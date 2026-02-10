@@ -1,0 +1,8 @@
+{
+  "name": "HanziGo - The Chinese Learning Hub",
+  "description": "An all-in-one Chinese learning platform combining AI-powered dictionary tools, gamified lessons, HSK prep, and cultural immersion.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}

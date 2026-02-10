@@ -146,7 +146,7 @@ const CultureFeed: React.FC = () => {
           <p className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] mb-1">{label || t('exploreCulture')}</p>
           <h2 className="text-4xl font-black text-gray-900 tracking-tight">{title}</h2>
         </div>
-        <button onClick={onClose} className="group flex items-center gap-3 pl-4 pr-5 py-3 bg-gray-900 text-white rounded-2xl hover:bg-red-600 transition-all shadow-xl shadow-gray-200">
+        <button onClick={onClose} className="group flex items-center gap-3 pl-4 pr-5 py-3 bg-gray-900 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl shadow-gray-200">
           <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
           <span className="text-xs font-black uppercase tracking-widest">{t('back')}</span>
         </button>
@@ -163,15 +163,15 @@ const CultureFeed: React.FC = () => {
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {categories.map((cat) => (
-            <div key={cat.id} onClick={() => setSelectedCategory(cat)} className="group cursor-pointer bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden">
-              <div className={`w-16 h-16 ${cat.color} rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:rotate-12 transition-transform text-white border-4 border-white shadow-xl`}>
+            <div key={cat.id} onClick={() => setSelectedCategory(cat)} className="group cursor-pointer bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden">
+              <div className={`w-16 h-16 ${cat.color} rounded-xl flex items-center justify-center text-3xl mb-8 group-hover:rotate-12 transition-transform text-white border-4 border-white shadow-xl`}>
                 {cat.icon}
               </div>
               <h3 className="text-2xl font-black text-gray-900 mb-2">{cat.title}</h3>
               <p className="text-gray-400 font-black uppercase tracking-widest text-[10px] mb-4">{cat.desc}</p>
               <div className="flex flex-wrap gap-1.5 opacity-60">
                 {cat.subTopics.slice(0, 3).map(stId => (
-                  <span key={stId} className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded text-[8px] font-black uppercase text-gray-500">
+                  <span key={stId} className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-md text-[8px] font-black uppercase text-gray-500">
                     {t(stId).split('(')[0]}
                   </span>
                 ))}
@@ -193,8 +193,8 @@ const CultureFeed: React.FC = () => {
       
       {!selectedTopicId ? (
         <div className="space-y-12 animate-in fade-in duration-700">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-10 bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
-             <div className={`w-32 h-32 aspect-square ${selectedCategory.color} rounded-[2rem] flex items-center justify-center text-6xl shadow-2xl shrink-0 text-white border-4 border-white`}>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-10 bg-white p-10 rounded-3xl border border-gray-100 shadow-sm">
+             <div className={`w-32 h-32 aspect-square ${selectedCategory.color} rounded-3xl flex items-center justify-center text-6xl shadow-2xl shrink-0 text-white border-4 border-white`}>
                 {selectedCategory.icon}
              </div>
              <div className="flex-1">
@@ -213,7 +213,7 @@ const CultureFeed: React.FC = () => {
               <div 
                 key={topicId} 
                 onClick={() => handleTopicSelect(topicId)} 
-                className="group p-8 bg-white border border-gray-100 rounded-[2.5rem] hover:border-red-600 hover:shadow-2xl transition-all cursor-pointer flex flex-col justify-between aspect-square md:aspect-auto min-h-[220px]"
+                className="group p-8 bg-white border border-gray-100 rounded-3xl hover:border-red-600 hover:shadow-2xl transition-all cursor-pointer flex flex-col justify-between aspect-square md:aspect-auto min-h-[220px]"
               >
                 <div>
                   <h4 className="text-2xl font-black text-gray-900 group-hover:text-red-600 transition-colors tracking-tight">{t(topicId)}</h4>
@@ -223,7 +223,7 @@ const CultureFeed: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex justify-end mt-10">
-                  <span className="px-5 py-2 bg-gray-50 text-gray-400 font-black text-[9px] uppercase tracking-widest rounded-xl group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
+                  <span className="px-5 py-2 bg-gray-50 text-gray-400 font-black text-[9px] uppercase tracking-widest rounded-lg group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
                     {t('readDeepDive')}
                   </span>
                 </div>
@@ -235,7 +235,7 @@ const CultureFeed: React.FC = () => {
         <div className="space-y-10">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-40 space-y-10">
-              <div className="w-24 h-24 bg-red-600 text-white rounded-[2rem] flex items-center justify-center text-6xl shadow-2xl animate-pulse chinese-font border-4 border-white">文</div>
+              <div className="w-24 h-24 bg-red-600 text-white rounded-3xl flex items-center justify-center text-6xl shadow-2xl animate-pulse chinese-font border-4 border-white">文</div>
               <div className="text-center">
                 <p className="text-gray-900 font-black text-xl mb-2 tracking-tight">{t('curating')}</p>
                 <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px]">{t(selectedTopicId)}</p>
@@ -250,7 +250,7 @@ const CultureFeed: React.FC = () => {
               </header>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-                <div className="bg-white p-12 rounded-[2.5rem] border-2 border-gray-50 shadow-sm relative overflow-hidden group">
+                <div className="bg-white p-12 rounded-3xl border-2 border-gray-50 shadow-sm relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-8 text-red-600/5 text-9xl chinese-font font-black pointer-events-none group-hover:scale-110 transition-transform">原</div>
                   <h4 className="text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-10 flex items-center gap-2 relative z-10">
                     <span className="w-2 h-2 bg-red-600 rounded-full"></span> {t('collectionOriginal')}
@@ -258,7 +258,7 @@ const CultureFeed: React.FC = () => {
                   <div className="text-3xl text-gray-900 leading-[2] font-black chinese-font drop-cap-red relative z-10">{content.contentChinese}</div>
                 </div>
                 
-                <div className="bg-gray-50 p-12 rounded-[2.5rem] border border-gray-100 italic relative group">
+                <div className="bg-gray-50 p-12 rounded-3xl border border-gray-100 italic relative group">
                   <div className="absolute top-0 right-0 p-8 text-gray-300/10 text-9xl chinese-font font-black pointer-events-none group-hover:scale-110 transition-transform">譯</div>
                   <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mb-10 flex items-center gap-2 relative z-10">
                     <span className="w-2 h-2 bg-gray-400 rounded-full"></span> {t('localizedInsight')}
@@ -271,14 +271,14 @@ const CultureFeed: React.FC = () => {
               
               {content.vocabulary && content.vocabulary.length > 0 && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                  <div className="lg:col-span-7 bg-white p-12 rounded-[2.5rem] border border-gray-100 shadow-xl">
+                  <div className="lg:col-span-7 bg-white p-12 rounded-3xl border border-gray-100 shadow-xl">
                     <h4 className="font-black text-gray-900 text-xl mb-12 flex items-center gap-4">
-                      <span className="w-10 h-10 bg-red-600 rounded-2xl flex items-center justify-center text-white text-sm chinese-font font-black shadow-lg border-2 border-white">詞</span> 
+                      <span className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center text-white text-sm chinese-font font-black shadow-lg border-2 border-white">詞</span> 
                       {t('keyVocab')}
                     </h4>
                     <div className="grid grid-cols-1 gap-10">
                       {content.vocabulary.map((v: any, i: number) => (
-                        <div key={i} className="flex items-start gap-8 group cursor-help p-4 hover:bg-gray-50 rounded-2xl transition-colors">
+                        <div key={i} className="flex items-start gap-8 group cursor-help p-4 hover:bg-gray-50 rounded-xl transition-colors">
                           <div className="chinese-font text-5xl font-black text-gray-900 shrink-0 group-hover:text-red-600 transition-colors aspect-square">{v.word}</div>
                           <div>
                             <div className="text-xs text-red-600 font-black uppercase tracking-widest mb-1.5">{v.pinyin}</div>
@@ -290,19 +290,19 @@ const CultureFeed: React.FC = () => {
                   </div>
 
                   <div className="lg:col-span-5 flex flex-col gap-8">
-                    <div className="bg-gray-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden group">
+                    <div className="bg-gray-900 p-10 rounded-3xl text-white shadow-2xl relative overflow-hidden group">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
                       <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-6 relative z-10">{t('masterReflect')}</h4>
                       <p className="text-xl font-bold leading-relaxed italic relative z-10">"{content.reflection}"</p>
                     </div>
 
-                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-xl flex flex-col items-center text-center">
-                       <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-2xl mb-6 chinese-font font-black text-red-600 border border-white shadow-sm">書</div>
+                    <div className="bg-white p-10 rounded-3xl border border-gray-100 shadow-xl flex flex-col items-center text-center">
+                       <div className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center text-2xl mb-6 chinese-font font-black text-red-600 border border-white shadow-sm">書</div>
                        <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">{t('masterChallenge')}</h4>
                        <p className="text-lg font-bold text-gray-700 mb-8 leading-relaxed">
                          {t('challengePrompt', { word: content.vocabulary[0]?.word || '...' })}
                        </p>
-                       <button onClick={() => handleBack()} className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-red-600 transition-all shadow-lg active:scale-95">
+                       <button onClick={() => handleBack()} className="w-full py-4 bg-gray-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.3em] hover:bg-red-600 transition-all shadow-lg active:scale-95">
                          {t('startPractice')}
                        </button>
                     </div>

@@ -99,8 +99,6 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
-    // We still render Settings here when currentView is set to View.SETTINGS
-    // but the trigger for this view comes from the user profile button now.
     switch (currentView) {
       case View.DASHBOARD: return <Dashboard setView={setView} />;
       case View.DICTIONARY: return <Dictionary />;
@@ -108,9 +106,7 @@ const App: React.FC = () => {
       case View.CULTURE: return <CultureFeed />;
       case View.LEARN: return <Learn />;
       case View.HSK: return <HSKCenter />;
-      // Fallback or specific handler for Settings, though not explicitly in View enum anymore
-      // We will rely on Navigation to direct to 'SETTINGS' enum value, and handle it here
-      case 'SETTINGS' as View: return <Settings />; // Keep as View.SETTINGS for rendering
+      case View.SETTINGS: return <Settings />; // Use View.SETTINGS directly
       default: return <Dashboard setView={setView} />;
     }
   };

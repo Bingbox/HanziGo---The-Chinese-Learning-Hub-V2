@@ -76,7 +76,7 @@ const HSKCenter: React.FC = () => {
         <header className="flex flex-col mb-12">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center text-white font-black">
+              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-black">
                 {selectedLevel}
               </div>
               <div>
@@ -86,7 +86,7 @@ const HSKCenter: React.FC = () => {
             </div>
             <button 
               onClick={() => setTestStarted(false)} 
-              className="px-6 py-2.5 bg-gray-50 text-gray-400 rounded-xl font-black text-xs hover:bg-red-50 hover:text-red-600 transition-all uppercase tracking-widest"
+              className="px-6 py-2.5 bg-gray-50 text-gray-400 rounded-lg font-black text-xs hover:bg-red-50 hover:text-red-600 transition-all uppercase tracking-widest"
             >
               {t('quit')}
             </button>
@@ -104,7 +104,7 @@ const HSKCenter: React.FC = () => {
         </header>
 
         <div className="flex-1 space-y-10">
-          <div className="bg-gray-50 p-10 md:p-14 rounded-[2.5rem] border border-gray-100 relative overflow-hidden group">
+          <div className="bg-gray-50 p-10 md:p-14 rounded-3xl border border-gray-100 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-8 text-8xl font-black text-gray-200/20 select-none">试</div>
             <h3 className="text-lg font-black text-red-600 uppercase tracking-widest mb-6">{q.question}</h3>
             <p className="text-4xl md:text-5xl font-black text-gray-900 leading-relaxed chinese-font">
@@ -117,7 +117,7 @@ const HSKCenter: React.FC = () => {
               <button
                 key={i}
                 onClick={() => handleSelectOption(q.id, opt)}
-                className={`w-full p-6 rounded-2xl border-2 text-left flex items-center justify-between group transition-all
+                className={`w-full p-6 rounded-xl border-2 text-left flex items-center justify-between group transition-all
                   ${answers[q.id] === opt 
                     ? 'border-red-600 bg-red-50 text-red-700 shadow-xl' 
                     : 'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}
@@ -144,7 +144,7 @@ const HSKCenter: React.FC = () => {
           <button 
             onClick={currentIdx === questions.length - 1 ? finishTest : () => setCurrentIdx(prev => prev + 1)} 
             disabled={!answers[q.id]}
-            className="px-12 py-5 bg-gray-900 text-white rounded-2xl font-black shadow-2xl hover:bg-red-600 transition-all disabled:opacity-20 active:scale-95 uppercase tracking-[0.2em] text-sm"
+            className="px-12 py-5 bg-gray-900 text-white rounded-xl font-black shadow-2xl hover:bg-red-600 transition-all disabled:opacity-20 active:scale-95 uppercase tracking-[0.2em] text-sm"
           >
             {currentIdx === questions.length - 1 ? t('finishExam') : t('nextQuestion')}
           </button>
@@ -181,12 +181,12 @@ const HSKCenter: React.FC = () => {
           {questions.map((q, i) => {
             const isCorrect = answers[q.id] === q.answer;
             return (
-              <div key={q.id} className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row">
+              <div key={q.id} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row">
                 <div className={`w-2 md:w-4 ${isCorrect ? 'bg-emerald-500' : 'bg-red-500'}`} />
                 <div className="p-10 flex-1">
                   <div className="flex justify-between items-start mb-6">
                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('questionLabel')} {i + 1}</span> {/* Added questionLabel */}
-                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border
+                    <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border
                       ${isCorrect ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
                       {isCorrect ? t('correct') : t('hskIncorrectStatus')}
                     </span>
@@ -194,7 +194,7 @@ const HSKCenter: React.FC = () => {
                   <p className="text-2xl font-black text-gray-900 mb-4 chinese-font">{q.content}</p>
                   <p className="text-sm text-gray-500 mb-8 italic">{q.question}</p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 p-8 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 p-8 bg-gray-50 rounded-xl border border-gray-100">
                     <div>
                       <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{t('yourResponse')}</h4>
                       <p className={`text-lg font-black ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>{answers[q.id]}</p>
@@ -219,13 +219,13 @@ const HSKCenter: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-center gap-6">
           <button 
             onClick={() => { setResultsMode(false); setTestStarted(false); }} 
-            className="px-12 py-5 bg-gray-900 text-white rounded-2xl font-black shadow-xl hover:bg-red-600 transition-all uppercase tracking-widest text-xs"
+            className="px-12 py-5 bg-gray-900 text-white rounded-xl font-black shadow-xl hover:bg-red-600 transition-all uppercase tracking-widest text-xs"
           >
             {t('returnToExamHub')}
           </button>
           <button 
             onClick={() => startTest(selectedLevel!)} 
-            className="px-12 py-5 bg-white text-gray-900 border border-gray-200 rounded-2xl font-black shadow-sm hover:bg-gray-50 transition-all uppercase tracking-widest text-xs"
+            className="px-12 py-5 bg-white text-gray-900 border border-gray-200 rounded-xl font-black shadow-sm hover:bg-gray-50 transition-all uppercase tracking-widest text-xs"
           >
             {t('retryTest')}
           </button>
@@ -243,7 +243,7 @@ const HSKCenter: React.FC = () => {
             {t('hskWelcomeDesc')}
           </p>
         </div>
-        <div className="flex items-center gap-3 px-6 py-3 bg-red-600 text-white rounded-2xl shadow-xl shadow-red-100 animate-bounce">
+        <div className="flex items-center gap-3 px-6 py-3 bg-red-600 text-white rounded-xl shadow-xl shadow-red-100 animate-bounce">
            <span className="text-xl">🏆</span>
            <span className="text-xs font-black uppercase tracking-widest">{t('readyForCertification')}</span>
         </div>
@@ -253,13 +253,13 @@ const HSKCenter: React.FC = () => {
         {HSK_LEVELS.map((h) => (
           <div 
             key={h.level} 
-            className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all group flex flex-col items-center text-center overflow-hidden relative"
+            className="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all group flex flex-col items-center text-center overflow-hidden relative"
           >
             <div className="absolute top-0 right-0 p-10 text-9xl font-black text-gray-50/50 group-hover:text-red-50/50 transition-colors pointer-events-none">
               {h.level}
             </div>
             
-            <div className="w-24 h-24 bg-red-50 rounded-3xl flex items-center justify-center text-red-600 text-4xl font-black mb-8 border-4 border-white shadow-xl shadow-red-50/50 relative z-10 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
+            <div className="w-24 h-24 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 text-4xl font-black mb-8 border-4 border-white shadow-xl shadow-red-50/50 relative z-10 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
                {h.level}
             </div>
             
@@ -267,11 +267,11 @@ const HSKCenter: React.FC = () => {
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 relative z-10">{h.title}</p>
             
             <div className="grid grid-cols-2 gap-4 w-full mb-10 relative z-10">
-               <div className="bg-gray-50 p-4 rounded-2xl">
+               <div className="bg-gray-50 p-4 rounded-xl">
                   <p className="text-gray-400 font-black text-[9px] uppercase mb-1">{t('vocabCount')}</p>
                   <p className="text-lg font-black text-gray-900">{h.requiredVocab}</p>
                </div>
-               <div className="bg-gray-50 p-4 rounded-2xl">
+               <div className="bg-gray-50 p-4 rounded-xl">
                   <p className="text-gray-400 font-black text-[9px] uppercase mb-1">{t('estTime')}</p>
                   <p className="text-lg font-black text-gray-900">45m</p>
                </div>
@@ -279,7 +279,7 @@ const HSKCenter: React.FC = () => {
 
             <button 
               onClick={() => startTest(h.level)} 
-              className="w-full py-5 bg-gray-900 text-white rounded-2xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10"
+              className="w-full py-5 bg-gray-900 text-white rounded-xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10"
             >
                {t('startMock')}
             </button>
@@ -287,17 +287,17 @@ const HSKCenter: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-gray-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden">
+      <div className="bg-gray-900 rounded-3xl p-12 text-white flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="flex flex-col md:flex-row items-center gap-10 text-center md:text-left relative z-10">
-          <div className="w-24 h-24 bg-white/10 rounded-[2rem] flex items-center justify-center text-5xl border border-white/10">🧠</div>
+          <div className="w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center text-5xl border border-white/10">🧠</div>
           <div>
             <h4 className="text-2xl font-black mb-3">{t('aiStudyPlan')}</h4>
             <p className="text-gray-400 font-medium max-w-lg leading-relaxed">{t('aiStudyPlanDesc')}</p>
           </div>
         </div>
         <button 
-          className="px-10 py-5 bg-red-600 text-white rounded-2xl font-black hover:scale-105 transition-all text-xs uppercase tracking-[0.2em] relative z-10 shadow-xl shadow-red-900/40"
+          className="px-10 py-5 bg-red-600 text-white rounded-xl font-black hover:scale-105 transition-all text-xs uppercase tracking-[0.2em] relative z-10 shadow-xl shadow-red-900/40"
         >
           {t('unlockPath')}
         </button>

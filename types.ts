@@ -6,7 +6,7 @@ export enum View {
   HSK = 'HSK',
   CULTURE = 'CULTURE',
   AI_TUTOR = 'AI_TUTOR',
-  // SETTINGS is now accessed via the user profile, not a main navigation item.
+  SETTINGS = 'SETTINGS', // Added SETTINGS to the View enum
 }
 
 export type Language = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'ko' | 'ru' | 'ar' | 'zh_hk';
@@ -25,6 +25,11 @@ export interface User {
     listening: number;
     reading: number;
   };
+}
+
+// Interface for internally stored users (simulating a database record)
+export interface StoredUser extends User {
+  password: string; // For simulation purposes only, would be hashed in a real app
 }
 
 export interface Unit {

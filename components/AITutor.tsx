@@ -233,7 +233,7 @@ const AITutor: React.FC = () => {
 
         <button
           onClick={() => setShowHistory(!showHistory)}
-          className="px-5 py-2.5 bg-white border border-gray-100 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm hover:bg-gray-50 transition-all flex items-center gap-2"
+          className="px-5 py-2.5 bg-white border border-gray-100 rounded-lg font-bold text-xs uppercase tracking-widest shadow-sm hover:bg-gray-50 transition-all flex items-center gap-2"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2"><path d="M12 6v6l4 2" strokeLinecap="round"/><circle cx="12" cy="12" r="9"/></svg>
           {t('sessionHistory')}
@@ -246,7 +246,7 @@ const AITutor: React.FC = () => {
           <div className="flex justify-between items-center mb-10">
             <h4 className="text-2xl font-black text-gray-900 tracking-tight">{t('sessionHistory')}</h4>
             <div className="flex gap-4">
-              <button onClick={createNewChat} className="bg-gray-900 text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-colors">
+              <button onClick={createNewChat} className="bg-gray-900 text-white px-6 py-2 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-colors">
                 {t('newChat')}
               </button>
               <button onClick={() => setShowHistory(false)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">✕</button>
@@ -263,7 +263,7 @@ const AITutor: React.FC = () => {
                 <div
                   key={s.id}
                   onClick={() => loadSession(s)}
-                  className={`p-6 rounded-3xl border transition-all cursor-pointer group flex items-center justify-between
+                  className={`p-6 rounded-2xl border transition-all cursor-pointer group flex items-center justify-between
                     ${currentSessionId === s.id ? 'bg-red-50 border-red-100' : 'bg-white border-gray-100 hover:border-gray-200 shadow-sm'}`}
                 >
                   <div className="flex-1 pr-4 overflow-hidden">
@@ -274,7 +274,7 @@ const AITutor: React.FC = () => {
                   </div>
                   <button
                     onClick={(e) => deleteSession(e, s.id)}
-                    className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-100 hover:text-red-600"
+                    className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-100 hover:text-red-600"
                   >
                     🗑️
                   </button>
@@ -291,14 +291,14 @@ const AITutor: React.FC = () => {
           <div className="flex-1 overflow-y-auto space-y-8 mb-8 pr-4 custom-scrollbar pb-10">
             {messages.map((m, i) => (
               <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} animate-in slide-in-from-bottom-4 duration-500`}>
-                <div className={`max-w-[85%] p-5 rounded-[1.8rem] text-base leading-relaxed ${
+                <div className={`max-w-[85%] p-5 rounded-2xl text-base leading-relaxed ${
                   m.role === 'user' ? 'bg-gray-900 text-white rounded-br-none' : 'bg-white border border-gray-100 text-gray-800 rounded-bl-none shadow-sm'
                 }`}>
                   {m.text}
                 </div>
 
                 {m.analysis && (
-                  <div className="mt-4 w-full max-w-[85%] bg-blue-50/40 border border-blue-100 p-6 rounded-[2rem] shadow-sm">
+                  <div className="mt-4 w-full max-w-[85%] bg-blue-50/40 border border-blue-100 p-6 rounded-3xl shadow-sm">
                     <div className="flex items-center gap-2 mb-3">
                         <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{t('feedbackLabel')}</span>
                     </div>
@@ -312,7 +312,7 @@ const AITutor: React.FC = () => {
               </div>
             ))}
             {isTyping && (
-              <div className="flex gap-1.5 p-4 bg-gray-100 rounded-2xl w-fit animate-pulse">
+              <div className="flex gap-1.5 p-4 bg-gray-100 rounded-xl w-fit animate-pulse">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -343,12 +343,12 @@ const AITutor: React.FC = () => {
                     }
                   }}
                   placeholder={t('tutorPlaceholder')}
-                  className="flex-1 p-5 pr-32 rounded-[2rem] border-2 border-gray-100 shadow-lg focus:border-red-600 outline-none transition-all text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
+                  className="flex-1 p-5 pr-32 rounded-3xl border-2 border-gray-100 shadow-lg focus:border-red-600 outline-none transition-all text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
                 />
                 <button
                   onClick={() => handleSend(input)}
                   disabled={!input.trim() || isTyping}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-7 py-2.5 rounded-2xl font-black text-xs hover:bg-red-600 transition-all disabled:opacity-20 uppercase tracking-widest"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-7 py-2.5 rounded-xl font-black text-xs hover:bg-red-600 transition-all disabled:opacity-20 uppercase tracking-widest"
                 >
                   {t('send')}
                 </button>

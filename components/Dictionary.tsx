@@ -148,7 +148,7 @@ const Dictionary: React.FC = () => {
     <div className="max-w-7xl mx-auto p-6 md:p-12 relative pb-32">
       {showCamera && (
         <div className="fixed inset-0 z-[200] bg-black/90 flex flex-col items-center justify-center p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg aspect-[3/4] rounded-[2.5rem] overflow-hidden border-2 border-white/20">
+          <div className="relative w-full max-w-lg aspect-[3/4] rounded-3xl overflow-hidden border-2 border-white/20">
             <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
             <div className="absolute top-0 left-0 w-full h-1 bg-red-600 shadow-[0_0_15px_#ef4444] animate-[scan_3s_linear_infinite]" />
           </div>
@@ -170,7 +170,7 @@ const Dictionary: React.FC = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch(query)}
             placeholder={t('searchPlaceholder')}
-            className="w-full p-6 pl-16 pr-48 rounded-[2rem] bg-white border border-gray-100 shadow-2xl focus:border-red-600 outline-none transition-all text-xl font-medium"
+            className="w-full p-6 pl-16 pr-48 rounded-3xl bg-white border border-gray-100 shadow-2xl focus:border-red-600 outline-none transition-all text-xl font-medium"
           />
           <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30">
             <SearchIcon /> {/* Replaced emoji with SVG icon */}
@@ -182,15 +182,15 @@ const Dictionary: React.FC = () => {
             )}
             <button 
               onMouseDown={startRecording} onMouseUp={stopRecording}
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all
+              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all
                 ${isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'}`}
             >
               <MicIcon active={isRecording} /> {/* Reused MicIcon from AITutor */}
             </button>
-            <button onClick={openCamera} className="w-12 h-12 bg-gray-50 text-gray-400 rounded-2xl flex items-center justify-center hover:bg-gray-100 transition-colors">
+            <button onClick={openCamera} className="w-12 h-12 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
               <CameraIcon /> {/* Replaced emoji with SVG icon */}
             </button>
-            <button onClick={() => handleSearch(query)} className="ml-2 bg-gray-900 text-white px-8 py-4 rounded-2xl font-black text-sm hover:bg-red-600 transition-colors shadow-lg active:scale-95 uppercase tracking-widest">{t('go')}</button>
+            <button onClick={() => handleSearch(query)} className="ml-2 bg-gray-900 text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-red-600 transition-colors shadow-lg active:scale-95 uppercase tracking-widest">{t('go')}</button>
           </div>
         </div>
       </div>
@@ -205,13 +205,13 @@ const Dictionary: React.FC = () => {
       ) : result ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
           <div className="lg:col-span-8 space-y-8">
-            <div className="bg-white rounded-[2.5rem] p-12 border border-gray-100 shadow-xl relative overflow-hidden group">
+            <div className="bg-white rounded-3xl p-12 border border-gray-100 shadow-xl relative overflow-hidden group">
                 <div className="flex justify-between items-start relative z-10">
                     <div className="flex-1">
                         <div className="flex items-baseline gap-8 mb-6">
                             <h1 className="text-9xl font-black chinese-font text-gray-900 tracking-tight leading-none">{result.simplified}</h1>
                             <div className="flex flex-col gap-3">
-                                {result.hskLevel && <span className="px-4 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest w-fit">HSK {result.hskLevel}</span>}
+                                {result.hskLevel && <span className="px-4 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg uppercase tracking-widest w-fit">HSK {result.hskLevel}</span>}
                                 <button 
                                   onClick={() => copyToClipboard(result.simplified)}
                                   className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em] hover:underline text-left"
@@ -234,7 +234,7 @@ const Dictionary: React.FC = () => {
                 </div>
             </div>
 
-            <div className="bg-white rounded-[2.5rem] p-12 border border-gray-100 shadow-sm">
+            <div className="bg-white rounded-3xl p-12 border border-gray-100 shadow-sm">
                 <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-12">{t('usageExamples')}</h3>
                 <div className="space-y-12">
                     {result.examples.map((ex, i) => (
@@ -251,14 +251,14 @@ const Dictionary: React.FC = () => {
           </div>
 
           <div className="lg:col-span-4 space-y-8">
-            <div className="bg-gray-50 rounded-[2.5rem] p-10 border border-gray-100">
+            <div className="bg-gray-50 rounded-3xl p-10 border border-gray-100">
                 <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-8">{t('componentAnalysis')}</h4>
                 <div className="grid grid-cols-2 gap-5">
                     {result.components.map((c, i) => (
                         <button 
                           key={i} 
                           onClick={() => handleCrossReference(c.char)}
-                          className="bg-white p-6 rounded-3xl shadow-sm text-center hover:shadow-2xl hover:-translate-y-2 transition-all border border-gray-100 group"
+                          className="bg-white p-6 rounded-2xl shadow-sm text-center hover:shadow-2xl hover:-translate-y-2 transition-all border border-gray-100 group"
                         >
                             <div className="text-4xl font-black chinese-font text-gray-900 mb-3 group-hover:text-red-600">{c.char}</div>
                             <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{c.meaning}</div>
@@ -268,14 +268,14 @@ const Dictionary: React.FC = () => {
                 </div>
             </div>
 
-            <div className="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm">
+            <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-sm">
                 <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-8">{t('compounds')}</h4>
                 <div className="space-y-4">
                     {result.compounds.map((comp, i) => (
                         <button 
                           key={i} 
                           onClick={() => handleCrossReference(comp.word)} 
-                          className="w-full text-left p-5 rounded-2xl hover:bg-red-50 hover:border-red-100 border border-transparent transition-all group"
+                          className="w-full text-left p-5 rounded-xl hover:bg-red-50 hover:border-red-100 border border-transparent transition-all group"
                         >
                             <div className="text-2xl font-black chinese-font text-gray-900 mb-1 group-hover:text-red-600">{comp.word}</div>
                             <div className="flex justify-between items-center">

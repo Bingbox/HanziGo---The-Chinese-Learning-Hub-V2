@@ -51,7 +51,7 @@ const Icons = {
 
 const BrandLogo: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
   <div className={`${size} relative animate-in zoom-in duration-500 group`}>
-    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-2xl shadow-xl transform transition-all group-hover:scale-110 group-hover:rotate-3"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-xl shadow-xl transform transition-all group-hover:scale-110 group-hover:rotate-3"></div>
     <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white">
       <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
       <path d="M20 20l30-10 30 10v5h-60z" className="opacity-40" />
@@ -84,13 +84,13 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
           ))}
           {/* User profile button for mobile, now leads to settings */}
           <button
-            onClick={() => setView('SETTINGS' as View)} // Direct to 'SETTINGS' view for User Management
+            onClick={() => setView(View.SETTINGS)} // Direct to 'SETTINGS' view for User Management
             className="flex flex-col items-center justify-center flex-1 transition-all"
           >
-            <span className={`w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] transition-transform ${currentView === 'SETTINGS' as View ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
+            <span className={`w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
               {user?.avatar || '👤'}
             </span>
-            <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === 'SETTINGS' as View ? 'text-red-600' : 'text-gray-400'}`}>
+            <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === View.SETTINGS ? 'text-red-600' : 'text-gray-400'}`}>
               {t('profile')}
             </span>
           </button>
@@ -110,7 +110,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
 
           <div className="space-y-1.5 flex-1">
             {items.map(({ id, label, Icon }) => (
-              <button key={id} onClick={() => setView(id)} className={`flex items-center gap-4 w-full px-5 py-3.5 rounded-2xl transition-all font-bold text-sm ${currentView === id ? 'bg-red-50 text-red-600 shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
+              <button key={id} onClick={() => setView(id)} className={`flex items-center gap-4 w-full px-5 py-3.5 rounded-xl transition-all font-bold text-sm ${currentView === id ? 'bg-red-50 text-red-600 shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
                 <Icon active={currentView === id} />
                 <span>{label}</span>
               </button>
@@ -119,8 +119,8 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
 
           {/* User profile button for desktop, now leads to settings */}
           <div className="mt-auto pt-8 border-t border-gray-50">
-            <button onClick={() => setView('SETTINGS' as View)} className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-colors ${currentView === 'SETTINGS' as View ? 'bg-red-50 text-red-600 shadow-sm' : 'bg-gray-50 hover:bg-gray-100'}`}>
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
+            <button onClick={() => setView(View.SETTINGS)} className={`w-full p-4 rounded-xl flex items-center gap-4 transition-colors ${currentView === View.SETTINGS ? 'bg-red-50 text-red-600 shadow-sm' : 'bg-gray-50 hover:bg-gray-100'}`}>
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
               <div className="flex-1 text-left overflow-hidden">
                 <p className="text-sm font-black truncate">{user?.name || t('user')}</p> {/* Use t('user') for default user name */}
                 <span className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{t('online')}</span>

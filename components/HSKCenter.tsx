@@ -9,7 +9,6 @@ const HSKCenter: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [testStarted, setTestStarted] = useState(false);
   const [loading, setLoading] = useState(false);
-  // Fixed: Specified HSKQuestion[] type for questions state
   const [questions, setQuestions] = useState<HSKQuestion[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -29,14 +28,17 @@ const HSKCenter: React.FC = () => {
     setSelectedLevel(level);
     try {
       const qs = await generateHSKQuestions(level, language);
-      setQuestions(qs);
-      setTestStarted(true);
-      setCurrentIdx(0);
-      setAnswers({});
-      setResultsMode(false);
+      if (qs && qs.length > 0) {
+        setQuestions(qs);
+        setTestStarted(true);
+        setCurrentIdx(0);
+        setAnswers({});
+        setResultsMode(false);
+      } else {
+        throw new Error("No questions generated");
+      }
     } catch (err) {
       console.error(err);
-      // Display a translated error message to the user
       alert(t('errorLoadingQuestions')); 
     } finally {
       setLoading(false);
@@ -80,7 +82,7 @@ const HSKCenter: React.FC = () => {
                 {selectedLevel}
               </div>
               <div>
-                <h2 className="text-xl font-black text-gray-900">HSK {selectedLevel} {t('mockExamLabel')}</h2> {/* Added mockExamLabel */}
+                <h2 className="text-xl font-black text-gray-900">HSK {selectedLevel} {t('mockExamLabel')}</h2>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('officialSimulation')}</p>
               </div>
             </div>
@@ -155,7 +157,7 @@ const HSKCenter: React.FC = () => {
 
   if (resultsMode) {
     const score = questions.filter(q => answers[q.id] === q.answer).length;
-    const totalQuestions = questions.length; // Use a variable for clarity
+    const totalQuestions = questions.length;
     const percentage = Math.round((score / totalQuestions) * 100);
 
     return (
@@ -185,7 +187,7 @@ const HSKCenter: React.FC = () => {
                 <div className={`w-2 md:w-4 ${isCorrect ? 'bg-emerald-500' : 'bg-red-500'}`} />
                 <div className="p-10 flex-1">
                   <div className="flex justify-between items-start mb-6">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('questionLabel')} {i + 1}</span> {/* Added questionLabel */}
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('questionLabel')} {i + 1}</span>
                     <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border
                       ${isCorrect ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
                       {isCorrect ? t('correct') : t('hskIncorrectStatus')}

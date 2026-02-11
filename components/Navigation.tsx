@@ -87,7 +87,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
             onClick={() => setView(View.SETTINGS)} // Direct to 'SETTINGS' view for User Management
             className="flex flex-col items-center justify-center flex-1 transition-all"
           >
-            <span className={`w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
+            <span className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
               {user?.avatar || '👤'}
             </span>
             <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === View.SETTINGS ? 'text-red-600' : 'text-gray-400'}`}>
@@ -120,7 +120,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
           {/* User profile button for desktop, now leads to settings */}
           <div className="mt-auto pt-8 border-t border-gray-50">
             <button onClick={() => setView(View.SETTINGS)} className={`w-full p-4 rounded-xl flex items-center gap-4 transition-colors ${currentView === View.SETTINGS ? 'bg-red-50 text-red-600 shadow-sm' : 'bg-gray-50 hover:bg-gray-100'}`}>
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-sm shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
               <div className="flex-1 text-left overflow-hidden">
                 <p className="text-sm font-black truncate">{user?.name || t('user')}</p> {/* Use t('user') for default user name */}
                 <span className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{t('online')}</span>

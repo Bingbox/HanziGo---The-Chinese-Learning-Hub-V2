@@ -62,7 +62,7 @@ const Learn: React.FC = () => {
       { id: 'u7e2', type: 'SPEAK', question: t('exSayHappyNewYear'), answer: '新年快乐', pinyin: 'Xīnnián kuàilè', chinese: '新年快乐' },
       { id: 'u7e3', type: 'LISTEN', question: t('exListenCalligraphy'), options: ['書法', '繪畫', '武術'], answer: '書法', pinyin: 'Shūfǎ', chinese: '书法' },
     ]
-  }), [language, t]); // Add t to dependency array
+  }), [language, t]);
 
   useEffect(() => {
     if (activeUnitId) {
@@ -94,7 +94,6 @@ const Learn: React.FC = () => {
     setIsCorrect(null);
     setFeedback('');
     setLoading(false);
-    // Clear canvas for WRITE exercises
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext('2d');
       if (ctx) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -154,7 +153,7 @@ const Learn: React.FC = () => {
       if (!canvas) return;
       const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
       const result = await recognizeImage(base64);
-      const target = unitExercises[currentExerciseIdx].answer; // This is the Chinese character for WRITE type
+      const target = unitExercises[currentExerciseIdx].answer;
       const correct = result.includes(target);
       setIsCorrect(correct);
       setFeedback(correct ? t('perfectStroke') : `${t('detected')}: "${result}". ${t('target')}: "${target}"`);
@@ -188,9 +187,8 @@ const Learn: React.FC = () => {
 
   const checkAnswer = () => {
     const ex = unitExercises[currentExerciseIdx];
-    // For SELECT/READ/LISTEN, the answer and options are translation keys, so we need to translate them for comparison
     const translatedAnswer = t(ex.answer);
-    const translatedUserSelection = t(userSelection); // User selection will be the key
+    const translatedUserSelection = t(userSelection);
     const correct = translatedUserSelection === translatedAnswer;
     
     setIsCorrect(correct);
@@ -201,7 +199,7 @@ const Learn: React.FC = () => {
     if (currentExerciseIdx < unitExercises.length - 1) {
       setCurrentExerciseIdx(prev => prev + 1);
       resetState();
-    } else { setActiveUnit(null); } // End of unit
+    } else { setActiveUnit(null); }
   };
 
   const SecondaryHeader = ({ title, onClose, progress, current, total }: { title: string, onClose: () => void, progress?: number, current: number, total: number }) => (
@@ -210,7 +208,7 @@ const Learn: React.FC = () => {
         <div className="flex justify-between items-start mb-6">
            <div className="animate-in slide-in-from-left duration-500">
               <p className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] mb-1">{t('immersionSession')}</p>
-              <h2 className="text-3xl font-black text-gray-900 leading-tight text-wrap">{title}</h2> {/* Added text-wrap */}
+              <h2 className="text-3xl font-black text-gray-900 leading-tight text-wrap">{title}</h2>
            </div>
            
            <button 
@@ -258,7 +256,7 @@ const Learn: React.FC = () => {
                 {ex.type === 'WRITE' && t('exerciseTypeWrite')}
                 {(ex.type === 'SELECT' || ex.type === 'READ') && t('exerciseTypeSelectRead')}
               </div>
-              <h2 className="text-2xl font-black text-gray-900 leading-relaxed text-wrap">{ex.question}</h2> {/* Added text-wrap */}
+              <h2 className="text-2xl font-black text-gray-900 leading-relaxed text-wrap">{ex.question}</h2>
             </div>
             
             {ex.type === 'LISTEN' && (
@@ -276,7 +274,7 @@ const Learn: React.FC = () => {
                       onClick={() => setUserSelection(opt)} 
                       className={`p-6 rounded-xl border-2 font-black transition-all text-2xl chinese-font text-left flex flex-wrap justify-between items-center ${userSelection === opt ? 'border-red-600 bg-red-50 text-red-700 shadow-xl' : 'border-gray-100 hover:bg-gray-50'}`}
                     >
-                      {t(opt)} {/* Translate the option */}
+                      {t(opt)}
                       {userSelection === opt && <span className="text-sm bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg">✓</span>}
                     </button>
                   ))}
@@ -286,10 +284,10 @@ const Learn: React.FC = () => {
 
             {ex.type === 'SPEAK' && (
               <div className="space-y-12 w-full animate-in fade-in duration-500">
-                <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner relative overflow-hidden flex flex-col justify-center items-center"> {/* Changed p-14 to p-10 */}
+                <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner relative overflow-hidden flex flex-col justify-center items-center">
                   <div className="absolute -top-10 -right-10 text-9xl text-gray-200/50 chinese-font select-none">听</div>
-                  <div className="text-8xl font-black chinese-font text-gray-900 mb-4 relative z-10 text-wrap">{ex.chinese}</div> {/* Added text-wrap */}
-                  <div className="text-2xl text-red-600 font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div> {/* Added text-wrap */}
+                  <div className="text-8xl font-black chinese-font text-gray-900 mb-4 relative z-10 text-wrap">{ex.chinese}</div>
+                  <div className="text-2xl text-red-600 font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div>
                 </div>
                 <div className="flex flex-col items-center gap-6">
                   <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em]">{isRecording ? t('analyzingSpeech') : t('holdToSpeak')}</p>
@@ -311,7 +309,7 @@ const Learn: React.FC = () => {
                 <div className="flex justify-between items-end px-4">
                   <div className="text-left">
                     <p className="text-[10px] font-black text-gray-400 uppercase mb-1">{t('canvasTrace')}</p>
-                    <div className="text-7xl font-black chinese-font text-gray-200 select-none text-wrap">{ex.chinese}</div> {/* Added text-wrap */}
+                    <div className="text-7xl font-black chinese-font text-gray-200 select-none text-wrap">{ex.chinese}</div>
                   </div>
                   <button onClick={() => canvasRef.current?.getContext('2d')?.clearRect(0, 0, 400, 400)} className="px-6 py-3 bg-gray-100 text-gray-600 rounded-lg text-[10px] font-black hover:bg-gray-200 transition-colors uppercase tracking-[0.2em]">{t('clearBoard')}</button>
                 </div>
@@ -324,8 +322,8 @@ const Learn: React.FC = () => {
             {(ex.type === 'SELECT' || ex.type === 'READ') && (
               <div className="w-full space-y-12 animate-in fade-in duration-500">
                 <div className="space-y-4">
-                  <div className="text-9xl font-black chinese-font text-gray-900 text-wrap">{ex.chinese}</div> {/* Added text-wrap */}
-                  <div className="text-2xl text-gray-400 font-black tracking-widest uppercase text-wrap">{ex.pinyin}</div> {/* Added text-wrap */}
+                  <div className="text-9xl font-black chinese-font text-gray-900 text-wrap">{ex.chinese}</div>
+                  <div className="text-2xl text-gray-400 font-black tracking-widest uppercase text-wrap">{ex.pinyin}</div>
                 </div>
                 <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
                   {ex.options?.map(opt => (
@@ -334,7 +332,7 @@ const Learn: React.FC = () => {
                       onClick={() => setUserSelection(opt)} 
                       className={`p-6 rounded-xl border-2 font-black text-left flex flex-wrap justify-between items-center transition-all ${userSelection === opt ? 'border-red-600 bg-red-50 text-red-700 shadow-xl' : 'border-gray-100 hover:bg-gray-50'}`}
                     >
-                      <span className="text-xl">{t(opt)}</span> {/* Translate the option */}
+                      <span className="text-xl">{t(opt)}</span>
                       <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${userSelection === opt ? 'border-red-600 bg-white shadow-inner' : 'border-gray-200'}`}>
                         {userSelection === opt && <div className="w-4 h-4 bg-red-600 rounded-full animate-in zoom-in duration-200" />}
                       </div>
@@ -366,7 +364,7 @@ const Learn: React.FC = () => {
                 disabled={(!userSelection && ex.type !== 'WRITE' && ex.type !== 'SPEAK') || loading || (ex.type === 'SPEAK' && isRecording)} 
                 className="w-full py-7 bg-gray-900 text-white rounded-xl font-black text-xl shadow-2xl disabled:opacity-10 active:scale-95 transition-all transform hover:-translate-y-1 uppercase tracking-widest"
               >
-                {ex.type === 'SPEAK' && isRecording ? t('recording') : t('checkAnswer')} {/* Update recording state text */}
+                {ex.type === 'SPEAK' && isRecording ? t('recording') : t('checkAnswer')}
               </button>
             ) : (
               <button 
@@ -402,7 +400,7 @@ const Learn: React.FC = () => {
         {CATEGORIES.map((cat) => (
           <section key={cat.id} className="space-y-12 animate-in slide-in-from-bottom-10 duration-700">
             <div className="flex items-center gap-10">
-                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0 text-wrap">{cat.name}</h3> {/* Added flex-shrink-0 and text-wrap */}
+                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0 text-wrap">{cat.name}</h3>
                 <div className="h-1.5 flex-1 bg-gradient-to-r from-gray-100 via-gray-50 to-transparent rounded-full shadow-inner" />
             </div>
             
@@ -425,18 +423,19 @@ const Learn: React.FC = () => {
                     )}
                     
                     <div className="flex items-start gap-8 mb-10">
-                      <div className={`w-20 h-20 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-5xl shadow-2xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white`}>
+                      {/* Adjusted Icon container size to w-16 h-16 and icon text to text-3xl */}
+                      <div className={`w-16 h-16 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-3xl shadow-xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white`}>
                         {unit.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-2xl font-black text-gray-900 leading-tight mb-3 group-hover:text-red-600 transition-colors tracking-tight text-wrap">{unit.title}</h4> {/* Added text-wrap */}
+                        <h4 className="text-2xl font-black text-gray-900 leading-tight mb-3 group-hover:text-red-600 transition-colors tracking-tight text-wrap">{unit.title}</h4>
                         <div className="inline-flex px-3 py-1.5 bg-gray-50 rounded-md border border-gray-100">
-                          <p className="text-[10px] font-black text-red-600 uppercase tracking-widest leading-none text-wrap">{unit.focus}</p> {/* Added text-wrap */}
+                          <p className="text-[10px] font-black text-red-600 uppercase tracking-widest leading-none text-wrap">{unit.focus}</p>
                         </div>
                       </div>
                     </div>
                     
-                    <p className="text-gray-500 font-medium mb-10 flex-1 leading-relaxed text-base italic text-wrap">"{unit.description}"</p> {/* Added text-wrap */}
+                    <p className="text-gray-500 font-medium mb-10 flex-1 leading-relaxed text-base italic text-wrap">"{unit.description}"</p>
                     
                     <div className="space-y-6 mt-auto pb-6">
                       <div className="flex justify-between items-end px-1">

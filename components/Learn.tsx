@@ -4,6 +4,15 @@ import { Unit, Exercise, ExerciseType } from '../types';
 import { useTranslation } from '../App';
 import { evaluatePronunciation, generateLessonSpeech, recognizeImage, decodeBase64, decodeAudioData } from '../services/geminiService';
 
+const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
+  <div className={`${size} relative animate-bounce`}>
+    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-full shadow-lg border-2 border-white"></div>
+    <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white">
+      <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
+    </svg>
+  </div>
+);
+
 const Learn: React.FC = () => {
   const { language, t, allUnits, activeUnitId, setActiveUnitId } = useTranslation();
   const [activeUnit, setActiveUnit] = useState<Unit | null>(null);
@@ -55,7 +64,7 @@ const Learn: React.FC = () => {
     u3: [
       { id: 'u3e1', type: 'LISTEN', question: t('exIdentifySubway'), options: ['地铁站', '飞机场', '火车站'], answer: '地铁站', pinyin: 'Dìtiě zhàn', chinese: '地铁站' },
       { id: 'u3e2', type: 'READ', question: t('exWhatIsAirport'), options: [t('optionAirport'), t('optionHotel'), t('optionTaxi')], answer: t('optionAirport'), pinyin: 'Fēijī chǎng', chinese: '飞机场' },
-      { id: 'u3e3', type: 'WRITE', question: t('exWriteExit'), answer: '出', pinyin: 'Chū', chinese: '出' },
+      { id: 'u3e2', type: 'WRITE', question: t('exWriteExit'), answer: '出', pinyin: 'Chū', chinese: '出' },
     ],
     u7: [
       { id: 'u7e1', type: 'READ', question: t('exWhatIsRedEnvelope'), options: [t('optionRedEnvelope'), t('optionLantern'), t('optionTeaCup')], answer: t('optionRedEnvelope'), pinyin: 'Hóngbāo', chinese: '红包' },
@@ -344,11 +353,7 @@ const Learn: React.FC = () => {
 
             <div className="h-32 mt-10 w-full flex flex-col items-center justify-center">
               {loading ? (
-                 <div className="flex items-center gap-4">
-                   <div className="w-4 h-4 bg-red-600 rounded-full animate-bounce"></div>
-                   <div className="w-4 h-4 bg-red-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                   <div className="w-4 h-4 bg-red-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                 </div>
+                 <BrandLoader />
               ) : feedback && (
                 <div className={`p-6 rounded-xl w-full max-w-md font-black text-sm text-center animate-in slide-in-from-top-6 duration-500 shadow-xl ${isCorrect ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
                   {isCorrect ? `✨ ${t('fantastic')} ` : `💡 ${t('keepTrying')} `}{feedback}

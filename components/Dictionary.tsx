@@ -3,17 +3,13 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { dictionaryLookup, recognizeImage, transcribeAudio } from '../services/geminiService';
 import { WordEntry } from '../types';
 import { useTranslation } from '../App';
-import { MicIcon } from './AITutor'; // Import MicIcon from AITutor
+import { MicIcon } from './AITutor'; 
 
-const MascotHead: React.FC<{ animate?: boolean }> = ({ animate = true }) => (
-  <div className={`w-24 h-24 relative ${animate ? 'animate-float' : ''}`}>
-    <div className="absolute inset-0 logo-gradient rounded-[35%] brand-shadow border-4 border-white"></div>
-    <svg viewBox="0 0 100 100" className="absolute inset-0 p-3 fill-white">
-      <circle cx="25" cy="25" r="12" /><circle cx="75" cy="25" r="12" />
-      <circle cx="50" cy="55" r="35" />
-      <circle cx="35" cy="52" r="4" className="fill-gray-900" />
-      <circle cx="65" cy="52" r="4" className="fill-gray-900" />
-      <path d="M46 62 Q50 66 54 62" stroke="#111827" strokeWidth="3" fill="none" strokeLinecap="round" />
+const BrandLoader: React.FC<{ size?: string; animate?: boolean; grayscale?: boolean }> = ({ size = "w-24 h-24", animate = true, grayscale = false }) => (
+  <div className={`${size} relative ${animate ? 'animate-bounce' : ''} ${grayscale ? 'grayscale opacity-30' : ''}`}>
+    <div className={`absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-full shadow-2xl border-4 border-white`}></div>
+    <svg viewBox="0 0 100 100" className="absolute inset-0 p-5 fill-white">
+      <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
     </svg>
   </div>
 );
@@ -155,7 +151,7 @@ const Dictionary: React.FC = () => {
           <div className="flex gap-6 mt-8">
             <button onClick={() => setShowCamera(false)} className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-white text-xl">✕</button>
             <button onClick={captureImage} className="w-16 h-16 bg-red-600 rounded-full border-4 border-white flex items-center justify-center text-white shadow-xl">
-              <CameraIcon /> {/* Using the SVG CameraIcon */}
+              <CameraIcon />
             </button>
           </div>
           <canvas ref={canvasRef} className="hidden" />
@@ -173,7 +169,7 @@ const Dictionary: React.FC = () => {
             className="w-full p-6 pl-16 pr-48 rounded-3xl bg-white border border-gray-100 shadow-2xl focus:border-red-600 outline-none transition-all text-xl font-medium"
           />
           <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30">
-            <SearchIcon /> {/* Replaced emoji with SVG icon */}
+            <SearchIcon /> 
           </span>
           
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
@@ -185,10 +181,10 @@ const Dictionary: React.FC = () => {
               className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all
                 ${isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'}`}
             >
-              <MicIcon active={isRecording} /> {/* Reused MicIcon from AITutor */}
+              <MicIcon active={isRecording} /> 
             </button>
             <button onClick={openCamera} className="w-12 h-12 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors">
-              <CameraIcon /> {/* Replaced emoji with SVG icon */}
+              <CameraIcon /> 
             </button>
             <button onClick={() => handleSearch(query)} className="ml-2 bg-gray-900 text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-red-600 transition-colors shadow-lg active:scale-95 uppercase tracking-widest">{t('go')}</button>
           </div>
@@ -197,7 +193,7 @@ const Dictionary: React.FC = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24">
-            <MascotHead />
+            <BrandLoader />
             <div className="mt-12 text-center">
               <p className="text-gray-400 font-black uppercase tracking-[0.4em] text-xs animate-pulse">{t('linguisticAnalysis')}</p>
             </div>
@@ -290,8 +286,8 @@ const Dictionary: React.FC = () => {
         </div>
       ) : (
         <div className="h-[50vh] flex flex-col items-center justify-center text-center opacity-40 animate-in fade-in zoom-in duration-1000">
-            <div className="scale-150 mb-16 grayscale opacity-30">
-              <MascotHead animate={false} />
+            <div className="scale-150 mb-16">
+              <BrandLoader animate={false} grayscale={true} />
             </div>
             <h3 className="text-2xl font-black text-gray-400 uppercase tracking-[0.5em]">{t('readyToSearch')}</h3>
             <p className="mt-6 text-base font-medium text-gray-400 max-w-sm leading-relaxed">{t('readyToSearchDesc')}</p>

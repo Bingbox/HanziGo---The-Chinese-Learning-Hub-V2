@@ -9,14 +9,12 @@ const MeiAvatar: React.FC = () => (
   <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-2xl shadow-lg ring-4 ring-red-50 relative">
     <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white">
       <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
-      <path d="M20 20l30-10 30 10v5h-60z" className="opacity-40" />
     </svg>
     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
   </div>
 );
 
 // SF Symbols 5 Style Icons for AITutor and potentially Dictionary
-// Moved here to be reusable and exported
 export const MicIcon = ({ active }: { active: boolean }) => (
   <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-red-600' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75V19.5a2.25 2.25 0 0 1-2.25 2.25v0A2.25 2.25 0 0 1 7.5 19.5V18.75m4.5-5.625v-5.25a3.375 3.375 0 1 0-6.75 0v5.25m6.75 0H9m3.75 0H15" />
@@ -48,27 +46,22 @@ const AITutor: React.FC = () => {
   const [currentSessionId, setCurrentSessionId] = useState<string>(() => Math.random().toString(36).substr(2, 9));
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false); // Model is generating response
-  const [isMeiSpeaking, setIsMeiSpeaking] = useState(false); // Model audio playback
-  const [isRecordingVoice, setIsRecordingVoice] = useState(false); // User recording voice
+  const [isTyping, setIsTyping] = useState(false); 
+  const [isMeiSpeaking, setIsMeiSpeaking] = useState(false); 
+  const [isRecordingVoice, setIsRecordingVoice] = useState(false); 
   const scrollRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // Load sessions from local storage on mount
   useEffect(() => {
     const saved = localStorage.getItem('hanzigo_tutor_sessions');
     if (saved) {
       const parsed = JSON.parse(saved);
       setSessions(parsed);
-      if (parsed.length > 0) {
-        // Option to load most recent session could go here
-      }
     }
   }, []);
 
-  // Save sessions to local storage
   useEffect(() => {
     if (sessions.length > 0) {
       localStorage.setItem('hanzigo_tutor_sessions', JSON.stringify(sessions));
@@ -105,12 +98,10 @@ const AITutor: React.FC = () => {
       const finalMessages = [...updatedMessages, modelMsg];
       setMessages(finalMessages);
 
-      // Speak in voice mode if active
       if (mode === 'VOICE') {
         handleMeiSpeak(response.text);
       }
 
-      // Update or Create Session in History
       setSessions(prev => {
         const existingIdx = prev.findIndex(s => s.id === currentSessionId);
         if (existingIdx > -1) {
@@ -189,7 +180,7 @@ const AITutor: React.FC = () => {
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
           const base64Audio = (reader.result as string).split(',')[1];
-          setIsTyping(true); // Indicate processing
+          setIsTyping(true); 
           try {
             const transcribedText = await transcribeAudio(base64Audio);
             if (transcribedText) {
@@ -221,10 +212,9 @@ const AITutor: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full max-w-5xl mx-auto p-4 md:p-10 relative">
-      {/* Apple-Style Header */}
       <header className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
         <div className="flex items-center gap-4">
-          <MeiAvatar /> {/* Using the new MeiAvatar component */}
+          <MeiAvatar /> 
           <div>
             <h3 className="text-lg font-black text-gray-900 tracking-tight leading-none mb-1">Mei</h3>
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t('tutorRole')}</p>
@@ -240,7 +230,6 @@ const AITutor: React.FC = () => {
         </button>
       </header>
 
-      {/* History Drawer Overlay */}
       {showHistory && (
         <div className="absolute inset-0 z-50 bg-white/80 backdrop-blur-xl animate-in fade-in duration-300 p-8 flex flex-col">
           <div className="flex justify-between items-center mb-10">
@@ -285,7 +274,6 @@ const AITutor: React.FC = () => {
         </div>
       )}
 
-      {/* Main Content Area */}
       <div className="flex-1 relative min-h-0">
         <div className="h-full flex flex-col">
           <div className="flex-1 overflow-y-auto space-y-8 mb-8 pr-4 custom-scrollbar pb-10">
@@ -312,17 +300,23 @@ const AITutor: React.FC = () => {
               </div>
             ))}
             {isTyping && (
-              <div className="flex gap-1.5 p-4 bg-gray-100 rounded-xl w-fit animate-pulse">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+              <div className="flex items-center gap-3 p-4 bg-gray-100 rounded-2xl w-fit animate-pulse">
+                <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                  <svg viewBox="0 0 100 100" className="w-3.5 h-3.5 fill-white">
+                    <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
+                  </svg>
+                </div>
+                <div className="flex gap-1">
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                </div>
               </div>
             )}
             <div ref={scrollRef} />
           </div>
 
           <div className="relative flex items-center gap-3 group mb-4">
-            {/* Mode Switcher */}
             <button
               onClick={() => setMode(mode === 'TEXT' ? 'VOICE' : 'TEXT')}
               className="w-12 h-12 rounded-full flex items-center justify-center text-xl text-gray-400 bg-gray-100 hover:bg-gray-200 transition-colors shrink-0"
@@ -354,7 +348,6 @@ const AITutor: React.FC = () => {
                 </button>
               </>
             ) : (
-              // Voice Input Mode
               <div className="flex-1 flex justify-center items-center">
                 <button
                   onMouseDown={startVoiceRecording}
@@ -365,7 +358,7 @@ const AITutor: React.FC = () => {
                   className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all
                     ${isRecordingVoice ? 'bg-red-600 animate-pulse text-white scale-110' : 'bg-gray-900 text-white hover:bg-red-600'}`}
                 >
-                  <MicIcon active={isRecordingVoice} /> {/* Use MicIcon here */}
+                  <MicIcon active={isRecordingVoice} /> 
                 </button>
               </div>
             )}

@@ -4,6 +4,15 @@ import { HSKQuestion, HSKLevel } from '../types';
 import { generateHSKQuestions } from '../services/geminiService';
 import { useTranslation } from '../App';
 
+const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-24 h-24" }) => (
+  <div className={`${size} relative animate-bounce`}>
+    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-full shadow-2xl border-4 border-white"></div>
+    <svg viewBox="0 0 100 100" className="absolute inset-0 p-5 fill-white">
+      <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
+    </svg>
+  </div>
+);
+
 const HSKCenter: React.FC = () => {
   const { language, t } = useTranslation();
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -56,13 +65,9 @@ const HSKCenter: React.FC = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-12 text-center">
-        <div className="w-24 h-24 relative mb-10">
-          <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-red-600 rounded-full border-t-transparent animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center font-black text-gray-300">HSK</div>
-        </div>
-        <h3 className="text-2xl font-black text-gray-900 mb-4">{t('preparingExam')}</h3>
-        <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs max-w-sm leading-relaxed">
+        <BrandLoader />
+        <h3 className="text-2xl font-black text-gray-900 mb-4 mt-12 tracking-tight">{t('preparingExam')}</h3>
+        <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] max-w-sm leading-relaxed">
           {t('preparingGuidance', { level: selectedLevel, lang: t('langName') })}
         </p>
       </div>
@@ -86,7 +91,6 @@ const HSKCenter: React.FC = () => {
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('officialSimulation')}</p>
               </div>
             </div>
-            {/* 改进后的 QUIT 按钮，与整体风格统一 */}
             <button 
               onClick={() => setTestStarted(false)} 
               className="px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-xl font-black text-[10px] hover:bg-gray-900 hover:text-white transition-all uppercase tracking-widest active:scale-95 shadow-sm"
@@ -262,7 +266,7 @@ const HSKCenter: React.FC = () => {
               {h.level}
             </div>
             
-            {/* 使用 flex-1 包裹顶部内容，确保按钮 mt-auto 时能对齐 */}
+            {/* 使用 flex-1 包裹顶部内容，確保按鈕 mt-auto 時能對齊 */}
             <div className="flex-1 flex flex-col items-center w-full relative z-10">
               <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 text-3xl font-black mb-4 border-4 border-white shadow-xl shadow-red-50/50 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
                  {h.level}
@@ -283,7 +287,7 @@ const HSKCenter: React.FC = () => {
               </div>
             </div>
 
-            {/* 按钮使用 mt-auto 确保水平对齐 */}
+            {/* 按鈕使用 mt-auto 確保水平對齊 */}
             <button 
               onClick={() => startTest(h.level)} 
               className="w-full mt-auto py-4 bg-gray-900 text-white rounded-xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10"

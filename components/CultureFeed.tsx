@@ -14,6 +14,15 @@ interface CulturalCategory {
   subTopics: string[]; // Translation keys
 }
 
+const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-24 h-24" }) => (
+  <div className={`${size} relative animate-bounce`}>
+    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-full shadow-2xl border-4 border-white"></div>
+    <svg viewBox="0 0 100 100" className="absolute inset-0 p-5 fill-white">
+      <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
+    </svg>
+  </div>
+);
+
 const CultureFeed: React.FC = () => {
   const { language, t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<CulturalCategory | null>(null);
@@ -104,8 +113,6 @@ const CultureFeed: React.FC = () => {
       }
     } catch (e) {
       console.error(e);
-      // Fallback to English content if translation fails for generated content
-      // For preset content, `translateCultureArticle` should handle fallback
       setContent({
         title: "Error",
         pinyinTitle: "Cuòwù",
@@ -124,7 +131,7 @@ const CultureFeed: React.FC = () => {
     if (selectedTopicId) {
       fetchContent(selectedTopicId);
     }
-  }, [language, selectedTopicId]); // Added selectedTopicId to dependency array
+  }, [language, selectedTopicId]); 
 
   const handleTopicSelect = (topicId: string) => {
     setSelectedTopicId(topicId);
@@ -218,7 +225,6 @@ const CultureFeed: React.FC = () => {
                 <div>
                   <h4 className="text-2xl font-black text-gray-900 group-hover:text-red-600 transition-colors tracking-tight">{t(topicId)}</h4>
                   <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-loose mt-2">
-                    {/* Resolution logic: t('desc_' + topicId) will look for a translated description string */}
                     {t('desc_' + topicId) !== ('desc_' + topicId) ? t('desc_' + topicId) : t('exploreGenericTopic')}
                   </p>
                 </div>
@@ -235,8 +241,8 @@ const CultureFeed: React.FC = () => {
         <div className="space-y-10">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-40 space-y-10">
-              <div className="w-24 h-24 bg-red-600 text-white rounded-3xl flex items-center justify-center text-6xl shadow-2xl animate-pulse chinese-font border-4 border-white">文</div>
-              <div className="text-center">
+              <BrandLoader />
+              <div className="text-center mt-4">
                 <p className="text-gray-900 font-black text-xl mb-2 tracking-tight">{t('curating')}</p>
                 <p className="text-gray-400 font-bold uppercase tracking-[0.3em] text-[10px]">{t(selectedTopicId)}</p>
               </div>

@@ -22,9 +22,10 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
   const { t, user, allUnits, setActiveUnitId } = useTranslation();
   const [selectedDay, setSelectedDay] = useState<number | null>(new Date().getDay() - 1);
 
-  const randomModules = useMemo(() => {
+  const featuredModules = useMemo(() => {
     const available = allUnits.filter(u => !u.locked);
-    return [...available].sort(() => 0.5 - Math.random()).slice(0, 4);
+    // Shuffle and pick 3 modules
+    return [...available].sort(() => 0.5 - Math.random()).slice(0, 3);
   }, [allUnits]);
 
   const weeklyData = useMemo(() => [
@@ -187,32 +188,48 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         </div>
       </section>
 
-      <section className="space-y-10">
-        <div className="flex items-center justify-between">
-            <h3 className="text-4xl font-black text-gray-900 tracking-tight">{t('deepLearningModules')}</h3>
+      {/* Featured Learning Modules - Updated to 3 columns */}
+      <section className="space-y-8 animate-in slide-in-from-bottom-10 duration-700">
+        <div className="flex items-center gap-10">
+            <h3 className="text-2xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0">{t('learn')}</h3>
+            <div className="h-1 flex-1 bg-gradient-to-r from-gray-100 via-gray-50 to-transparent rounded-full shadow-inner" />
             <button 
               onClick={() => setView(View.LEARN)}
-              className="text-xs font-black text-red-600 uppercase tracking-[0.4em] hover:underline"
+              className="text-xs font-black text-red-600 uppercase tracking-[0.4em] hover:underline shrink-0"
             >
               {t('exploreAll')}
             </button>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {randomModules.map((unit) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredModules.map((unit) => (
                 <div 
                   key={unit.id} 
                   onClick={() => handleModuleClick(unit)}
-                  className="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full"
+                  className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full relative overflow-hidden min-h-[320px]"
                 >
-                    <div className={`w-16 h-16 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-4xl mb-8 group-hover:rotate-12 transition-transform shadow-xl border-4 border-white`}>
+                    <div className="flex items-start gap-6 mb-6">
+                      <div className={`w-16 h-16 shrink-0 aspect-square ${unit.color} rounded-2xl flex items-center justify-center text-4xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white shadow-xl`}>
                         {unit.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-2xl font-black text-gray-900 leading-tight group-hover:text-red-600 transition-colors tracking-tight">{unit.title}</h4>
+                        <div className="inline-flex px-3 py-1 bg-red-50 rounded-full border border-red-100 mt-3">
+                          <p className="text-[10px] font-black text-red-600 uppercase tracking-widest leading-none">{unit.focus}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="mb-4">
-                       <h4 className="text-2xl font-black text-gray-900 leading-tight group-hover:text-red-600 transition-colors tracking-tight">{unit.title}</h4>
+                    
+                    <p className="text-gray-500 font-medium mb-8 flex-1 leading-relaxed text-base italic">"{unit.description}"</p>
+                    
+                    <div className="mt-auto pt-6 border-t border-gray-50 flex justify-between items-center">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-red-600 transition-colors">{t('resumeTraining')}</span>
+                      <span className="text-red-600 opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-2">
+                        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                          <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" />
+                        </svg>
+                      </span>
                     </div>
-                    <p className="text-[10px] font-black text-red-600 uppercase tracking-[0.4em] mb-6">{unit.focus}</p>
-                    <p className="text-base text-gray-400 font-medium leading-relaxed italic opacity-80 flex-1">"{unit.description}"</p>
                 </div>
             ))}
         </div>

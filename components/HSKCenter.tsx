@@ -78,7 +78,7 @@ const HSKCenter: React.FC = () => {
         <header className="flex flex-col mb-12">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-black">
+              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-black shadow-lg shadow-red-100">
                 {selectedLevel}
               </div>
               <div>
@@ -86,9 +86,10 @@ const HSKCenter: React.FC = () => {
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('officialSimulation')}</p>
               </div>
             </div>
+            {/* 改进后的 QUIT 按钮，与整体风格统一 */}
             <button 
               onClick={() => setTestStarted(false)} 
-              className="px-6 py-2.5 bg-gray-50 text-gray-400 rounded-lg font-black text-xs hover:bg-red-50 hover:text-red-600 transition-all uppercase tracking-widest"
+              className="px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-xl font-black text-[10px] hover:bg-gray-900 hover:text-white transition-all uppercase tracking-widest active:scale-95 shadow-sm"
             >
               {t('quit')}
             </button>
@@ -251,37 +252,41 @@ const HSKCenter: React.FC = () => {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {HSK_LEVELS.map((h) => (
           <div 
             key={h.level} 
-            className="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all group flex flex-col items-center text-center overflow-hidden relative"
+            className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all group flex flex-col items-center text-center overflow-hidden relative min-h-[380px]"
           >
-            <div className="absolute top-0 right-0 p-10 text-9xl font-black text-gray-50/50 group-hover:text-red-50/50 transition-colors pointer-events-none">
+            <div className="absolute top-0 right-0 p-8 text-8xl font-black text-gray-50/50 group-hover:text-red-50/50 transition-colors pointer-events-none">
               {h.level}
             </div>
             
-            <div className="w-24 h-24 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 text-4xl font-black mb-8 border-4 border-white shadow-xl shadow-red-50/50 relative z-10 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-               {h.level}
-            </div>
-            
-            <h3 className="text-2xl font-black text-gray-900 mb-2 relative z-10">HSK {h.level}</h3>
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 relative z-10">{h.title}</p>
-            
-            <div className="grid grid-cols-2 gap-4 w-full mb-10 relative z-10">
-               <div className="bg-gray-50 p-4 rounded-xl">
-                  <p className="text-gray-400 font-black text-[9px] uppercase mb-1">{t('vocabCount')}</p>
-                  <p className="text-lg font-black text-gray-900">{h.requiredVocab}</p>
-               </div>
-               <div className="bg-gray-50 p-4 rounded-xl">
-                  <p className="text-gray-400 font-black text-[9px] uppercase mb-1">{t('estTime')}</p>
-                  <p className="text-lg font-black text-gray-900">45m</p>
-               </div>
+            {/* 使用 flex-1 包裹顶部内容，确保按钮 mt-auto 时能对齐 */}
+            <div className="flex-1 flex flex-col items-center w-full relative z-10">
+              <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 text-3xl font-black mb-4 border-4 border-white shadow-xl shadow-red-50/50 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
+                 {h.level}
+              </div>
+              
+              <h3 className="text-xl font-black text-gray-900 mb-1">HSK {h.level}</h3>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">{h.title}</p>
+              
+              <div className="grid grid-cols-2 gap-4 w-full mb-6">
+                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <p className="text-gray-400 font-black text-[8px] uppercase mb-1">{t('vocabCount')}</p>
+                    <p className="text-base font-black text-gray-900">{h.requiredVocab}</p>
+                 </div>
+                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <p className="text-gray-400 font-black text-[8px] uppercase mb-1">{t('estTime')}</p>
+                    <p className="text-base font-black text-gray-900">45m</p>
+                 </div>
+              </div>
             </div>
 
+            {/* 按钮使用 mt-auto 确保水平对齐 */}
             <button 
               onClick={() => startTest(h.level)} 
-              className="w-full py-5 bg-gray-900 text-white rounded-xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10"
+              className="w-full mt-auto py-4 bg-gray-900 text-white rounded-xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10"
             >
                {t('startMock')}
             </button>

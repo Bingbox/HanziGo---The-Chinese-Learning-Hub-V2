@@ -382,7 +382,7 @@ const Learn: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-10 pb-24">
-      <header className="mb-16 flex items-center justify-between">
+      <header className="mb-12 flex items-center justify-between">
         <div className="animate-in slide-in-from-left duration-700">
           <h2 className="text-5xl font-black text-gray-900 mb-4 tracking-tight">{t('learn')}</h2>
           <div className="flex items-center gap-3">
@@ -396,55 +396,54 @@ const Learn: React.FC = () => {
         </div>
       </header>
 
-      <div className="space-y-32">
+      <div className="space-y-16">
         {CATEGORIES.map((cat) => (
-          <section key={cat.id} className="space-y-12 animate-in slide-in-from-bottom-10 duration-700">
+          <section key={cat.id} className="space-y-8 animate-in slide-in-from-bottom-10 duration-700">
             <div className="flex items-center gap-10">
-                <h3 className="text-3xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0 text-wrap">{cat.name}</h3>
-                <div className="h-1.5 flex-1 bg-gradient-to-r from-gray-100 via-gray-50 to-transparent rounded-full shadow-inner" />
+                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0 text-wrap">{cat.name}</h3>
+                <div className="h-1 flex-1 bg-gradient-to-r from-gray-100 via-gray-50 to-transparent rounded-full shadow-inner" />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {cat.units.map((unit: any) => {
                 const progressPercent = Math.round((unit.completed / unit.lessons) * 100);
                 return (
                   <div 
                     key={unit.id}
                     onClick={() => !unit.locked && startLesson(unit)}
-                    className={`bg-white p-10 rounded-xl border border-gray-100 shadow-sm transition-all flex flex-col h-full relative group overflow-hidden
-                      ${unit.locked ? 'opacity-30 cursor-not-allowed scale-95 grayscale' : 'hover:shadow-2xl hover:-translate-y-4 cursor-pointer active:scale-[0.98]'}`}
+                    className={`bg-white p-7 rounded-xl border border-gray-100 shadow-sm transition-all flex flex-col h-full relative group overflow-hidden min-h-[300px]
+                      ${unit.locked ? 'opacity-30 cursor-not-allowed scale-95 grayscale' : 'hover:shadow-2xl hover:-translate-y-2 cursor-pointer active:scale-[0.98]'}`}
                   >
                     {unit.locked && (
                       <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                        <div className="bg-white/90 p-5 rounded-xl text-gray-400 border border-gray-100 shadow-2xl backdrop-blur-sm transform scale-125 animate-in zoom-in duration-300">
-                          <span className="text-4xl">🔒</span>
+                        <div className="bg-white/90 p-4 rounded-xl text-gray-400 border border-gray-100 shadow-2xl backdrop-blur-sm transform scale-110 animate-in zoom-in duration-300">
+                          <span className="text-3xl">🔒</span>
                         </div>
                       </div>
                     )}
                     
-                    <div className="flex items-start gap-8 mb-10">
-                      {/* Adjusted Icon container size to w-16 h-16 and icon text to text-3xl */}
-                      <div className={`w-16 h-16 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-3xl shadow-xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white`}>
+                    <div className="flex items-start gap-5 mb-4">
+                      <div className={`w-14 h-14 shrink-0 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-3xl shadow-xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white`}>
                         {unit.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-2xl font-black text-gray-900 leading-tight mb-3 group-hover:text-red-600 transition-colors tracking-tight text-wrap">{unit.title}</h4>
-                        <div className="inline-flex px-3 py-1.5 bg-gray-50 rounded-md border border-gray-100">
-                          <p className="text-[10px] font-black text-red-600 uppercase tracking-widest leading-none text-wrap">{unit.focus}</p>
+                        <h4 className="text-xl font-black text-gray-900 leading-tight mb-2 group-hover:text-red-600 transition-colors tracking-tight text-wrap">{unit.title}</h4>
+                        <div className="inline-flex px-2 py-1 bg-gray-50 rounded-md border border-gray-100">
+                          <p className="text-[9px] font-black text-red-600 uppercase tracking-widest leading-none text-wrap">{unit.focus}</p>
                         </div>
                       </div>
                     </div>
                     
-                    <p className="text-gray-500 font-medium mb-10 flex-1 leading-relaxed text-base italic text-wrap">"{unit.description}"</p>
+                    <p className="text-gray-500 font-medium mb-6 flex-1 leading-relaxed text-sm italic text-wrap">"{unit.description}"</p>
                     
-                    <div className="space-y-6 mt-auto pb-6">
+                    <div className="space-y-4 mt-auto">
                       <div className="flex justify-between items-end px-1">
                          <div className="max-w-[140px]">
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t('levelMastery')}</p>
-                            <span className="text-lg font-black text-gray-900 truncate block">{t('doneUnit', { completed: unit.completed, lessons: unit.lessons })}</span>
+                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">{t('levelMastery')}</p>
+                            <span className="text-base font-black text-gray-900 truncate block">{t('doneUnit', { completed: unit.completed, lessons: unit.lessons })}</span>
                          </div>
                       </div>
-                      <div className="h-3 w-[80%] bg-gray-50 rounded-full overflow-hidden shadow-inner border border-gray-50 p-0.5">
+                      <div className="h-2 w-full bg-gray-50 rounded-full overflow-hidden shadow-inner border border-gray-50 p-0.5">
                         <div className="h-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-1000 rounded-full" style={{ width: `${progressPercent}%` }} />
                       </div>
                     </div>

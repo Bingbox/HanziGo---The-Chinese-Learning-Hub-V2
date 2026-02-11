@@ -62,13 +62,13 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
   };
 
   return (
-    <div className="p-6 md:p-10 space-y-10 animate-in fade-in duration-700">
+    <div className="p-6 md:p-8 lg:p-12 space-y-10 animate-in fade-in duration-700 bg-white/50">
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div className="flex items-center gap-5">
           <MasteryBadge level={user?.level || 1} />
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-               <span className="px-1.5 py-0.5 bg-red-600 text-white text-[8px] font-black rounded uppercase tracking-widest">
+               <span className="px-1.5 py-0.5 bg-red-600 text-white text-[8px] font-black rounded uppercase tracking-widest shadow-sm">
                   {t('premium')}
                </span>
                <span className="text-gray-400 font-bold text-[10px] uppercase tracking-widest">
@@ -82,8 +82,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         </div>
         
         <div className="flex gap-2 w-full lg:w-auto">
-            <div className="flex-1 lg:flex-none bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 min-w-[130px] group transition-all hover:shadow-md">
-                <div className="w-9 h-9 bg-orange-50 rounded-xl flex items-center justify-center shrink-0">
+            <div className="flex-1 lg:flex-none bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3 min-w-[130px] group transition-all hover:shadow-md">
+                <div className="w-9 h-9 bg-orange-50 rounded-lg flex items-center justify-center shrink-0">
                     <svg viewBox="0 0 24 24" className="w-5 h-5 fill-orange-500">
                         <path d="M12 2.25c0 4.142-2.583 6.666-4.5 8.166-.948.74-2.25 1.55-2.25 3.584 0 3.728 3.022 6.75 6.75 6.75s6.75-3.022 6.75-6.75c0-3.142-2.144-4.757-4.125-6.141-1.332-.932-2.625-1.838-2.625-5.609Z" />
                     </svg>
@@ -94,8 +94,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                 </div>
             </div>
 
-            <div className="flex-1 lg:flex-none bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 min-w-[130px] group transition-all hover:shadow-md">
-                <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+            <div className="flex-1 lg:flex-none bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3 min-w-[130px] group transition-all hover:shadow-md">
+                <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
                     <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blue-500">
                         <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.833l2.015-7.179H3.75a.75.75 0 0 1-.548-1.262L13.702 1.75a.75.75 0 0 1 .913-.155Z" clipRule="evenodd" />
                     </svg>
@@ -109,10 +109,9 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
       </header>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Weekly Mastery: Updated to bg-white for unity */}
+        {/* Weekly Mastery: Updated to white/lively style */}
         <div className="lg:col-span-7 bg-white rounded-2xl p-8 text-gray-900 relative overflow-hidden shadow-sm border border-gray-100 flex flex-col min-h-[350px]">
-            {/* Subtle brand accent decor */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full translate-x-16 -translate-y-16 blur-2xl" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full translate-x-16 -translate-y-16 blur-2xl opacity-50" />
             
             <div className="relative z-10 flex justify-between items-start mb-8">
                 <div>
@@ -120,7 +119,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                   <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">{t('productivityPeak')}</p>
                 </div>
                 {selectedDay !== null && (
-                  <div className="text-right bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 transition-all">
+                  <div className="text-right bg-gray-50 px-4 py-2 rounded-lg border border-gray-100 transition-all">
                     <p className="text-[7px] font-black text-red-500 uppercase tracking-widest mb-0.5">{t('selectedDetail')}</p>
                     <p className="text-lg font-black text-gray-900">{weeklyData[selectedDay].xp} XP</p>
                   </div>
@@ -139,9 +138,9 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                           className="flex-1 flex flex-col items-center gap-3 group cursor-pointer"
                           onClick={() => setSelectedDay(i)}
                         >
-                            <div className="w-full bg-gray-50 rounded-xl relative flex items-end overflow-hidden h-full border border-gray-100 transition-all group-hover:bg-gray-100/50">
+                            <div className="w-full bg-gray-50 rounded-xl relative flex items-end overflow-hidden h-full border border-gray-100 transition-all group-hover:bg-gray-100">
                                 <div 
-                                    className={`w-full rounded-t-lg transition-all duration-700 ease-out
+                                    className={`w-full rounded-t-md transition-all duration-700 ease-out
                                       ${selectedDay === i ? 'bg-gradient-to-t from-red-600 to-orange-400 shadow-md shadow-red-100' : 'bg-gray-200 group-hover:bg-gray-300'}`} 
                                     style={{ height: `${item.percent}%` }}
                                 ></div>
@@ -220,7 +219,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                   className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all cursor-pointer group flex flex-col h-full min-h-[240px] relative overflow-hidden"
                 >
                     <div className="flex items-start gap-4 mb-4 relative z-10">
-                      <div className={`w-12 h-12 shrink-0 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-2xl transition-all group-hover:scale-110 border-2 border-white shadow-md`}>
+                      <div className={`w-12 h-12 shrink-0 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-2xl shadow-md transition-all group-hover:scale-110 border-2 border-white`}>
                         {unit.icon}
                       </div>
                       <div className="flex-1">
@@ -248,12 +247,12 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         
         <div 
           onClick={handleCultureSpotlightClick}
-          className="bg-white rounded-2xl p-10 border border-gray-100 shadow-sm hover:shadow-xl transition-all cursor-pointer group relative overflow-hidden"
+          className="bg-white rounded-2xl p-8 lg:p-10 border border-gray-100 shadow-sm hover:shadow-xl transition-all cursor-pointer group relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 p-8 text-[10rem] font-black text-red-600/5 chinese-font select-none pointer-events-none group-hover:scale-105 transition-transform duration-700">
              {cultureSpotlight.chineseTitle.charAt(0)}
           </div>
-          <div className="flex flex-col md:flex-row gap-10 items-center relative z-10">
+          <div className="flex flex-col md:flex-row gap-8 lg:gap-10 items-center relative z-10">
             <div className="w-24 h-24 bg-red-50 rounded-2xl flex items-center justify-center text-4xl shadow-lg border-2 border-white shrink-0 group-hover:rotate-6 transition-transform duration-500">
                🏮
             </div>

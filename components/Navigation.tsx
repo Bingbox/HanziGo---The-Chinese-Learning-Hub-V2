@@ -39,19 +39,12 @@ const Icons = {
     <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-red-600 scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
-  ),
-  // Settings icon is removed from main nav items, but defined here for potential use elsewhere if needed.
-  Settings: ({ active }: { active: boolean }) => (
-    <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-red-600 scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-    </svg>
   )
 };
 
 const BrandLogo: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
-  <div className={`${size} relative animate-in zoom-in duration-500 group`}>
-    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-xl shadow-xl transform transition-all group-hover:scale-110 group-hover:rotate-3"></div>
+  <div className={`${size} relative animate-in zoom-in duration-500 group shrink-0`}>
+    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-xl shadow-lg transform transition-all group-hover:scale-110 group-hover:rotate-3"></div>
     <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white">
       <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
       <path d="M20 20l30-10 30 10v5h-60z" className="opacity-40" />
@@ -82,12 +75,8 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
               <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === id ? 'text-red-600' : 'text-gray-400'}`}>{label}</span>
             </button>
           ))}
-          {/* User profile button for mobile, now leads to settings */}
-          <button
-            onClick={() => setView(View.SETTINGS)} // Direct to 'SETTINGS' view for User Management
-            className="flex flex-col items-center justify-center flex-1 transition-all"
-          >
-            <span className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
+          <button onClick={() => setView(View.SETTINGS)} className="flex flex-col items-center justify-center flex-1 transition-all">
+            <span className={`w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-red-500' : ''}`}>
               {user?.avatar || '👤'}
             </span>
             <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === View.SETTINGS ? 'text-red-600' : 'text-gray-400'}`}>
@@ -99,8 +88,8 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
 
       {/* Tablet/Desktop Sidebar */}
       <nav className="hidden md:flex flex-col w-64 h-screen bg-white border-r border-gray-100 sticky top-0 overflow-y-auto">
-        <div className="p-8 flex flex-col h-full">
-          <div className="flex items-center gap-4 mb-14 cursor-pointer group" onClick={() => setView(View.DASHBOARD)}>
+        <div className="p-6 lg:p-8 flex flex-col h-full">
+          <div className="flex items-center gap-4 mb-12 cursor-pointer group" onClick={() => setView(View.DASHBOARD)}>
             <BrandLogo />
             <div>
               <h1 className="text-2xl font-black tracking-tighter text-gray-900 leading-none">Hanzi<span className="text-red-600 italic">Go</span></h1>
@@ -110,19 +99,18 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
 
           <div className="space-y-1.5 flex-1">
             {items.map(({ id, label, Icon }) => (
-              <button key={id} onClick={() => setView(id)} className={`flex items-center gap-4 w-full px-5 py-3.5 rounded-xl transition-all font-bold text-sm ${currentView === id ? 'bg-red-50 text-red-600 shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
+              <button key={id} onClick={() => setView(id)} className={`flex items-center gap-4 w-full px-5 py-3 rounded-xl transition-all font-bold text-sm ${currentView === id ? 'bg-red-50 text-red-600 shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}>
                 <Icon active={currentView === id} />
                 <span>{label}</span>
               </button>
             ))}
           </div>
 
-          {/* User profile button for desktop, now leads to settings */}
           <div className="mt-auto pt-8 border-t border-gray-50">
             <button onClick={() => setView(View.SETTINGS)} className={`w-full p-4 rounded-xl flex items-center gap-4 transition-colors ${currentView === View.SETTINGS ? 'bg-red-50 text-red-600 shadow-sm' : 'bg-gray-50 hover:bg-gray-100'}`}>
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-sm shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
+              <div className="w-11 h-11 bg-white rounded-lg flex items-center justify-center text-sm shadow-sm border border-gray-100">{user?.avatar || '👤'}</div>
               <div className="flex-1 text-left overflow-hidden">
-                <p className="text-sm font-black truncate">{user?.name || t('user')}</p> {/* Use t('user') for default user name */}
+                <p className="text-sm font-black truncate">{user?.name || t('user')}</p>
                 <span className="text-[9px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>{t('online')}</span>
               </div>
             </button>

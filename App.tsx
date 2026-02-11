@@ -20,6 +20,8 @@ interface LanguageContextType {
   allUnits: Unit[];
   activeUnitId: string | null;
   setActiveUnitId: (id: string | null) => void;
+  activeCultureTopic: string | null;
+  setActiveCultureTopic: (id: string | null) => void;
 }
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -34,6 +36,7 @@ const App: React.FC = () => {
   const [currentView, setView] = useState<View>(View.DASHBOARD);
   const [language, setLanguage] = useState<Language>('en');
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
+  const [activeCultureTopic, setActiveCultureTopic] = useState<string | null>(null);
   
   const [user, setUser] = useState<User | null>({
     id: 'u-001',
@@ -106,7 +109,7 @@ const App: React.FC = () => {
       case View.CULTURE: return <CultureFeed />;
       case View.LEARN: return <Learn />;
       case View.HSK: return <HSKCenter />;
-      case View.SETTINGS: return <Settings />; // Use View.SETTINGS directly
+      case View.SETTINGS: return <Settings />;
       default: return <Dashboard setView={setView} />;
     }
   };
@@ -114,7 +117,7 @@ const App: React.FC = () => {
   return (
     <LanguageContext.Provider value={{ 
       language, setLanguage: handleSetLanguage, t, user, setUser: handleSetUser, 
-      allUnits, activeUnitId, setActiveUnitId 
+      allUnits, activeUnitId, setActiveUnitId, activeCultureTopic, setActiveCultureTopic 
     }}>
       <div className={`flex h-screen w-screen overflow-hidden bg-gray-50 flex-col md:flex-row ${language === 'ar' ? 'rtl font-arabic' : 'ltr'}`}>
         <Navigation currentView={currentView} setView={setView} />

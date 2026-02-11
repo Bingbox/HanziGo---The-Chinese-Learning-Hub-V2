@@ -24,7 +24,7 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-24 h-24" }) => (
 );
 
 const CultureFeed: React.FC = () => {
-  const { language, t } = useTranslation();
+  const { language, t, activeCultureTopic, setActiveCultureTopic } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<CulturalCategory | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
   const [content, setContent] = useState<any>(null);
@@ -80,6 +80,17 @@ const CultureFeed: React.FC = () => {
       subTopics: ['shaolin_kungfu', 'tai_chi', 'wuxia_culture', 'weapons', 'wing_chun'] 
     }
   ], [t]);
+
+  // Handle deep linking from Dashboard
+  useEffect(() => {
+    if (activeCultureTopic) {
+      setSelectedTopicId(activeCultureTopic);
+      // Find the category that contains this topic
+      const category = categories.find(cat => cat.subTopics.includes(activeCultureTopic));
+      if (category) setSelectedCategory(category);
+      setActiveCultureTopic(null); // Clear the trigger
+    }
+  }, [activeCultureTopic, categories, setActiveCultureTopic]);
 
   const fetchContent = async (topicId: string) => {
     setLoading(true);

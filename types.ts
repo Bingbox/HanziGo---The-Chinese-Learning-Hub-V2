@@ -6,7 +6,7 @@ export enum View {
   HSK = 'HSK',
   CULTURE = 'CULTURE',
   AI_TUTOR = 'AI_TUTOR',
-  SETTINGS = 'SETTINGS', // Added SETTINGS to the View enum
+  SETTINGS = 'SETTINGS',
 }
 
 export type Language = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'ko' | 'ru' | 'ar' | 'zh_hk';
@@ -27,9 +27,8 @@ export interface User {
   };
 }
 
-// Interface for internally stored users (simulating a database record)
 export interface StoredUser extends User {
-  password: string; // For simulation purposes only, would be hashed in a real app
+  password: string; 
 }
 
 export interface Unit {
@@ -66,6 +65,11 @@ export interface ChatMessage {
     correction: string;
     explanation: string;
   };
+  vocab?: {
+    word: string;
+    pinyin: string;
+    meaning: string;
+  }[];
 }
 
 export interface TutorSession {
@@ -83,8 +87,8 @@ export interface Exercise {
   id: string;
   type: ExerciseType;
   question: string;
-  options?: string[]; // These options are now translation keys
-  answer: string; // This answer is now a translation key or the original Chinese/Pinyin string
+  options?: string[]; 
+  answer: string; 
   pinyin: string;
   chinese: string;
   audioUrl?: string;
@@ -96,7 +100,6 @@ export interface HSKLevel {
   title: string;
 }
 
-// Added missing HSKQuestion interface to fix import errors in HSKCenter
 export interface HSKQuestion {
   id: string;
   question: string;

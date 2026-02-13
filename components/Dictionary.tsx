@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { dictionaryLookup, recognizeImage, transcribeAudio } from '../services/geminiService';
 import { WordEntry } from '../types';
 import { useTranslation } from '../App';
-import { MicIcon } from './AITutor'; 
+
+// Fix: Removed incorrect MicIcon import from AITutor and added local definition
 
 const BrandLoader: React.FC<{ size?: string; animate?: boolean; grayscale?: boolean }> = ({ size = "w-24 h-24", animate = true, grayscale = false }) => (
   <div className={`${size} relative ${animate ? 'animate-bounce' : ''} ${grayscale ? 'grayscale opacity-30' : ''}`}>
@@ -24,6 +25,14 @@ const SearchIcon = () => (
 const CameraIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-gray-400 stroke-[1.8]">
     <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.351 2.25 9.25V19.5a2.25 2.25 0 0 0 2.25 2.25h15.5a2.25 2.25 0 0 0 2.25-2.25V9.25c0-.899-.75-1.669-1.874-1.921-.377-.063-.754-.121-1.134-.175a2.31 2.31 0 0 1-1.64-1.055l-.82-1.26A2.25 2.25 0 0 0 14.828 5.25h-5.656a2.25 2.25 0 0 0-1.64 1.055ZM15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+  </svg>
+);
+
+// Added local MicIcon to resolve import error
+const MicIcon = ({ active }: { active?: boolean }) => (
+  <svg viewBox="0 0 24 24" className={`w-5 h-5 transition-all duration-300 ${active ? 'fill-white scale-110' : 'fill-gray-400'}`}>
+    <path d="M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z" />
+    <path d="M6 10.5a.75.75 0 0 1 .75.75 5.25 5.25 0 1 0 10.5 0 .75.75 0 0 1 1.5 0 6.75 6.75 0 0 1-6 6.709V21a.75.75 0 0 1-1.5 0v-3.041a6.75 6.75 0 0 1-6-6.709.75.75 0 0 1 .75-.75Z" />
   </svg>
 );
 

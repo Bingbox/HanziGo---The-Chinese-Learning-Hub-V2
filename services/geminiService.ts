@@ -1,28 +1,8 @@
 
+import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { Language, ChatMessage } from "../types";
 import { translations } from "../translations";
 
-// 获取环境变量
-const API_KEY = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
-const BASE_URL = process.env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
-const MODEL = process.env.GEMINI_MODEL || 'gemini-3-flash-preview';
-
-/**
- * 辅助函数：解码 Base64 编码的数据
- */
-export function decodeBase64(base64: string): Uint8Array {
-  const binaryString = atob(base64);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-}
-
-/**
- * 辅助函数：从模型返回的字符串中提取纯 JSON 块
- * 防止 Markdown 代码块标记导致的解析失败
- */
 const extractJson = (text: string) => {
   try {
     const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
@@ -34,41 +14,14 @@ const extractJson = (text: string) => {
   }
 };
 
-/**
- * 通过第三方中转站调用生成内容接口
- */
-const callGenerateContent = async (payload: any): Promise<string> => {
-  const isLocalhost = BASE_URL.includes('localhost') || BASE_URL.includes('127.0.0.1');
-  const url = isLocalhost 
-    ? `${BASE_URL}/chat/completions`
-    : `${BASE_URL}/models/${MODEL}:generateContent?key=${API_KEY}`;
-  
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(isLocalhost ? { 'Authorization': `Bearer ${API_KEY}` } : {})
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`API Error: ${response.status} - ${error}`);
+export function decodeBase64(base64: string): Uint8Array {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
   }
-
-  const data = await response.json();
-  
-  // 处理中转站返回格式（兼容OpenAI格式和Google格式）
-  if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-    return data.candidates[0].content.parts[0].text;
-  }
-  if (data.choices?.[0]?.message?.content) {
-    return data.choices[0].message.content;
-  }
-  
-  throw new Error('Unexpected API response format');
-};
+  return bytes;
+}
 
 export async function decodeAudioData(
   data: Uint8Array,
@@ -76,9 +29,10 @@ export async function decodeAudioData(
   sampleRate: number = 24000,
   numChannels: number = 1
 ): Promise<AudioBuffer> {
-  const dataInt16 = new Int16Array(data.buffer);
+  const dataInt16 = new Int16Array(data.buffer, data.byteOffset, data.byteLength / 2);
   const frameCount = dataInt16.length / numChannels;
   const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
+
   for (let channel = 0; channel < numChannels; channel++) {
     const channelData = buffer.getChannelData(channel);
     for (let i = 0; i < frameCount; i++) {
@@ -88,49 +42,82 @@ export async function decodeAudioData(
   return buffer;
 }
 
-export const dictionaryLookup = async (query: string, userLang: Language = 'en') => {
+/**
+ * AI Tutor 流式响应函数 - 支持双语、语法纠错及名词提取
+ */
+export async function* getAITutorResponseStream(history: ChatMessage[], userLang: Language = 'en') {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const langName = translations[userLang]?.langName || 'English';
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [{
-        text: `Analyze the Chinese word/character: "${query}". 
-    Provide a professional Pleco-grade linguistic breakdown for a native ${langName} speaker. 
-    IMPORTANT: All explanations, meanings, etymology descriptions, and component analysis MUST be strictly and naturally in ${langName}.`
-      }]
-    }],
-    generationConfig: {
+  
+  const contents = history.map(m => ({
+    role: m.role,
+    parts: [{ text: m.text }]
+  }));
+
+  const responseStream = await ai.models.generateContentStream({
+    model: 'gemini-3-flash-preview', 
+    contents: contents,
+    config: {
+      systemInstruction: `You are 'Mei', a professional Mandarin Teacher for a native ${langName} speaker. 
+      CORE RULES:
+      1. ALWAYS respond with Chinese characters first, then ${langName} translation.
+      2. If the user made errors, put correction JSON in [ANALYSIS]...[/ANALYSIS] at the VERY END.
+      3. KEY FEATURE: Identify 1-3 key Chinese nouns or phrases from your current response. For each, provide a mini dictionary entry in this EXACT JSON format: {"word": "...", "pinyin": "...", "meaning": "..."}.
+      4. Wrap each vocab entry inside [VOCAB]...[/VOCAB] tags. Place them after the main text but before [ANALYSIS].
+      Example:
+      你好！很高兴认识你。
+      (Hello! Nice to meet you.)
+      [VOCAB]{"word": "高兴", "pinyin": "gāoxìng", "meaning": "happy / glad"}[/VOCAB]
+      [ANALYSIS]{...}[/ANALYSIS]`,
+      thinkingConfig: { thinkingBudget: 0 },
+    },
+  });
+
+  for await (const chunk of responseStream) {
+    yield chunk.text;
+  }
+}
+
+export const dictionaryLookup = async (query: string, userLang: Language = 'en') => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const langName = translations[userLang]?.langName || 'English';
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: `Analyze the Chinese word/character: "${query}". 
+    Provide a professional breakdown for a native ${langName} speaker. 
+    IMPORTANT: All explanations MUST be in ${langName}.`,
+    config: {
       responseMimeType: "application/json",
       responseSchema: {
-        type: "OBJECT",
+        type: Type.OBJECT,
         properties: {
-          simplified: { type: "STRING" },
-          traditional: { type: "STRING" },
-          pinyin: { type: "STRING" },
-          hskLevel: { type: "INTEGER" },
-          etymology: { type: "STRING" },
-          meanings: { type: "ARRAY", items: { type: "STRING" } },
+          simplified: { type: Type.STRING },
+          traditional: { type: Type.STRING },
+          pinyin: { type: Type.STRING },
+          hskLevel: { type: Type.INTEGER },
+          etymology: { type: Type.STRING },
+          meanings: { type: Type.ARRAY, items: { type: Type.STRING } },
           components: {
-            type: "ARRAY",
+            type: Type.ARRAY,
             items: {
-              type: "OBJECT",
-              properties: { char: { type: "STRING" }, meaning: { type: "STRING" }, radical: { type: "BOOLEAN" } },
+              type: Type.OBJECT,
+              properties: { char: { type: Type.STRING }, meaning: { type: Type.STRING }, radical: { type: Type.BOOLEAN } },
               required: ["char", "meaning"]
             }
           },
           examples: {
-            type: "ARRAY",
+            type: Type.ARRAY,
             items: {
-              type: "OBJECT",
-              properties: { chinese: { type: "STRING" }, pinyin: { type: "STRING" }, translation: { type: "STRING" } },
+              type: Type.OBJECT,
+              properties: { chinese: { type: Type.STRING }, pinyin: { type: Type.STRING }, translation: { type: Type.STRING } },
               required: ["chinese", "translation"]
             }
           },
           compounds: {
-            type: "ARRAY",
+            type: Type.ARRAY,
             items: {
-              type: "OBJECT",
-              properties: { word: { type: "STRING" }, pinyin: { type: "STRING" }, meaning: { type: "STRING" } },
+              type: Type.OBJECT,
+              properties: { word: { type: Type.STRING }, pinyin: { type: Type.STRING }, meaning: { type: Type.STRING } },
               required: ["word", "meaning"]
             }
           }
@@ -138,81 +125,123 @@ export const dictionaryLookup = async (query: string, userLang: Language = 'en')
         required: ["simplified", "pinyin", "meanings", "components"]
       }
     }
-  };
-  
-  const text = await callGenerateContent(payload);
-  return extractJson(text);
+  });
+  return extractJson(response.text);
 };
 
 export const generateCulturalDeepDive = async (topic: string, userLang: Language = 'en') => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const langName = translations[userLang]?.langName || 'English';
-  const payload = {
-    system: [{
-      parts: [{
-        text: `Act as a world-class cultural historian. Generate authoritative content in both Chinese and ${langName}.`
-      }]
-    }],
-    contents: [{
-      role: "user",
-      parts: [{
-        text: `Generate a scholarly deep-dive into: "${topic}".`
-      }]
-    }],
-    generationConfig: {
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-pro-preview',
+    contents: `Generate a scholarly deep-dive into: "${topic}".`,
+    config: {
+      systemInstruction: `Act as a world-class cultural historian. Generate authoritative content in both Chinese and ${langName}.`,
       responseMimeType: "application/json",
       responseSchema: {
-        type: "OBJECT",
+        type: Type.OBJECT,
         properties: {
-          chineseTitle: { type: "STRING" },
-          pinyinTitle: { type: "STRING" },
-          fullContentChinese: { type: "STRING" },
-          fullContentTranslated: { type: "STRING" },
+          chineseTitle: { type: Type.STRING },
+          pinyinTitle: { type: Type.STRING },
+          fullContentChinese: { type: Type.STRING },
+          fullContentTranslated: { type: Type.STRING },
           keyConcepts: {
-            type: "ARRAY",
+            type: Type.ARRAY,
             items: {
-              type: "OBJECT",
-              properties: { word: { type: "STRING" }, pinyin: { type: "STRING" }, meaning: { type: "STRING" } },
+              type: Type.OBJECT,
+              properties: { word: { type: Type.STRING }, pinyin: { type: Type.STRING }, meaning: { type: Type.STRING } },
               required: ["word", "pinyin", "meaning"]
             }
           },
-          reflection: { type: "STRING" }
+          reflection: { type: Type.STRING }
         },
         required: ["chineseTitle", "pinyinTitle", "fullContentChinese", "fullContentTranslated", "keyConcepts", "reflection"]
       }
     }
-  };
+  });
+  return extractJson(response.text);
+};
 
-  const text = await callGenerateContent(payload);
-  return extractJson(text);
+export const generateLessonSpeech = async (text: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash-preview-tts",
+    contents: [{ parts: [{ text: `Say clearly: ${text}` }] }],
+    config: { 
+      responseModalities: [Modality.AUDIO], 
+      speechConfig: { 
+        voiceConfig: { 
+          prebuiltVoiceConfig: { voiceName: 'Kore' } 
+        } 
+      } 
+    }
+  });
+  return response.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+};
+
+export const transcribeAudio = async (base64Audio: string, mimeType: string = 'audio/webm') => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: { 
+      parts: [
+        { inlineData: { mimeType, data: base64Audio } }, 
+        { text: "Transcribe this Chinese audio precisely into simplified Chinese characters. If there is English, transcribe it as well. Return ONLY the text." }
+      ] 
+    }
+  });
+  return response.text?.trim() || "";
+};
+
+export const evaluatePronunciation = async (base64Audio: string, targetText: string, userLang: Language = 'en', mimeType: string = 'audio/webm') => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const langName = translations[userLang]?.langName || 'English';
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: { 
+      parts: [
+        { inlineData: { mimeType, data: base64Audio } }, 
+        { text: `Evaluate the Mandarin pronunciation of: "${targetText}". Feedback must be in ${langName}.` }
+      ] 
+    },
+    config: { 
+      responseMimeType: "application/json", 
+      responseSchema: { 
+        type: Type.OBJECT, 
+        properties: { 
+          score: { type: Type.NUMBER, description: "A score from 0-100" }, 
+          feedback: { type: Type.STRING }, 
+          isCorrect: { type: Type.BOOLEAN } 
+        }, 
+        required: ["score", "feedback", "isCorrect"] 
+      } 
+    }
+  });
+  return extractJson(response.text);
 };
 
 export const translateCultureArticle = async (article: any, userLang: Language = 'en') => {
   if (userLang === 'en') return article;
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const langName = translations[userLang]?.langName || 'English';
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [{
-        text: `Translate this Chinese culture article into ${langName}: ${JSON.stringify(article)}`
-      }]
-    }],
-    generationConfig: {
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: `Translate this Chinese culture article into ${langName}: ${JSON.stringify(article)}`,
+    config: {
       responseMimeType: "application/json",
       responseSchema: {
-        type: "OBJECT",
+        type: Type.OBJECT,
         properties: {
-          summary: { type: "STRING" },
-          fullContentTranslated: { type: "STRING" },
-          reflection: { type: "STRING" },
-          vocabularyMeanings: { type: "ARRAY", items: { type: "STRING" } }
+          summary: { type: Type.STRING },
+          fullContentTranslated: { type: Type.STRING },
+          reflection: { type: Type.STRING },
+          vocabularyMeanings: { type: Type.ARRAY, items: { type: Type.STRING } }
         },
         required: ["summary", "fullContentTranslated", "reflection", "vocabularyMeanings"]
       }
     }
-  };
-  
-  const text = await callGenerateContent(payload);
-  const data = extractJson(text);
+  });
+  const data = extractJson(response.text);
   return {
     ...article,
     summary: data.summary,
@@ -222,162 +251,41 @@ export const translateCultureArticle = async (article: any, userLang: Language =
   };
 };
 
-export const getAITutorResponse = async (history: ChatMessage[], message: string, userLang: Language = 'en') => {
-  const langName = translations[userLang]?.langName || 'English';
-  
-  // 将前端消息历史转换为 Gemini 的 contents 格式
-  const contents = history.map(m => ({
-    role: m.role,
-    parts: [{ text: m.text }]
-  }));
-
-  const payload = {
-    system: [{
-      parts: [{
-        text: `You are 'Mei', a professional Mandarin Teacher for a student whose native language is ${langName}. 
-      Respond in Mandarin but provide corrections and explanations strictly in ${langName}. 
-      Always analyze the student's grammar and provide feedback if they make mistakes.`
-      }]
-    }],
-    contents,
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: "OBJECT",
-        properties: { 
-          text: { type: "STRING" }, 
-          analysis: { 
-            type: "OBJECT", 
-            properties: { 
-              original: { type: "STRING" }, 
-              correction: { type: "STRING" }, 
-              explanation: { type: "STRING" } 
-            } 
-          } 
-        },
-        required: ["text"]
-      }
-    }
-  };
-
-  const text = await callGenerateContent(payload);
-  return extractJson(text);
-};
-
 export const generateHSKQuestions = async (level: number, userLang: Language = 'en') => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const langName = translations[userLang]?.langName || 'English';
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [{
-        text: `Generate 5 high-quality HSK Level ${level} mock exam questions. 
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-pro-preview',
+    contents: `Generate 5 high-quality HSK Level ${level} mock exam questions. 
     Ensure the difficulty matches official HSK standards. 
-    Questions and explanations must be provided in ${langName}.`
-      }]
-    }],
-    generationConfig: {
+    Questions and explanations must be provided in ${langName}.`,
+    config: {
       responseMimeType: "application/json",
       responseSchema: {
-        type: "ARRAY",
+        type: Type.ARRAY,
         items: {
-          type: "OBJECT",
+          type: Type.OBJECT,
           properties: { 
-            id: { type: "STRING" }, 
-            question: { type: "STRING", description: "Instruction like 'Select the correct character'" }, 
-            content: { type: "STRING", description: "The actual Chinese text/sentence" }, 
-            options: { type: "ARRAY", items: { type: "STRING" } }, 
-            answer: { type: "STRING" }, 
-            explanation: { type: "STRING" } 
+            id: { type: Type.STRING }, 
+            question: { type: Type.STRING, description: "Instruction like 'Select the correct character'" }, 
+            content: { type: Type.STRING, description: "The actual Chinese text/sentence" }, 
+            options: { type: Type.ARRAY, items: { type: Type.STRING } }, 
+            answer: { type: Type.STRING }, 
+            explanation: { type: Type.STRING } 
           },
           required: ["id", "question", "content", "options", "answer", "explanation"]
         }
       }
     }
-  };
-
-  const text = await callGenerateContent(payload);
-  return extractJson(text);
-};
-
-
-export const generateLessonSpeech = async (text: string) => {
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [{ text: `Say clearly: ${text}` }]
-    }],
-    generationConfig: {
-      responseModalities: ["AUDIO"],
-      speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } } }
-    }
-  };
-
-  const response = await fetch(`${BASE_URL}/models/${MODEL}:generateContent?key=${API_KEY}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
   });
-
-  if (!response.ok) throw new Error(`API Error: ${response.status}`);
-  
-  const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-};
-
-export const transcribeAudio = async (base64Audio: string) => {
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [
-        { inlineData: { mimeType: 'audio/webm', data: base64Audio } }, 
-        { text: "Transcribe the Chinese speech into characters." }
-      ]
-    }]
-  };
-
-  const text = await callGenerateContent(payload);
-  return text.trim() || "";
+  return extractJson(response.text);
 };
 
 export const recognizeImage = async (base64Data: string) => {
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [
-        { inlineData: { mimeType: 'image/jpeg', data: base64Data } }, 
-        { text: "Extract and identify all Chinese characters in this image." }
-      ]
-    }]
-  };
-
-  const text = await callGenerateContent(payload);
-  return text.trim() || "";
-};
-
-export const evaluatePronunciation = async (base64Audio: string, targetText: string, userLang: Language = 'en') => {
-  const langName = translations[userLang]?.langName || 'English';
-  const payload = {
-    contents: [{
-      role: "user",
-      parts: [
-        { inlineData: { mimeType: 'audio/webm', data: base64Audio } }, 
-        { text: `Evaluate the pronunciation of: "${targetText}". Feedback must be in ${langName}.` }
-      ]
-    }],
-    generationConfig: { 
-      responseMimeType: "application/json", 
-      responseSchema: { 
-        type: "OBJECT", 
-        properties: { 
-          score: { type: "NUMBER", description: "A score from 0-100" }, 
-          feedback: { type: "STRING" }, 
-          isCorrect: { type: "BOOLEAN" } 
-        }, 
-        required: ["score", "feedback", "isCorrect"] 
-      } 
-    }
-  };
-
-  const text = await callGenerateContent(payload);
-  return extractJson(text);
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: { parts: [{ inlineData: { mimeType: 'image/jpeg', data: base64Data } }, { text: "Extract and identify all Chinese characters in this image." }] }
+  });
+  return response.text?.trim() || "";
 };

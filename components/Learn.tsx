@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Unit, Exercise, ExerciseType } from '../types';
+import React, { useState, useRef, useEffect } from 'react';
+import { Unit, Exercise } from '../types';
 import { useTranslation } from '../App';
 import { evaluatePronunciation, generateLessonSpeech, recognizeImage, decodeBase64, decodeAudioData } from '../services/geminiService';
 
@@ -12,6 +12,51 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
     </svg>
   </div>
 );
+
+// Defined UNIT_EXERCISES_MAP to resolve the reference error.
+// This map contains exercise sequences for each learning unit.
+const UNIT_EXERCISES_MAP: Record<string, Exercise[]> = {
+  'u1': [
+    { id: 'u1e1', type: 'LISTEN', question: 'exListenHello', chinese: '你好', pinyin: 'nǐ hǎo', answer: '你好', options: ['你好', '谢谢', '再见'] },
+    { id: 'u1e2', type: 'SPEAK', question: 'exSayHello', chinese: '你好', pinyin: 'nǐ hǎo', answer: '你好' },
+    { id: 'u1e3', type: 'WRITE', question: 'exWritePerson', chinese: '人', pinyin: 'rén', answer: '人' }
+  ],
+  'u8': [
+    { id: 'u8e1', type: 'SELECT', question: 'exCharThree', chinese: '三', pinyin: 'sān', answer: '三', options: ['一', '二', '三', '四'] },
+    { id: 'u8e2', type: 'LISTEN', question: 'exListenEight', chinese: '八', pinyin: 'bā', answer: '八', options: ['六', '七', '八', '九'] },
+    { id: 'u8e3', type: 'SPEAK', question: 'exSay10', chinese: '十点', pinyin: 'shí diǎn', answer: '十点' }
+  ],
+  'u4': [
+    { id: 'u4e1', type: 'SELECT', question: 'exWakeUp', chinese: '起床', pinyin: 'qǐchuáng', answer: '起床', options: ['睡觉', '起床', '吃饭'] },
+    { id: 'u4e2', type: 'SPEAK', question: 'exSayWork', chinese: '我去上班', pinyin: 'wǒ qù shàngbān', answer: '我去上班' },
+    { id: 'u4e3', type: 'READ', question: 'exWhatIsSleep', chinese: '睡觉', pinyin: 'shuìjiào', answer: 'optionSleep', options: ['optionSleep', 'optionEat', 'optionRun'] }
+  ],
+  'u2': [
+    { id: 'u2e1', type: 'SELECT', question: 'exWhatIsSleep', chinese: '吃饭', pinyin: 'chī fàn', answer: 'optionEat', options: ['optionSleep', 'optionEat', 'optionRun'] },
+    { id: 'u2e2', type: 'LISTEN', question: 'exListenHello', chinese: '好喝', pinyin: 'hǎohē', answer: '好喝', options: ['好吃', '好喝', '好闻'] },
+    { id: 'u2e3', type: 'SPEAK', question: 'exSayHello', chinese: '我想吃饭', pinyin: 'wǒ xiǎng chīfàn', answer: '我想吃饭' }
+  ],
+  'u5': [
+    { id: 'u5e1', type: 'READ', question: 'exWhatIsExpensive', chinese: '太贵了', pinyin: 'tài guì le', answer: 'optionTooExpensive', options: ['optionTooExpensive', 'optionVeryCheap', 'optionHowMuch'] },
+    { id: 'u5e2', type: 'SPEAK', question: 'exSayHowMuch', chinese: '多少钱？', pinyin: 'duōshǎo qián?', answer: '多少钱？' },
+    { id: 'u5e3', type: 'LISTEN', question: 'exListenCheap', chinese: '便宜', pinyin: 'piányi', answer: '便宜', options: ['便宜', '贵', '打折'] }
+  ],
+  'u6': [
+    { id: 'u6e1', type: 'SELECT', question: 'exWhichFriend', chinese: '朋友', pinyin: 'péngyou', answer: '朋友', options: ['老师', '学生', '朋友'] },
+    { id: 'u6e2', type: 'SPEAK', question: 'exSayNiceToMeet', chinese: '很高兴认识你', pinyin: 'hěn gāoxìng rènshi nǐ', answer: '很高兴认识你' },
+    { id: 'u6e3', type: 'LISTEN', question: 'exListenFamily', chinese: '家人', pinyin: 'jiārén', answer: '家人', options: ['朋友', '老师', '家人'] }
+  ],
+  'u3': [
+    { id: 'u3e1', type: 'SELECT', question: 'exIdentifySubway', chinese: '地铁站', pinyin: 'dìtiě zhàn', answer: '地铁站', options: ['火车站', '地铁站', '飞机场'] },
+    { id: 'u3e2', type: 'READ', question: 'exWhatIsAirport', chinese: '飞机场', pinyin: 'fēijī chǎng', answer: 'optionAirport', options: ['optionAirport', 'optionHotel', 'optionTaxi'] },
+    { id: 'u3e3', type: 'WRITE', question: 'exWriteExit', chinese: '出', pinyin: 'chū', answer: '出' }
+  ],
+  'u7': [
+    { id: 'u7e1', type: 'READ', question: 'exWhatIsRedEnvelope', chinese: '红包', pinyin: 'hóngbāo', answer: 'optionRedEnvelope', options: ['optionRedEnvelope', 'optionLantern', 'optionTeaCup'] },
+    { id: 'u7e2', type: 'SPEAK', question: 'exSayHappyNewYear', chinese: '新年快乐', pinyin: 'xīnnián kuàilè', answer: '新年快乐' },
+    { id: 'u7e3', type: 'LISTEN', question: 'exListenCalligraphy', chinese: '书法', pinyin: 'shūfǎ', answer: '书法', options: ['国画', '书法', '京剧'] }
+  ]
+};
 
 const Learn: React.FC = () => {
   const { language, t, allUnits, activeUnitId, setActiveUnitId } = useTranslation();
@@ -30,49 +75,7 @@ const Learn: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawing = useRef(false);
 
-  const UNIT_EXERCISES_MAP: Record<string, Exercise[]> = useMemo(() => ({
-    u1: [
-      { id: 'u1e1', type: 'LISTEN', question: t('exListenHello'), options: ['你好', '谢谢', '再见'], answer: '你好', pinyin: 'Nǐ hǎo', chinese: '你好' },
-      { id: 'u1e2', type: 'SPEAK', question: t('exSayHello'), answer: '你好', pinyin: 'Nǐ hǎo', chinese: '你好' },
-      { id: 'u1e3', type: 'WRITE', question: t('exWritePerson'), answer: '人', pinyin: 'Rén', chinese: '人' },
-    ],
-    u8: [
-      { id: 'u8e1', type: 'READ', question: t('exCharThree'), options: ['一', '二', '三'], answer: '三', pinyin: 'Sān', chinese: '三' },
-      { id: 'u8e2', type: 'LISTEN', question: t('exListenEight'), options: ['六', '七', '八'], answer: '八', pinyin: 'Bā', chinese: '八' },
-      { id: 'u8e3', type: 'READ', question: t('exSay10'), options: ['十点', '九点', '八点'], answer: '十点', pinyin: 'Shí diǎn', chinese: '十点' },
-    ],
-    u4: [
-      { id: 'u4e1', type: 'SELECT', question: t('exWakeUp'), options: [t('optionWakeUp'), t('optionSleep'), t('optionEat')], answer: t('optionWakeUp'), pinyin: 'Qǐchuáng', chinese: '起床' },
-      { id: 'u4e2', type: 'SPEAK', question: t('exSayWork'), answer: '我去上班', pinyin: 'Wǒ qù shàngbān', chinese: '我去上班' },
-      { id: 'u4e3', type: 'READ', question: t('exWhatIsSleep'), options: [t('optionSleep'), t('optionEat'), t('optionRun')], answer: t('optionSleep'), pinyin: 'Shuìjiào', chinese: '睡觉' },
-    ],
-    u2: [
-      { id: 'u2e1', type: 'LISTEN', question: t('exListenHello'), options: ['你好', '谢谢', '再见'], answer: '你好', pinyin: 'Nǐ hǎo', chinese: '你好' },
-      { id: 'u2e2', type: 'READ', question: t('exWhatIsSleep'), options: [t('optionSleep'), t('optionEat'), t('optionRun')], answer: t('optionSleep'), pinyin: 'Shuìjiào', chinese: '睡觉' },
-      { id: 'u2e3', type: 'SPEAK', question: t('exSayHello'), answer: '你好', pinyin: 'Nǐ hǎo', chinese: '你好' },
-    ],
-    u5: [
-      { id: 'u5e1', type: 'READ', question: t('exWhatIsExpensive'), options: [t('optionTooExpensive'), t('optionVeryCheap'), t('optionHowMuch')], answer: t('optionTooExpensive'), pinyin: 'Tài guì le', chinese: '太贵了' },
-      { id: 'u5e2', type: 'SPEAK', question: t('exSayHowMuch'), answer: '多少钱', pinyin: 'Duōshǎo qián', chinese: '多少钱' },
-      { id: 'u5e3', type: 'LISTEN', question: t('exListenCheap'), options: ['便宜', '贵', '打折'], answer: '便宜', pinyin: 'Piányí', chinese: '便宜' },
-    ],
-    u6: [
-      { id: 'u6e1', type: 'READ', question: t('exWhichFriend'), options: ['朋友', '老师', '同事'], answer: '朋友', pinyin: 'Péngyǒu', chinese: '朋友' },
-      { id: 'u6e2', type: 'SPEAK', question: t('exSayNiceToMeet'), answer: '很高兴认识你', pinyin: 'Hěn gāoxìng rènshí nǐ', chinese: '很高兴认识你' },
-      { id: 'u6e3', type: 'LISTEN', question: t('exListenFamily'), options: ['朋友', '家人', '同学'], answer: '家人', pinyin: 'Jiārén', chinese: '家人' },
-    ],
-    u3: [
-      { id: 'u3e1', type: 'LISTEN', question: t('exIdentifySubway'), options: ['地铁站', '飞机场', '火车站'], answer: '地铁站', pinyin: 'Dìtiě zhàn', chinese: '地铁站' },
-      { id: 'u3e2', type: 'READ', question: t('exWhatIsAirport'), options: [t('optionAirport'), t('optionHotel'), t('optionTaxi')], answer: t('optionAirport'), pinyin: 'Fēijī chǎng', chinese: '飞机场' },
-      { id: 'u3e2', type: 'WRITE', question: t('exWriteExit'), answer: '出', pinyin: 'Chū', chinese: '出' },
-    ],
-    u7: [
-      { id: 'u7e1', type: 'READ', question: t('exWhatIsRedEnvelope'), options: [t('optionRedEnvelope'), t('optionLantern'), t('optionTeaCup')], answer: t('optionRedEnvelope'), pinyin: 'Hóngbāo', chinese: '红包' },
-      { id: 'u7e2', type: 'SPEAK', question: t('exSayHappyNewYear'), answer: '新年快乐', pinyin: 'Xīnnián kuàilè', chinese: '新年快乐' },
-      { id: 'u7e3', type: 'LISTEN', question: t('exListenCalligraphy'), options: ['書法', '繪畫', '武術'], answer: '書法', pinyin: 'Shūfǎ', chinese: '书法' },
-    ]
-  }), [language, t]);
-
+  // Handle unit auto-activation if coming from dashboard
   useEffect(() => {
     if (activeUnitId) {
       const unit = allUnits.find(u => u.id === activeUnitId);
@@ -83,15 +86,8 @@ const Learn: React.FC = () => {
     }
   }, [activeUnitId, allUnits, setActiveUnitId]);
 
-  const CATEGORIES = useMemo(() => [
-    { id: 'Foundation', name: t('foundation'), units: allUnits.filter(u => u.category === 'Foundation') },
-    { id: 'Lifestyle', name: t('lifestyle'), units: allUnits.filter(u => u.category === 'Lifestyle') },
-    { id: 'Interaction', name: t('interaction'), units: allUnits.filter(u => u.category === 'Interaction') },
-    { id: 'Immersion', name: t('immersion'), units: allUnits.filter(u => u.category === 'Immersion') }
-  ], [allUnits, t]);
-
   const startLesson = (unit: any) => {
-    const exercises = UNIT_EXERCISES_MAP[unit.id] || UNIT_EXERCISES_MAP['u1'];
+    const exercises = (UNIT_EXERCISES_MAP as any)[unit.id] || (UNIT_EXERCISES_MAP as any)['u1'];
     setUnitExercises(exercises);
     setActiveUnit(unit);
     setCurrentExerciseIdx(0);
@@ -115,44 +111,18 @@ const Learn: React.FC = () => {
       if (!audioContextRef.current) {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       }
-      const ctx = audioContextRef.current;
+      if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
+      
       const base64Audio = await generateLessonSpeech(text);
       if (base64Audio) {
         const decoded = decodeBase64(base64Audio);
-        const buffer = await decodeAudioData(decoded, ctx);
-        const source = ctx.createBufferSource();
+        const buffer = await decodeAudioData(decoded, audioContextRef.current);
+        const source = audioContextRef.current.createBufferSource();
         source.buffer = buffer;
-        source.connect(ctx.destination);
+        source.connect(audioContextRef.current.destination);
         source.start();
       }
     } catch (e) { console.error(e); } finally { setLoading(false); }
-  };
-
-  const startDrawing = (e: any) => {
-    isDrawing.current = true;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.beginPath();
-    const rect = canvas.getBoundingClientRect();
-    const x = ('touches' in e) ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = ('touches' in e) ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-    ctx.moveTo(x, y);
-  };
-
-  const draw = (e: any) => {
-    if (!isDrawing.current || !canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = ('touches' in e) ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = ('touches' in e) ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = '#111827';
-    ctx.lineWidth = 10;
-    ctx.lineCap = 'round';
-    ctx.stroke();
   };
 
   const handleWriteCheck = async () => {
@@ -162,7 +132,7 @@ const Learn: React.FC = () => {
       if (!canvas) return;
       const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
       const result = await recognizeImage(base64);
-      const target = unitExercises[currentExerciseIdx].answer;
+      const target = unitExercises[currentExerciseIdx].chinese;
       const correct = result.includes(target);
       setIsCorrect(correct);
       setFeedback(correct ? t('perfectStroke') : `${t('detected')}: "${result}". ${t('target')}: "${target}"`);
@@ -172,119 +142,128 @@ const Learn: React.FC = () => {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+      const recorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = recorder;
       audioChunksRef.current = [];
       recorder.ondataavailable = (e) => audioChunksRef.current.push(e.data);
       recorder.onstop = async () => {
         setLoading(true);
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
           const base64 = (reader.result as string).split(',')[1];
-          const result = await evaluatePronunciation(base64, unitExercises[currentExerciseIdx].chinese, language);
-          setIsCorrect(result.isCorrect);
-          setFeedback(`${t('score')}: ${result.score} - ${result.feedback}`);
-          setLoading(false);
+          try {
+            const result = await evaluatePronunciation(base64, unitExercises[currentExerciseIdx].chinese, language, mimeType);
+            setIsCorrect(result.isCorrect);
+            setFeedback(`${t('score')}: ${result.score} - ${result.feedback}`);
+          } catch (e) {
+            setFeedback(t('micError'));
+          } finally {
+            setLoading(false);
+          }
         };
+        stream.getTracks().forEach(track => track.stop());
       };
       recorder.start();
       setIsRecording(true);
     } catch (e) { setFeedback(t('micError')); }
   };
 
-  const checkAnswer = () => {
-    const ex = unitExercises[currentExerciseIdx];
-    const translatedAnswer = t(ex.answer);
-    const translatedUserSelection = t(userSelection);
-    const correct = translatedUserSelection === translatedAnswer;
-    
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const handleSelectOption = (opt: string) => {
+    setUserSelection(opt);
+    const correct = opt === unitExercises[currentExerciseIdx].answer;
     setIsCorrect(correct);
-    setFeedback(correct ? t('correct') : `${t('wrong')}. ${t('correctAnswer')}: "${translatedAnswer}"`);
+    setFeedback(correct ? t('fantastic') : t('keepTrying'));
   };
 
-  const nextQuestion = () => {
-    if (currentExerciseIdx < unitExercises.length - 1) {
-      setCurrentExerciseIdx(prev => prev + 1);
-      resetState();
-    } else { setActiveUnit(null); }
+  const initDrawing = (e: any) => {
+    isDrawing.current = true;
+    draw(e);
   };
 
-  const SecondaryHeader = ({ title, onClose, progress, current, total }: { title: string, onClose: () => void, progress?: number, current: number, total: number }) => (
-    <header className="relative mb-8 pt-4 px-2">
-      <div className="flex flex-col">
-        <div className="flex justify-between items-start mb-6">
-           <div className="animate-in slide-in-from-left duration-500">
-              <p className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] mb-1">{t('immersionSession')}</p>
-              <h2 className="text-3xl font-black text-gray-900 leading-tight text-wrap">{title}</h2>
-           </div>
-           
-           <button 
-             onClick={onClose} 
-             className="group flex items-center gap-3 pl-4 pr-5 py-3 bg-gray-900 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl shadow-gray-200 transform hover:scale-105 active:scale-95 animate-in slide-in-from-right duration-500"
-           >
-             <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
-             <span className="text-xs font-black uppercase tracking-widest">{t('back')}</span>
-           </button>
-        </div>
-        
-        <div className="flex justify-between items-end mb-1 px-1">
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('progressLabel', { current, total })}</p>
-        </div>
-        {progress !== undefined && (
-          <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden shadow-inner relative">
-            <div 
-              className="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all duration-1000 ease-out rounded-full" 
-              style={{ width: `${progress * 100}%` }} 
-            />
-          </div>
-        )}
-      </div>
-    </header>
-  );
+  const endDrawing = () => {
+    isDrawing.current = false;
+    if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext('2d');
+        ctx?.beginPath();
+    }
+  };
+
+  const draw = (e: any) => {
+    if (!isDrawing.current || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+    const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+    ctx.lineWidth = 12;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
 
   if (activeUnit) {
     const ex = unitExercises[currentExerciseIdx];
     return (
       <div className="fixed inset-0 z-[300] bg-white flex flex-col p-6 animate-in slide-in-from-right duration-300 overflow-y-auto">
         <div className="max-w-xl mx-auto w-full flex flex-col h-full">
-          <SecondaryHeader 
-            title={activeUnit.title} 
-            onClose={() => setActiveUnit(null)} 
-            progress={(currentExerciseIdx + 1) / unitExercises.length}
-            current={currentExerciseIdx + 1}
-            total={unitExercises.length}
-          />
+          <header className="flex justify-between items-center mb-8">
+            <button onClick={() => setActiveUnit(null)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">✕</button>
+            <div className="flex-1 px-8">
+              <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-red-600 transition-all duration-500 ease-out" 
+                  style={{ width: `${((currentExerciseIdx + 1) / unitExercises.length) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{currentExerciseIdx + 1} / {unitExercises.length}</div>
+          </header>
 
           <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
-            <div className="mb-10 w-full animate-in zoom-in duration-500">
-              <div className="inline-block px-4 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-md uppercase tracking-widest mb-6 shadow-sm">
-                {ex.type === 'LISTEN' && t('exerciseTypeListen')}
-                {ex.type === 'SPEAK' && t('exerciseTypeSpeak')}
-                {ex.type === 'WRITE' && t('exerciseTypeWrite')}
-                {(ex.type === 'SELECT' || ex.type === 'READ') && t('exerciseTypeSelectRead')}
-              </div>
-              <h2 className="text-2xl font-black text-gray-900 leading-relaxed text-wrap">{ex.question}</h2>
-            </div>
-            
-            {ex.type === 'LISTEN' && (
-              <div className="w-full space-y-12 animate-in fade-in duration-500">
-                <button 
-                  onClick={() => playAudio(ex.chinese)} 
-                  className="w-28 h-28 aspect-square bg-red-600 text-white rounded-xl flex items-center justify-center text-5xl shadow-2xl mx-auto hover:scale-110 active:scale-90 transition-all border-4 border-white"
-                >
-                  🔊
-                </button>
-                <div className="grid grid-cols-1 gap-4 w-full max-w-sm mx-auto">
-                  {ex.options?.map(opt => (
-                    <button 
-                      key={opt} 
-                      onClick={() => setUserSelection(opt)} 
-                      className={`p-6 rounded-xl border-2 font-black transition-all text-2xl chinese-font text-left flex flex-wrap justify-between items-center ${userSelection === opt ? 'border-red-600 bg-red-50 text-red-700 shadow-xl' : 'border-gray-100 hover:bg-gray-50'}`}
+            <h3 className="text-sm font-black text-red-600 uppercase tracking-[0.2em] mb-4">{t('exerciseType' + (ex.type === 'SELECT' || ex.type === 'READ' ? 'SelectRead' : ex.type))}</h3>
+            <h2 className="text-2xl font-black text-gray-900 mb-12 tracking-tight">{t(ex.question)}</h2>
+
+            {(ex.type === 'SELECT' || ex.type === 'READ' || ex.type === 'LISTEN') && (
+              <div className="w-full space-y-4">
+                {ex.type === 'LISTEN' && (
+                  <button onClick={() => playAudio(ex.chinese)} className="w-24 h-24 bg-red-50 rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-white mx-auto mb-10 hover:scale-105 transition-transform group">
+                    <span className="group-hover:scale-125 transition-transform">🔊</span>
+                  </button>
+                )}
+                {ex.type === 'READ' && (
+                  <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner mb-10">
+                    <div className="text-7xl font-black chinese-font text-gray-900 mb-2">{ex.chinese}</div>
+                    <div className="text-xl text-gray-400 font-bold tracking-[0.2em] uppercase">{ex.pinyin}</div>
+                  </div>
+                )}
+                <div className="grid grid-cols-1 gap-4">
+                  {ex.options?.map((opt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleSelectOption(opt)}
+                      className={`p-6 rounded-2xl border-2 font-black text-xl transition-all
+                        ${userSelection === opt 
+                          ? (isCorrect ? 'border-green-600 bg-green-50 text-green-700' : 'border-red-600 bg-red-50 text-red-700') 
+                          : 'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}
                     >
-                      {t(opt)}
-                      {userSelection === opt && <span className="text-sm bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg">✓</span>}
+                      {t(opt) !== opt ? t(opt) : opt}
                     </button>
                   ))}
                 </div>
@@ -294,7 +273,6 @@ const Learn: React.FC = () => {
             {ex.type === 'SPEAK' && (
               <div className="space-y-12 w-full animate-in fade-in duration-500">
                 <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner relative overflow-hidden flex flex-col justify-center items-center">
-                  <div className="absolute -top-10 -right-10 text-9xl text-gray-200/50 chinese-font select-none">听</div>
                   <div className="text-8xl font-black chinese-font text-gray-900 mb-4 relative z-10 text-wrap">{ex.chinese}</div>
                   <div className="text-2xl text-red-600 font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div>
                 </div>
@@ -302,9 +280,9 @@ const Learn: React.FC = () => {
                   <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em]">{isRecording ? t('analyzingSpeech') : t('holdToSpeak')}</p>
                   <button 
                     onMouseDown={startRecording} 
-                    onMouseUp={() => mediaRecorderRef.current?.stop()} 
+                    onMouseUp={stopRecording} 
                     onTouchStart={startRecording}
-                    onTouchEnd={() => mediaRecorderRef.current?.stop()}
+                    onTouchEnd={stopRecording}
                     className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all mx-auto ${isRecording ? 'bg-red-600 animate-pulse text-white scale-125' : 'bg-gray-900 text-white hover:scale-110'}`}
                   >
                     🎤
@@ -314,58 +292,51 @@ const Learn: React.FC = () => {
             )}
 
             {ex.type === 'WRITE' && (
-              <div className="w-full space-y-6 animate-in fade-in duration-500">
-                <div className="flex justify-between items-end px-4">
+              <div className="w-full space-y-8 animate-in fade-in duration-500">
+                <div className="flex items-center justify-between mb-4">
                   <div className="text-left">
-                    <p className="text-[10px] font-black text-gray-400 uppercase mb-1">{t('canvasTrace')}</p>
-                    <div className="text-7xl font-black chinese-font text-gray-200 select-none text-wrap">{ex.chinese}</div>
+                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('canvasTrace')}</p>
+                    <p className="text-4xl font-black chinese-font text-gray-900">{ex.answer}</p>
                   </div>
-                  <button onClick={() => canvasRef.current?.getContext('2d')?.clearRect(0, 0, 400, 400)} className="px-6 py-3 bg-gray-100 text-gray-600 rounded-lg text-[10px] font-black hover:bg-gray-200 transition-colors uppercase tracking-[0.2em]">{t('clearBoard')}</button>
+                  <button onClick={() => { const ctx = canvasRef.current?.getContext('2d'); ctx?.clearRect(0,0,500,500); }} className="px-4 py-2 bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest rounded-lg hover:bg-gray-100">{t('clearBoard')}</button>
                 </div>
-                <div className="relative aspect-square w-full max-w-[400px] mx-auto group">
-                   <canvas ref={canvasRef} width={400} height={400} className="bg-gray-50 rounded-xl border-4 border-gray-50 w-full h-full touch-none cursor-crosshair shadow-2xl" onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={() => isDrawing.current = false} onTouchStart={startDrawing} onTouchMove={draw} onTouchEnd={() => isDrawing.current = false} />
-                </div>
-              </div>
-            )}
-
-            {(ex.type === 'SELECT' || ex.type === 'READ') && (
-              <div className="w-full space-y-12 animate-in fade-in duration-500">
-                <div className="space-y-4">
-                  <div className="text-9xl font-black chinese-font text-gray-900 text-wrap">{ex.chinese}</div>
-                  <div className="text-2xl text-gray-400 font-black tracking-widest uppercase text-wrap">{ex.pinyin}</div>
-                </div>
-                <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
-                  {ex.options?.map(opt => (
-                    <button 
-                      key={opt} 
-                      onClick={() => setUserSelection(opt)} 
-                      className={`p-6 rounded-xl border-2 font-black text-left flex flex-wrap justify-between items-center transition-all ${userSelection === opt ? 'border-red-600 bg-red-50 text-red-700 shadow-xl' : 'border-gray-100 hover:bg-gray-50'}`}
-                    >
-                      <span className="text-xl">{t(opt)}</span>
-                      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${userSelection === opt ? 'border-red-600 bg-white shadow-inner' : 'border-gray-200'}`}>
-                        {userSelection === opt && <div className="w-4 h-4 bg-red-600 rounded-full animate-in zoom-in duration-200" />}
-                      </div>
-                    </button>
-                  ))}
+                <div className="aspect-square w-full bg-white border-4 border-gray-100 rounded-3xl shadow-inner relative cursor-crosshair overflow-hidden">
+                   <canvas
+                    ref={canvasRef}
+                    width={500}
+                    height={500}
+                    onMouseDown={initDrawing}
+                    onMouseMove={draw}
+                    onMouseUp={endDrawing}
+                    onMouseOut={endDrawing}
+                    onTouchStart={initDrawing}
+                    onTouchMove={draw}
+                    onTouchEnd={endDrawing}
+                    className="w-full h-full touch-none"
+                   />
                 </div>
               </div>
             )}
 
-            <div className="h-32 mt-10 w-full flex flex-col items-center justify-center">
-              {loading ? (
-                 <BrandLoader />
-              ) : feedback && (
-                <div className={`p-6 rounded-xl w-full max-w-md font-black text-sm text-center animate-in slide-in-from-top-6 duration-500 shadow-xl ${isCorrect ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
-                  {isCorrect ? `✨ ${t('fantastic')} ` : `💡 ${t('keepTrying')} `}{feedback}
+            {isCorrect !== null && (
+              <div className={`mt-10 p-6 rounded-2xl w-full animate-in zoom-in duration-300 border-2 ${isCorrect ? 'bg-green-50 border-green-100 text-green-800' : 'bg-red-50 border-red-100 text-red-800'}`}>
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                    {isCorrect ? '✓' : '✕'}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-black uppercase tracking-widest mb-1">{isCorrect ? t('fantastic') : t('keepTrying')}</p>
+                    <p className="text-xs font-medium opacity-80">{feedback}</p>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           <footer className="mt-auto py-10 bg-white border-t border-gray-50 -mx-6 px-10">
             {isCorrect === null ? (
               <button 
-                onClick={ex.type === 'WRITE' || ex.type === 'SPEAK' ? (ex.type === 'WRITE' ? handleWriteCheck : startRecording) : checkAnswer} 
+                onClick={ex.type === 'WRITE' || ex.type === 'SPEAK' ? (ex.type === 'WRITE' ? handleWriteCheck : () => {}) : () => {}} 
                 disabled={(!userSelection && ex.type !== 'WRITE' && ex.type !== 'SPEAK') || loading || (ex.type === 'SPEAK' && isRecording)} 
                 className="w-full py-7 bg-gray-900 text-white rounded-xl font-black text-xl shadow-2xl disabled:opacity-10 active:scale-95 transition-all transform hover:-translate-y-1 uppercase tracking-widest"
               >
@@ -373,7 +344,7 @@ const Learn: React.FC = () => {
               </button>
             ) : (
               <button 
-                onClick={isCorrect ? nextQuestion : () => setIsCorrect(null)} 
+                onClick={isCorrect ? () => { if (currentExerciseIdx < unitExercises.length - 1) { setCurrentExerciseIdx(p => p + 1); resetState(); } else { setActiveUnit(null); } } : () => setIsCorrect(null)} 
                 className={`w-full py-7 rounded-xl font-black text-xl text-white shadow-2xl transition-all active:scale-95 transform hover:-translate-y-1 uppercase tracking-widest ${isCorrect ? 'bg-green-600' : 'bg-red-600'}`}
               >
                 {isCorrect ? t('nextStep') : t('tryAgain')}
@@ -387,76 +358,58 @@ const Learn: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-10 pb-24">
-      <header className="mb-12 flex items-center justify-between">
-        <div className="animate-in slide-in-from-left duration-700">
-          <h2 className="text-5xl font-black text-gray-900 mb-4 tracking-tight">{t('learn')}</h2>
-          <div className="flex items-center gap-3">
-             <div className="w-3.5 h-3.5 bg-red-600 rounded-full animate-pulse shadow-[0_0_15px_#ef4444]"></div>
-             <p className="text-xs text-gray-500 font-black uppercase tracking-[0.4em]">{t('personalPath')}</p>
+      <header className="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+        <div className="max-w-2xl">
+          <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">{t('personalPath')}</h2>
+          <div className="flex items-center gap-4">
+            <div className="px-4 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg uppercase tracking-widest shadow-lg">{t('currentMilestone')}</div>
+            <p className="text-gray-400 font-bold text-sm">{t('milestoneText')}</p>
           </div>
         </div>
-        <div className="text-right hidden sm:block animate-in slide-in-from-right duration-700">
-           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t('currentMilestone')}</p>
-           <p className="text-2xl font-black text-gray-900">{t('milestoneText')}</p>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} className={`w-3 h-3 rounded-full ${i <= 3 ? 'bg-emerald-500' : 'bg-gray-200'}`} />
+          ))}
         </div>
       </header>
 
-      <div className="space-y-16">
-        {CATEGORIES.map((cat) => (
-          <section key={cat.id} className="space-y-8 animate-in slide-in-from-bottom-10 duration-700">
-            <div className="flex items-center gap-10">
-                <h3 className="text-2xl font-black text-gray-900 uppercase tracking-widest leading-none flex-shrink-0 text-wrap">{cat.name}</h3>
-                <div className="h-1 flex-1 bg-gradient-to-r from-gray-100 via-gray-50 to-transparent rounded-full shadow-inner" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {allUnits.map((unit) => (
+          <div 
+            key={unit.id}
+            onClick={() => !unit.locked && startLesson(unit)}
+            className={`group p-8 rounded-3xl border transition-all relative overflow-hidden flex flex-col min-h-[300px]
+              ${unit.locked ? 'bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed' : 'bg-white border-gray-100 hover:border-red-600 hover:shadow-2xl cursor-pointer'}`}
+          >
+            <div className="absolute top-0 right-0 p-6">
+               {unit.locked ? (
+                 <span className="text-2xl opacity-20">🔒</span>
+               ) : (
+                 <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-xs font-black text-gray-300 group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
+                    {Math.round((unit.completed / unit.lessons) * 100)}%
+                 </div>
+               )}
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cat.units.map((unit: any) => {
-                const progressPercent = Math.round((unit.completed / unit.lessons) * 100);
-                return (
-                  <div 
-                    key={unit.id}
-                    onClick={() => !unit.locked && startLesson(unit)}
-                    className={`bg-white p-7 rounded-xl border border-gray-100 shadow-sm transition-all flex flex-col h-full relative group overflow-hidden min-h-[300px]
-                      ${unit.locked ? 'opacity-30 cursor-not-allowed scale-95 grayscale' : 'hover:shadow-2xl hover:-translate-y-2 cursor-pointer active:scale-[0.98]'}`}
-                  >
-                    {unit.locked && (
-                      <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                        <div className="bg-white/90 p-4 rounded-xl text-gray-400 border border-gray-100 shadow-2xl backdrop-blur-sm transform scale-110 animate-in zoom-in duration-300">
-                          <span className="text-3xl">🔒</span>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-start gap-5 mb-4">
-                      <div className={`w-14 h-14 shrink-0 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-3xl shadow-xl transition-all group-hover:rotate-12 group-hover:scale-110 border-4 border-white`}>
-                        {unit.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-black text-gray-900 leading-tight mb-2 group-hover:text-red-600 transition-colors tracking-tight text-wrap">{unit.title}</h4>
-                        <div className="inline-flex px-2 py-1 bg-gray-50 rounded-md border border-gray-100">
-                          <p className="text-[9px] font-black text-red-600 uppercase tracking-widest leading-none text-wrap">{unit.focus}</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <p className="text-gray-500 font-medium mb-6 flex-1 leading-relaxed text-sm italic text-wrap">"{unit.description}"</p>
-                    
-                    <div className="space-y-4 mt-auto">
-                      <div className="flex justify-between items-end px-1">
-                         <div className="max-w-[140px]">
-                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">{t('levelMastery')}</p>
-                            <span className="text-base font-black text-gray-900 truncate block">{t('doneUnit', { completed: unit.completed, lessons: unit.lessons })}</span>
-                         </div>
-                      </div>
-                      <div className="h-2 w-full bg-gray-50 rounded-full overflow-hidden shadow-inner border border-gray-50 p-0.5">
-                        <div className="h-full bg-gradient-to-r from-emerald-500 to-green-400 transition-all duration-1000 rounded-full" style={{ width: `${progressPercent}%` }} />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+
+            <div className={`w-16 h-16 ${unit.color} rounded-2xl flex items-center justify-center text-4xl mb-8 shadow-xl border-4 border-white transition-transform group-hover:scale-110 group-hover:rotate-6`}>
+              {unit.icon}
             </div>
-          </section>
+
+            <div className="flex-1">
+              <h3 className={`text-2xl font-black mb-2 tracking-tight ${unit.locked ? 'text-gray-400' : 'text-gray-900 group-hover:text-red-600 transition-colors'}`}>{unit.title}</h3>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">{unit.category} • {unit.focus}</p>
+              <p className="text-gray-500 font-medium text-sm leading-relaxed line-clamp-2">"{unit.description}"</p>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center">
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('doneUnit', { completed: unit.completed, lessons: unit.lessons })}</span>
+              {!unit.locked && (
+                <span className="text-red-600 font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                  {t('resumeTraining')} →
+                </span>
+              )}
+            </div>
+          </div>
         ))}
       </div>
     </div>

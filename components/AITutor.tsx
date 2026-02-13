@@ -1,13 +1,11 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { getAITutorResponseStream, generateLessonSpeech, decodeBase64, decodeAudioData, transcribeAudio } from '../services/geminiService';
 import { ChatMessage, TutorSession, TutorMode } from '../types';
 import { useTranslation } from '../App';
 
-// 统一的图标组件库
 const Icons = {
   Speaker: ({ active, loading }: { active?: boolean; loading?: boolean }) => (
-    <svg viewBox="0 0 24 24" className={`w-5 h-5 transition-all duration-300 ${loading ? 'animate-spin opacity-50' : active ? 'fill-red-600 scale-110' : 'fill-gray-400 group-hover:fill-gray-600'}`}>
+    <svg viewBox="0 0 24 24" className={`w-5 h-5 transition-all duration-300 ${loading ? 'animate-spin opacity-50' : active ? 'fill-[#BD1023] scale-110' : 'fill-gray-400 group-hover:fill-gray-600'}`}>
       {loading ? (
         <path d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M7.757 16.243l-2.121 2.121M16.243 16.243l2.121 2.121M7.757 7.757L5.636 5.636" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
       ) : (
@@ -29,12 +27,12 @@ const Icons = {
 };
 
 const MeiAvatar: React.FC = () => (
-  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-2xl shadow-lg ring-4 ring-red-50 relative overflow-hidden group">
+  <div className="w-12 h-12 bg-[#BD1023] rounded-full flex items-center justify-center text-2xl shadow-lg ring-4 ring-[#fae2e4] relative overflow-hidden group">
     <div className="absolute inset-0 bg-white/10 group-hover:scale-150 transition-transform duration-700"></div>
     <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white z-10">
       <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
     </svg>
-    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full z-20"></div>
+    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#2D8C61] border-2 border-white rounded-full z-20"></div>
   </div>
 );
 
@@ -50,11 +48,9 @@ const AITutor: React.FC = () => {
   const [isMeiSpeaking, setIsMeiSpeaking] = useState(false); 
   const [isRecordingVoice, setIsRecordingVoice] = useState(false); 
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const [loadingAudioId, setLoadingAudioId] = useState<string | null>(null); // 用于跟踪哪个单词或句子正在加载音频
+  const [loadingAudioId, setLoadingAudioId] = useState<string | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  
-  // 核心音频引用：管理播放队列
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioQueueRef = useRef<AudioBuffer[]>([]);
   const isPlayingQueueRef = useRef(false);
@@ -62,7 +58,6 @@ const AITutor: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  // 预热音频上下文
   const ensureAudioContext = async () => {
     if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
@@ -76,7 +71,6 @@ const AITutor: React.FC = () => {
   useEffect(() => {
     const saved = localStorage.getItem('hanzigo_tutor_sessions');
     if (saved) setSessions(JSON.parse(saved));
-    // 组件挂载时预热
     ensureAudioContext().catch(() => {}); 
     return () => stopCurrentAudio();
   }, []);
@@ -111,10 +105,8 @@ const AITutor: React.FC = () => {
       setLoadingAudioId(null);
       return;
     }
-
     isPlayingQueueRef.current = true;
     setIsMeiSpeaking(true);
-
     const ctx = await ensureAudioContext();
     const buffer = audioQueueRef.current.shift()!;
     const source = ctx.createBufferSource();
@@ -126,24 +118,18 @@ const AITutor: React.FC = () => {
 
   const queueSpeechChunk = async (text: string, sourceId?: string) => {
     if (sourceId) setLoadingAudioId(sourceId);
-    
     try {
       const cleanText = text.replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '').replace(/\[ANALYSIS\][\s\S]*$/, '').trim();
       if (!cleanText) return;
-
       const base64Audio = await generateLessonSpeech(cleanText);
       if (base64Audio) {
         const ctx = await ensureAudioContext();
         const decoded = decodeBase64(base64Audio);
         const buffer = await decodeAudioData(decoded, ctx);
         audioQueueRef.current.push(buffer);
-        
-        if (!isPlayingQueueRef.current) {
-          playNextInQueue();
-        }
+        if (!isPlayingQueueRef.current) playNextInQueue();
       }
     } catch (e) {
-      console.error("Speech queue error:", e);
       setLoadingAudioId(null);
     }
   };
@@ -155,33 +141,23 @@ const AITutor: React.FC = () => {
 
   const handleSend = async (textToSend: string) => {
     if (!textToSend.trim()) return;
-    
     stopCurrentAudio();
     lastProcessedIndexRef.current = 0;
-
     const userMsg: ChatMessage = { role: 'user', text: textToSend, timestamp: Date.now() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
-
     let fullStreamedText = '';
     const tempModelMsg: ChatMessage = { role: 'model', text: '', timestamp: Date.now() };
     setMessages(prev => [...prev, tempModelMsg]);
-
     try {
       const stream = getAITutorResponseStream([...messages, userMsg], language);
-      
       for await (const chunk of stream) {
         fullStreamedText += chunk;
-        const rawBodyText = fullStreamedText
-          .replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '')
-          .replace(/\[ANALYSIS\][\s\S]*$/, '')
-          .trim();
-        
+        const rawBodyText = fullStreamedText.replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '').replace(/\[ANALYSIS\][\s\S]*$/, '').trim();
         if (mode === 'VOICE') {
           const unprocessed = rawBodyText.slice(lastProcessedIndexRef.current);
           const sentenceEndMatch = unprocessed.match(/[。！？\n]/);
-          
           if (sentenceEndMatch) {
             const endIdx = sentenceEndMatch.index! + 1;
             const sentenceToSpeak = unprocessed.slice(0, endIdx);
@@ -189,37 +165,20 @@ const AITutor: React.FC = () => {
             lastProcessedIndexRef.current += endIdx;
           }
         }
-
         setMessages(prev => {
           const updated = [...prev];
           const last = updated[updated.length - 1];
-          if (last.role === 'model') {
-            last.text = rawBodyText;
-          }
+          if (last.role === 'model') last.text = rawBodyText;
           return updated;
         });
       }
-
-      const finalRawBody = fullStreamedText
-        .replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '')
-        .replace(/\[ANALYSIS\][\s\S]*$/, '')
-        .trim();
-      
-      if (mode === 'VOICE' && lastProcessedIndexRef.current < finalRawBody.length) {
-        queueSpeechChunk(finalRawBody.slice(lastProcessedIndexRef.current));
-      }
-
+      const finalRawBody = fullStreamedText.replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '').replace(/\[ANALYSIS\][\s\S]*$/, '').trim();
+      if (mode === 'VOICE' && lastProcessedIndexRef.current < finalRawBody.length) queueSpeechChunk(finalRawBody.slice(lastProcessedIndexRef.current));
       const vocabMatches = [...fullStreamedText.matchAll(/\[VOCAB\]([\s\S]*?)\[\/VOCAB\]/g)];
-      const vocabItems = vocabMatches.map(m => {
-        try { return JSON.parse(m[1]); } catch(e) { return null; }
-      }).filter(Boolean);
-
+      const vocabItems = vocabMatches.map(m => { try { return JSON.parse(m[1]); } catch(e) { return null; } }).filter(Boolean);
       const analysisMatch = fullStreamedText.match(/\[ANALYSIS\]([\s\S]*?)\[\/ANALYSIS\]/);
       let analysisData;
-      if (analysisMatch) {
-        try { analysisData = JSON.parse(analysisMatch[1]); } catch (e) { console.error("Analysis parse failed", e); }
-      }
-
+      if (analysisMatch) { try { analysisData = JSON.parse(analysisMatch[1]); } catch (e) {} }
       setMessages(prev => {
         const updated = [...prev];
         const last = updated[updated.length - 1];
@@ -228,7 +187,6 @@ const AITutor: React.FC = () => {
         last.vocab = vocabItems;
         return updated;
       });
-
       setSessions(prev => {
         const sessionIdx = prev.findIndex(s => s.id === currentSessionId);
         const finalMessages = [...messages.filter(m => m.text !== ''), userMsg, { ...tempModelMsg, text: finalRawBody, analysis: analysisData, vocab: vocabItems }];
@@ -237,20 +195,10 @@ const AITutor: React.FC = () => {
           newSessions[sessionIdx] = { ...newSessions[sessionIdx], messages: finalMessages };
           return newSessions;
         } else {
-          return [{
-            id: currentSessionId,
-            title: textToSend.slice(0, 20) + '...',
-            date: Date.now(),
-            messages: finalMessages
-          }, ...prev];
+          return [{ id: currentSessionId, title: textToSend.slice(0, 20) + '...', date: Date.now(), messages: finalMessages }, ...prev];
         }
       });
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsTyping(false);
-    }
+    } catch (err) {} finally { setIsTyping(false); }
   };
 
   const startVoiceRecording = async () => {
@@ -271,13 +219,13 @@ const AITutor: React.FC = () => {
           try {
             const text = await transcribeAudio(base64Audio);
             if (text) handleSend(text);
-          } catch (e) { console.error(e); } finally { setIsTranscribing(false); }
+          } catch (e) {} finally { setIsTranscribing(false); }
         };
         stream.getTracks().forEach(track => track.stop());
       };
       mediaRecorder.start();
       setIsRecordingVoice(true);
-    } catch (err) { console.error(err); setIsRecordingVoice(false); }
+    } catch (err) { setIsRecordingVoice(false); }
   };
 
   const stopVoiceRecording = () => {
@@ -293,14 +241,14 @@ const AITutor: React.FC = () => {
         <div className="flex items-center gap-4">
           <MeiAvatar /> 
           <div>
-            <h3 className="text-lg font-black text-gray-900 tracking-tight leading-none mb-1">Mei</h3>
+            <h3 className="text-lg font-black text-[#1A1A1A] tracking-tight leading-none mb-1">Mei</h3>
             <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t('tutorRole')}</p>
           </div>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => { stopCurrentAudio(); setShowHistory(!showHistory); }}
-            className="px-5 py-2.5 bg-white border border-gray-100 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm hover:shadow-md hover:border-red-100 transition-all flex items-center gap-2"
+            className="px-5 py-2.5 bg-white border border-[#f0ede5] rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm hover:shadow-md hover:border-[#BD1023]/20 transition-all flex items-center gap-2"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2"><path d="M12 6v6l4 2" strokeLinecap="round"/><circle cx="12" cy="12" r="9"/></svg>
             {t('sessionHistory')}
@@ -309,21 +257,21 @@ const AITutor: React.FC = () => {
       </header>
 
       {showHistory && (
-        <div className="absolute inset-0 z-50 bg-white/95 backdrop-blur-xl animate-in fade-in duration-300 p-8 flex flex-col">
+        <div className="absolute inset-0 z-50 bg-[#f9f7f2]/95 backdrop-blur-xl animate-in fade-in duration-300 p-8 flex flex-col">
           <div className="flex justify-between items-center mb-10">
-            <h4 className="text-2xl font-black text-gray-900 tracking-tight">{t('sessionHistory')}</h4>
+            <h4 className="text-2xl font-black text-[#1A1A1A] tracking-tight">{t('sessionHistory')}</h4>
             <div className="flex gap-4">
-              <button onClick={() => { stopCurrentAudio(); setCurrentSessionId(Math.random().toString(36).substr(2, 9)); setMessages([{ role: 'model', text: t('tutorWelcome'), timestamp: Date.now() }]); setShowHistory(false); }} className="bg-gray-900 text-white px-6 py-2 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-colors">
+              <button onClick={() => { stopCurrentAudio(); setCurrentSessionId(Math.random().toString(36).substr(2, 9)); setMessages([{ role: 'model', text: t('tutorWelcome'), timestamp: Date.now() }]); setShowHistory(false); }} className="bg-[#1A1A1A] text-white px-6 py-2 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-[#BD1023] transition-colors">
                 {t('newChat')}
               </button>
-              <button onClick={() => setShowHistory(false)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">✕</button>
+              <button onClick={() => setShowHistory(false)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-[#1A1A1A] transition-colors">✕</button>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar">
             {sessions.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center opacity-20 grayscale">
                  <div className="text-6xl mb-4">⌛</div>
-                 <p className="font-black uppercase tracking-widest text-xs">{t('historyEmpty')}</p>
+                 <p className="font-black uppercase tracking-widest text-xs text-[#1A1A1A]">{t('historyEmpty')}</p>
               </div>
             ) : (
               sessions.map(s => (
@@ -331,10 +279,10 @@ const AITutor: React.FC = () => {
                   key={s.id}
                   onClick={() => { stopCurrentAudio(); setCurrentSessionId(s.id); setMessages(s.messages); setShowHistory(false); }}
                   className={`p-6 rounded-2xl border transition-all cursor-pointer group flex items-center justify-between
-                    ${currentSessionId === s.id ? 'bg-red-50 border-red-100' : 'bg-white border-gray-100 hover:border-gray-200 shadow-sm'}`}
+                    ${currentSessionId === s.id ? 'bg-[#fdf0f1] border-[#fae2e4]' : 'bg-white border-[#f0ede5] hover:border-[#BD1023]/30 shadow-sm'}`}
                 >
                   <div className="flex-1 pr-4 overflow-hidden">
-                    <p className="text-sm font-black text-gray-900 truncate mb-1">{s.title}</p>
+                    <p className="text-sm font-black text-[#1A1A1A] truncate mb-1">{s.title}</p>
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                       {new Date(s.date).toLocaleDateString()} • {s.messages.length} messages
                     </p>
@@ -357,7 +305,7 @@ const AITutor: React.FC = () => {
                        onClick={() => { stopCurrentAudio(); queueSpeechChunk(m.text, `msg-${i}`); }}
                        disabled={loadingAudioId === `msg-${i}`}
                        className={`mt-2 w-10 h-10 rounded-full flex items-center justify-center transition-all group shrink-0 shadow-sm
-                         ${isMeiSpeaking && loadingAudioId === `msg-${i}` ? 'bg-red-600 ring-4 ring-red-100 shadow-red-200' : 'bg-white border border-gray-100 hover:bg-red-50 hover:border-red-100'}`}
+                         ${isMeiSpeaking && loadingAudioId === `msg-${i}` ? 'bg-[#BD1023] ring-4 ring-[#fae2e4]' : 'bg-white border border-[#f0ede5] hover:bg-[#fdf0f1] hover:border-[#fae2e4]'}`}
                      >
                        <Icons.Speaker 
                           active={isMeiSpeaking && loadingAudioId === `msg-${i}`} 
@@ -366,7 +314,7 @@ const AITutor: React.FC = () => {
                      </button>
                   )}
                   <div className={`p-5 rounded-2xl text-base leading-relaxed whitespace-pre-wrap transition-all duration-500 shadow-sm ${
-                    m.role === 'user' ? 'bg-gray-900 text-white rounded-br-none' : `bg-white border border-gray-100 text-gray-800 rounded-bl-none ${isMeiSpeaking && loadingAudioId === `msg-${i}` ? 'ring-2 ring-red-100' : ''}`
+                    m.role === 'user' ? 'bg-[#1A1A1A] text-white rounded-br-none shadow-gray-200' : `bg-white border border-[#f0ede5] text-[#1A1A1A] rounded-bl-none ${isMeiSpeaking && loadingAudioId === `msg-${i}` ? 'ring-2 ring-[#fae2e4]' : ''}`
                   }`}>
                     {m.text || (i === messages.length - 1 && isTyping ? '...' : '')}
                   </div>
@@ -375,12 +323,12 @@ const AITutor: React.FC = () => {
                 {m.vocab && m.vocab.length > 0 && (
                   <div className="mt-4 flex gap-3 overflow-x-auto pb-2 w-full max-w-[85%] no-scrollbar">
                     {m.vocab.map((v, vIdx) => (
-                      <div key={vIdx} className="flex-shrink-0 bg-white border border-gray-100 p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-red-100 transition-all min-w-[150px] animate-in zoom-in duration-300 group">
+                      <div key={vIdx} className="flex-shrink-0 bg-white border border-[#f0ede5] p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-[#BD1023]/20 transition-all min-w-[150px] animate-in zoom-in duration-300 group">
                         <div className="flex justify-between items-start mb-1">
-                          <span className="text-2xl font-black text-gray-900 chinese-font">{v.word}</span>
+                          <span className="text-2xl font-black text-[#1A1A1A] chinese-font">{v.word}</span>
                           <button 
                             onClick={() => handleSpeakWord(v.word, vIdx)}
-                            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-gray-50 group-hover:bg-red-50"
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-[#f9f7f2] group-hover:bg-[#fdf0f1]"
                           >
                             <Icons.Speaker 
                               active={isMeiSpeaking && loadingAudioId === `word-${vIdx}`} 
@@ -388,7 +336,7 @@ const AITutor: React.FC = () => {
                             />
                           </button>
                         </div>
-                        <p className="text-[11px] text-red-600 font-black tracking-widest uppercase mb-2">{v.pinyin}</p>
+                        <p className="text-[11px] text-[#BD1023] font-black tracking-widest uppercase mb-2">{v.pinyin}</p>
                         <p className="text-xs text-gray-500 font-medium leading-tight">{v.meaning}</p>
                       </div>
                     ))}
@@ -396,14 +344,14 @@ const AITutor: React.FC = () => {
                 )}
 
                 {m.analysis && (
-                  <div className="mt-4 w-full max-w-[85%] bg-blue-50/40 border border-blue-100 p-6 rounded-3xl shadow-sm animate-in zoom-in duration-300">
+                  <div className="mt-4 w-full max-w-[85%] bg-[#F0F4F8] border border-[#D9E2EC] p-6 rounded-3xl shadow-sm animate-in zoom-in duration-300">
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{t('feedbackLabel')}</span>
+                        <span className="text-[9px] font-black text-[#243B53] uppercase tracking-widest">{t('feedbackLabel')}</span>
                     </div>
                     <div className="space-y-2">
                         <p className="text-xs text-gray-400 line-through opacity-60">{m.analysis.original}</p>
-                        <p className="text-lg font-black text-gray-900 chinese-font">{m.analysis.correction}</p>
-                        <p className="text-xs text-blue-600/80 font-medium italic mt-2">{m.analysis.explanation}</p>
+                        <p className="text-lg font-black text-[#1A1A1A] chinese-font">{m.analysis.correction}</p>
+                        <p className="text-xs text-[#243B53]/80 font-medium italic mt-2">{m.analysis.explanation}</p>
                     </div>
                   </div>
                 )}
@@ -412,7 +360,7 @@ const AITutor: React.FC = () => {
             {isTranscribing && (
               <div className="flex flex-col items-end animate-in slide-in-from-bottom-2">
                 <div className="bg-gray-100 p-4 rounded-2xl rounded-br-none italic text-xs text-gray-500 flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-600 rounded-full animate-ping"></div>
+                  <div className="w-2 h-2 bg-[#BD1023] rounded-full animate-ping"></div>
                   {t('transcribing') || 'Transcribing...'}
                 </div>
               </div>
@@ -423,7 +371,7 @@ const AITutor: React.FC = () => {
           <div className="relative flex items-center gap-3 group mb-4 shrink-0">
             <button
               onClick={() => { stopCurrentAudio(); setMode(mode === 'TEXT' ? 'VOICE' : 'TEXT'); }}
-              className="w-14 h-14 rounded-full flex items-center justify-center text-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-red-100 transition-all shrink-0"
+              className="w-14 h-14 rounded-full flex items-center justify-center text-xl bg-white border border-[#f0ede5] shadow-sm hover:shadow-md hover:border-[#BD1023]/20 transition-all shrink-0"
             >
               {mode === 'TEXT' ? <Icons.Mic active={false} /> : <Icons.Keyboard />}
             </button>
@@ -437,12 +385,12 @@ const AITutor: React.FC = () => {
                     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(input); }
                   }}
                   placeholder={t('tutorPlaceholder')}
-                  className="w-full p-5 pr-24 rounded-3xl border-2 border-gray-100 shadow-xl focus:border-red-600 focus:ring-4 focus:ring-red-50 outline-none transition-all text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
+                  className="w-full p-5 pr-24 rounded-3xl border-2 border-[#f0ede5] shadow-xl focus:border-[#BD1023] focus:ring-4 focus:ring-[#fdf0f1] outline-none transition-all text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
                 />
                 <button
                   onClick={() => handleSend(input)}
                   disabled={!input.trim() || isTyping || isTranscribing}
-                  className="absolute right-3 bg-gray-900 text-white px-6 py-2.5 rounded-xl font-black text-xs hover:bg-red-600 transition-all disabled:opacity-20 uppercase tracking-widest shadow-lg"
+                  className="absolute right-3 bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl font-black text-xs hover:bg-[#BD1023] transition-all disabled:opacity-20 uppercase tracking-widest shadow-lg"
                 >
                   {t('send')}
                 </button>
@@ -456,10 +404,10 @@ const AITutor: React.FC = () => {
                   onTouchEnd={stopVoiceRecording}
                   disabled={isTyping || isTranscribing}
                   className={`w-20 h-20 rounded-full flex items-center justify-center shadow-2xl transition-all relative
-                    ${isRecordingVoice ? 'bg-red-600 scale-110 shadow-red-200' : 'bg-gray-900 text-white hover:bg-red-600'}
+                    ${isRecordingVoice ? 'bg-[#BD1023] scale-110 shadow-[#fae2e4]' : 'bg-[#1A1A1A] text-white hover:bg-[#BD1023]'}
                     ${isTyping || isTranscribing ? 'opacity-20 grayscale' : ''}`}
                 >
-                  {isRecordingVoice && <div className="absolute inset-0 rounded-full border-4 border-red-400 animate-ping opacity-50"></div>}
+                  {isRecordingVoice && <div className="absolute inset-0 rounded-full border-4 border-[#fae2e4] animate-ping opacity-50"></div>}
                   <Icons.Mic active={isRecordingVoice} transcribing={isTranscribing} /> 
                 </button>
               </div>

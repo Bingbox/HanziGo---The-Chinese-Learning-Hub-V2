@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,41 +9,58 @@
     <style>
         :root {
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
-            --brand-red: #ef4444;
-            --brand-red-dark: #b91c1c;
+            --brand-red: #BD1023; /* 宫廷红 */
+            --brand-red-dark: #8E0C1B;
+            --paper-white: #F9F7F2; /* 宣纸色 */
+            --ink-black: #1A1A1A;
+            --accent-gold: #E9C46A;
         }
         body { 
             font-family: 'Inter', 'Noto Sans SC', sans-serif; 
             -webkit-tap-highlight-color: transparent;
+            background-color: var(--paper-white);
+            color: var(--ink-black);
         }
         .chinese-font { font-family: 'Noto Sans SC', sans-serif; }
+        
+        /* 这种渐变更贴合漆器质感，而不是廉价的亮红色 */
         .logo-gradient {
-            background: linear-gradient(135deg, #FF6B6B 0%, #ef4444 100%);
+            background: linear-gradient(135deg, #BD1023 0%, #8E0C1B 100%);
         }
+        
         .brand-shadow {
-            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(189, 16, 35, 0.25);
         }
-        /* Custom Scrollbar for Desktop */
+
+        /* 优化滚动条为水墨色调 */
         @media (min-width: 768px) {
             .custom-scrollbar::-webkit-scrollbar { width: 6px; }
             .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #dcd7cc; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #BD1023; }
         }
-        /* Glassmorphism */
+
+        /* 玻璃拟态结合宣纸色 */
         .glass {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(249, 247, 242, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        /* Mascot Floating Animation */
+
+        /* 更加平滑的悬浮动画 */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(2deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
         .animate-float {
-            animation: float 4s ease-in-out infinite;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* 文本首字母红色修饰 */
+        .drop-cap-red::first-letter {
+            color: var(--brand-red);
+            font-weight: 900;
         }
     </style>
 <script type="importmap">
@@ -58,7 +74,7 @@
 }
 </script>
 </head>
-<body class="bg-gray-50 text-gray-900 overflow-hidden">
+<body class="overflow-hidden">
     <div id="root"></div>
 </body>
 </html>

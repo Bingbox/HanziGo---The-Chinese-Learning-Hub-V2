@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Unit, Exercise } from '../types';
 import { useTranslation } from '../App';
@@ -6,15 +5,13 @@ import { evaluatePronunciation, generateLessonSpeech, recognizeImage, decodeBase
 
 const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
   <div className={`${size} relative animate-bounce`}>
-    <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-500 rounded-full shadow-lg border-2 border-white"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-[#BD1023] to-[#8E0C1B] rounded-full shadow-lg border-2 border-white"></div>
     <svg viewBox="0 0 100 100" className="absolute inset-0 p-2.5 fill-white">
       <path d="M25 20h10v60H25z M65 20h10v60H65z M35 45h30v10H35z" />
     </svg>
   </div>
 );
 
-// Defined UNIT_EXERCISES_MAP to resolve the reference error.
-// This map contains exercise sequences for each learning unit.
 const UNIT_EXERCISES_MAP: Record<string, Exercise[]> = {
   'u1': [
     { id: 'u1e1', type: 'LISTEN', question: 'exListenHello', chinese: '你好', pinyin: 'nǐ hǎo', answer: '你好', options: ['你好', '谢谢', '再见'] },
@@ -75,13 +72,10 @@ const Learn: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDrawing = useRef(false);
 
-  // Handle unit auto-activation if coming from dashboard
   useEffect(() => {
     if (activeUnitId) {
       const unit = allUnits.find(u => u.id === activeUnitId);
-      if (unit && !unit.locked) {
-        startLesson(unit);
-      }
+      if (unit && !unit.locked) startLesson(unit);
       setActiveUnitId(null);
     }
   }, [activeUnitId, allUnits, setActiveUnitId]);
@@ -99,20 +93,13 @@ const Learn: React.FC = () => {
     setIsCorrect(null);
     setFeedback('');
     setLoading(false);
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
   };
 
   const playAudio = async (text: string) => {
     setLoading(true);
     try {
-      if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-      }
+      if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
       if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
-      
       const base64Audio = await generateLessonSpeech(text);
       if (base64Audio) {
         const decoded = decodeBase64(base64Audio);
@@ -122,7 +109,7 @@ const Learn: React.FC = () => {
         source.connect(audioContextRef.current.destination);
         source.start();
       }
-    } catch (e) { console.error(e); } finally { setLoading(false); }
+    } catch (e) {} finally { setLoading(false); }
   };
 
   const handleWriteCheck = async () => {
@@ -158,11 +145,7 @@ const Learn: React.FC = () => {
             const result = await evaluatePronunciation(base64, unitExercises[currentExerciseIdx].chinese, language, mimeType);
             setIsCorrect(result.isCorrect);
             setFeedback(`${t('score')}: ${result.score} - ${result.feedback}`);
-          } catch (e) {
-            setFeedback(t('micError'));
-          } finally {
-            setLoading(false);
-          }
+          } catch (e) { setFeedback(t('micError')); } finally { setLoading(false); }
         };
         stream.getTracks().forEach(track => track.stop());
       };
@@ -185,33 +168,17 @@ const Learn: React.FC = () => {
     setFeedback(correct ? t('fantastic') : t('keepTrying'));
   };
 
-  const initDrawing = (e: any) => {
-    isDrawing.current = true;
-    draw(e);
-  };
-
-  const endDrawing = () => {
-    isDrawing.current = false;
-    if (canvasRef.current) {
-        const ctx = canvasRef.current.getContext('2d');
-        ctx?.beginPath();
-    }
-  };
-
   const draw = (e: any) => {
     if (!isDrawing.current || !canvasRef.current) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
     const rect = canvas.getBoundingClientRect();
     const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
     const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-
     ctx.lineWidth = 12;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000';
-
+    ctx.strokeStyle = '#1A1A1A';
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.beginPath();
@@ -221,14 +188,14 @@ const Learn: React.FC = () => {
   if (activeUnit) {
     const ex = unitExercises[currentExerciseIdx];
     return (
-      <div className="fixed inset-0 z-[300] bg-white flex flex-col p-6 animate-in slide-in-from-right duration-300 overflow-y-auto">
+      <div className="fixed inset-0 z-[300] bg-[#f9f7f2] flex flex-col p-6 animate-in slide-in-from-right duration-300 overflow-y-auto">
         <div className="max-w-xl mx-auto w-full flex flex-col h-full">
           <header className="flex justify-between items-center mb-8">
-            <button onClick={() => setActiveUnit(null)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">✕</button>
+            <button onClick={() => setActiveUnit(null)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-[#1A1A1A] transition-colors">✕</button>
             <div className="flex-1 px-8">
-              <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-[#f0ede5] rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-red-600 transition-all duration-500 ease-out" 
+                  className="h-full bg-gradient-to-r from-[#BD1023] to-[#E9C46A] transition-all duration-500 ease-out" 
                   style={{ width: `${((currentExerciseIdx + 1) / unitExercises.length) * 100}%` }}
                 />
               </div>
@@ -237,20 +204,20 @@ const Learn: React.FC = () => {
           </header>
 
           <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
-            <h3 className="text-sm font-black text-red-600 uppercase tracking-[0.2em] mb-4">{t('exerciseType' + (ex.type === 'SELECT' || ex.type === 'READ' ? 'SelectRead' : ex.type))}</h3>
-            <h2 className="text-2xl font-black text-gray-900 mb-12 tracking-tight">{t(ex.question)}</h2>
+            <h3 className="text-sm font-black text-[#BD1023] uppercase tracking-[0.2em] mb-4">{t('exerciseType' + (ex.type === 'SELECT' || ex.type === 'READ' ? 'SelectRead' : ex.type))}</h3>
+            <h2 className="text-2xl font-black text-[#1A1A1A] mb-12 tracking-tight">{t(ex.question)}</h2>
 
             {(ex.type === 'SELECT' || ex.type === 'READ' || ex.type === 'LISTEN') && (
               <div className="w-full space-y-4">
                 {ex.type === 'LISTEN' && (
-                  <button onClick={() => playAudio(ex.chinese)} className="w-24 h-24 bg-red-50 rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-white mx-auto mb-10 hover:scale-105 transition-transform group">
+                  <button onClick={() => playAudio(ex.chinese)} className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-[#fdf0f1] mx-auto mb-10 hover:scale-105 transition-transform group">
                     <span className="group-hover:scale-125 transition-transform">🔊</span>
                   </button>
                 )}
                 {ex.type === 'READ' && (
-                  <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner mb-10">
-                    <div className="text-7xl font-black chinese-font text-gray-900 mb-2">{ex.chinese}</div>
-                    <div className="text-xl text-gray-400 font-bold tracking-[0.2em] uppercase">{ex.pinyin}</div>
+                  <div className="bg-white p-10 rounded-xl border border-[#f0ede5] shadow-inner mb-10">
+                    <div className="text-7xl font-black chinese-font text-[#1A1A1A] mb-2">{ex.chinese}</div>
+                    <div className="text-xl text-[#BD1023] font-bold tracking-[0.2em] uppercase">{ex.pinyin}</div>
                   </div>
                 )}
                 <div className="grid grid-cols-1 gap-4">
@@ -260,8 +227,8 @@ const Learn: React.FC = () => {
                       onClick={() => handleSelectOption(opt)}
                       className={`p-6 rounded-2xl border-2 font-black text-xl transition-all
                         ${userSelection === opt 
-                          ? (isCorrect ? 'border-green-600 bg-green-50 text-green-700' : 'border-red-600 bg-red-50 text-red-700') 
-                          : 'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}
+                          ? (isCorrect ? 'border-[#2D8C61] bg-[#eefaf3] text-[#2D8C61]' : 'border-[#BD1023] bg-[#fdf0f1] text-[#BD1023]') 
+                          : 'border-[#f0ede5] bg-white hover:border-gray-200 shadow-sm'}`}
                     >
                       {t(opt) !== opt ? t(opt) : opt}
                     </button>
@@ -272,9 +239,9 @@ const Learn: React.FC = () => {
 
             {ex.type === 'SPEAK' && (
               <div className="space-y-12 w-full animate-in fade-in duration-500">
-                <div className="bg-gray-50 p-10 rounded-xl border border-gray-100 shadow-inner relative overflow-hidden flex flex-col justify-center items-center">
-                  <div className="text-8xl font-black chinese-font text-gray-900 mb-4 relative z-10 text-wrap">{ex.chinese}</div>
-                  <div className="text-2xl text-red-600 font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div>
+                <div className="bg-white p-10 rounded-xl border border-[#f0ede5] shadow-inner relative overflow-hidden flex flex-col justify-center items-center">
+                  <div className="text-8xl font-black chinese-font text-[#1A1A1A] mb-4 relative z-10 text-wrap">{ex.chinese}</div>
+                  <div className="text-2xl text-[#BD1023] font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div>
                 </div>
                 <div className="flex flex-col items-center gap-6">
                   <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em]">{isRecording ? t('analyzingSpeech') : t('holdToSpeak')}</p>
@@ -283,7 +250,7 @@ const Learn: React.FC = () => {
                     onMouseUp={stopRecording} 
                     onTouchStart={startRecording}
                     onTouchEnd={stopRecording}
-                    className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all mx-auto ${isRecording ? 'bg-red-600 animate-pulse text-white scale-125' : 'bg-gray-900 text-white hover:scale-110'}`}
+                    className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all mx-auto ${isRecording ? 'bg-[#BD1023] animate-pulse text-white scale-125' : 'bg-[#1A1A1A] text-white hover:scale-110'}`}
                   >
                     🎤
                   </button>
@@ -296,22 +263,18 @@ const Learn: React.FC = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-left">
                     <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('canvasTrace')}</p>
-                    <p className="text-4xl font-black chinese-font text-gray-900">{ex.answer}</p>
+                    <p className="text-4xl font-black chinese-font text-[#1A1A1A]">{ex.answer}</p>
                   </div>
-                  <button onClick={() => { const ctx = canvasRef.current?.getContext('2d'); ctx?.clearRect(0,0,500,500); }} className="px-4 py-2 bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest rounded-lg hover:bg-gray-100">{t('clearBoard')}</button>
+                  <button onClick={() => { const ctx = canvasRef.current?.getContext('2d'); ctx?.clearRect(0,0,500,500); }} className="px-4 py-2 bg-[#f0ede5] text-[10px] font-black text-gray-500 uppercase tracking-widest rounded-lg hover:bg-gray-200">{t('clearBoard')}</button>
                 </div>
-                <div className="aspect-square w-full bg-white border-4 border-gray-100 rounded-3xl shadow-inner relative cursor-crosshair overflow-hidden">
+                <div className="aspect-square w-full bg-white border-4 border-[#f0ede5] rounded-3xl shadow-inner relative cursor-crosshair overflow-hidden">
                    <canvas
                     ref={canvasRef}
                     width={500}
                     height={500}
-                    onMouseDown={initDrawing}
+                    onMouseDown={(e) => { isDrawing.current = true; draw(e); }}
                     onMouseMove={draw}
-                    onMouseUp={endDrawing}
-                    onMouseOut={endDrawing}
-                    onTouchStart={initDrawing}
-                    onTouchMove={draw}
-                    onTouchEnd={endDrawing}
+                    onMouseUp={() => { isDrawing.current = false; canvasRef.current?.getContext('2d')?.beginPath(); }}
                     className="w-full h-full touch-none"
                    />
                 </div>
@@ -319,9 +282,9 @@ const Learn: React.FC = () => {
             )}
 
             {isCorrect !== null && (
-              <div className={`mt-10 p-6 rounded-2xl w-full animate-in zoom-in duration-300 border-2 ${isCorrect ? 'bg-green-50 border-green-100 text-green-800' : 'bg-red-50 border-red-100 text-red-800'}`}>
+              <div className={`mt-10 p-6 rounded-2xl w-full animate-in zoom-in duration-300 border-2 ${isCorrect ? 'bg-[#eefaf3] border-[#2D8C61]/20 text-[#2D8C61]' : 'bg-[#fdf0f1] border-[#BD1023]/20 text-[#BD1023]'}`}>
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${isCorrect ? 'bg-[#2D8C61] text-white' : 'bg-[#BD1023] text-white'}`}>
                     {isCorrect ? '✓' : '✕'}
                   </div>
                   <div className="text-left">
@@ -333,19 +296,19 @@ const Learn: React.FC = () => {
             )}
           </div>
 
-          <footer className="mt-auto py-10 bg-white border-t border-gray-50 -mx-6 px-10">
+          <footer className="mt-auto py-10 bg-[#f9f7f2] border-t border-[#f0ede5] -mx-6 px-10">
             {isCorrect === null ? (
               <button 
-                onClick={ex.type === 'WRITE' || ex.type === 'SPEAK' ? (ex.type === 'WRITE' ? handleWriteCheck : () => {}) : () => {}} 
+                onClick={ex.type === 'WRITE' ? handleWriteCheck : () => {}} 
                 disabled={(!userSelection && ex.type !== 'WRITE' && ex.type !== 'SPEAK') || loading || (ex.type === 'SPEAK' && isRecording)} 
-                className="w-full py-7 bg-gray-900 text-white rounded-xl font-black text-xl shadow-2xl disabled:opacity-10 active:scale-95 transition-all transform hover:-translate-y-1 uppercase tracking-widest"
+                className="w-full py-7 bg-[#1A1A1A] text-white rounded-xl font-black text-xl shadow-2xl disabled:opacity-10 active:scale-95 transition-all transform hover:-translate-y-1 uppercase tracking-widest"
               >
                 {ex.type === 'SPEAK' && isRecording ? t('recording') : t('checkAnswer')}
               </button>
             ) : (
               <button 
                 onClick={isCorrect ? () => { if (currentExerciseIdx < unitExercises.length - 1) { setCurrentExerciseIdx(p => p + 1); resetState(); } else { setActiveUnit(null); } } : () => setIsCorrect(null)} 
-                className={`w-full py-7 rounded-xl font-black text-xl text-white shadow-2xl transition-all active:scale-95 transform hover:-translate-y-1 uppercase tracking-widest ${isCorrect ? 'bg-green-600' : 'bg-red-600'}`}
+                className={`w-full py-7 rounded-xl font-black text-xl text-white shadow-2xl transition-all active:scale-95 transform hover:-translate-y-1 uppercase tracking-widest ${isCorrect ? 'bg-[#2D8C61]' : 'bg-[#BD1023]'}`}
               >
                 {isCorrect ? t('nextStep') : t('tryAgain')}
               </button>
@@ -360,15 +323,15 @@ const Learn: React.FC = () => {
     <div className="max-w-6xl mx-auto p-6 md:p-10 pb-24">
       <header className="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div className="max-w-2xl">
-          <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">{t('personalPath')}</h2>
+          <h2 className="text-4xl font-black text-[#1A1A1A] mb-4 tracking-tight">{t('personalPath')}</h2>
           <div className="flex items-center gap-4">
-            <div className="px-4 py-1.5 bg-gray-900 text-white text-[10px] font-black rounded-lg uppercase tracking-widest shadow-lg">{t('currentMilestone')}</div>
+            <div className="px-4 py-1.5 bg-[#BD1023] text-white text-[10px] font-black rounded-lg uppercase tracking-widest shadow-lg">{t('currentMilestone')}</div>
             <p className="text-gray-400 font-bold text-sm">{t('milestoneText')}</p>
           </div>
         </div>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className={`w-3 h-3 rounded-full ${i <= 3 ? 'bg-emerald-500' : 'bg-gray-200'}`} />
+            <div key={i} className={`w-3 h-3 rounded-full ${i <= 3 ? 'bg-[#2D8C61]' : 'bg-[#f0ede5]'}`} />
           ))}
         </div>
       </header>
@@ -379,13 +342,13 @@ const Learn: React.FC = () => {
             key={unit.id}
             onClick={() => !unit.locked && startLesson(unit)}
             className={`group p-8 rounded-3xl border transition-all relative overflow-hidden flex flex-col min-h-[300px]
-              ${unit.locked ? 'bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed' : 'bg-white border-gray-100 hover:border-red-600 hover:shadow-2xl cursor-pointer'}`}
+              ${unit.locked ? 'bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed' : 'bg-white border-[#f0ede5] hover:border-[#BD1023] hover:shadow-2xl cursor-pointer'}`}
           >
             <div className="absolute top-0 right-0 p-6">
                {unit.locked ? (
                  <span className="text-2xl opacity-20">🔒</span>
                ) : (
-                 <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-xs font-black text-gray-300 group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
+                 <div className="w-12 h-12 rounded-xl bg-[#f9f7f2] flex items-center justify-center text-xs font-black text-gray-300 group-hover:bg-[#fdf0f1] group-hover:text-[#BD1023] transition-colors">
                     {Math.round((unit.completed / unit.lessons) * 100)}%
                  </div>
                )}
@@ -396,15 +359,15 @@ const Learn: React.FC = () => {
             </div>
 
             <div className="flex-1">
-              <h3 className={`text-2xl font-black mb-2 tracking-tight ${unit.locked ? 'text-gray-400' : 'text-gray-900 group-hover:text-red-600 transition-colors'}`}>{unit.title}</h3>
+              <h3 className={`text-2xl font-black mb-2 tracking-tight ${unit.locked ? 'text-gray-400' : 'text-[#1A1A1A] group-hover:text-[#BD1023] transition-colors'}`}>{unit.title}</h3>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">{unit.category} • {unit.focus}</p>
               <p className="text-gray-500 font-medium text-sm leading-relaxed line-clamp-2">"{unit.description}"</p>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center">
+            <div className="mt-8 pt-6 border-t border-[#f0ede5] flex justify-between items-center">
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('doneUnit', { completed: unit.completed, lessons: unit.lessons })}</span>
               {!unit.locked && (
-                <span className="text-red-600 font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                <span className="text-[#BD1023] font-black text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                   {t('resumeTraining')} →
                 </span>
               )}

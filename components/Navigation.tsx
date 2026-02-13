@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View } from '../types';
 import { useTranslation } from '../App';
@@ -37,6 +38,11 @@ const Icons = {
     <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-[#BD1023] scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
     </svg>
+  ),
+  Profile: ({ active }: { active: boolean }) => (
+    <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-[#BD1023] scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+    </svg>
   )
 };
 
@@ -74,9 +80,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
             </button>
           ))}
           <button onClick={() => setView(View.SETTINGS)} className="flex flex-col items-center justify-center flex-1 transition-all">
-            <span className={`w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs transition-transform ${currentView === View.SETTINGS ? 'scale-110 -translate-y-1 ring-2 ring-[#BD1023]' : ''}`}>
-              {user?.avatar || '👤'}
-            </span>
+            <Icons.Profile active={currentView === View.SETTINGS} />
             <span className={`text-[9px] font-black uppercase mt-1.5 tracking-widest ${currentView === View.SETTINGS ? 'text-[#BD1023]' : 'text-gray-400'}`}>
               {t('profile')}
             </span>
@@ -105,10 +109,10 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
           </div>
 
           <div className="mt-auto pt-8 border-t border-[#f0ede5]">
-            <button onClick={() => setView(View.SETTINGS)} className={`w-full p-4 rounded-xl flex items-center gap-4 transition-colors ${currentView === View.SETTINGS ? 'bg-[#fdf0f1] text-[#BD1023] shadow-sm' : 'bg-[#f9f7f2] hover:bg-[#f2efe6]'}`}>
-              <div className="w-11 h-11 bg-white rounded-lg flex items-center justify-center text-sm shadow-sm border border-[#f0ede5]">{user?.avatar || '👤'}</div>
+            <button onClick={() => setView(View.SETTINGS)} className={`flex items-center gap-4 w-full px-5 py-3 rounded-xl transition-all font-bold text-sm ${currentView === View.SETTINGS ? 'bg-[#fdf0f1] text-[#BD1023] shadow-sm' : 'text-gray-500 hover:bg-[#f9f7f2]'}`}>
+              <Icons.Profile active={currentView === View.SETTINGS} />
               <div className="flex-1 text-left overflow-hidden">
-                <p className="text-sm font-black truncate text-[#1A1A1A]">{user?.name || t('user')}</p>
+                <p className={`text-sm font-black truncate ${currentView === View.SETTINGS ? 'text-[#BD1023]' : 'text-[#1A1A1A]'}`}>{user?.name || t('user')}</p>
                 <span className="text-[9px] text-[#2D8C61] font-black uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 bg-[#2D8C61] rounded-full"></span>{t('online')}</span>
               </div>
             </button>

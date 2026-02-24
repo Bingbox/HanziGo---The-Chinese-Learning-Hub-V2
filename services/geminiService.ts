@@ -166,7 +166,7 @@ export const generateLessonSpeech = async (text: string) => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
-    contents: [{ parts: [{ text: `Say clearly: ${text}` }] }],
+    contents: [{ parts: [{ text: text }] }],
     config: { 
       responseModalities: [Modality.AUDIO], 
       speechConfig: { 
@@ -201,7 +201,9 @@ export const evaluatePronunciation = async (base64Audio: string, targetText: str
     contents: { 
       parts: [
         { inlineData: { mimeType, data: base64Audio } }, 
-        { text: `Evaluate the Mandarin pronunciation of: "${targetText}". Feedback must be in ${langName}.` }
+        { text: `Evaluate Mandarin pronunciation of "${targetText}". 
+        Return JSON: {score: 0-100, feedback: string in ${langName}, isCorrect: boolean}. 
+        CRITICAL: Be very strict. If the tones are wrong, the sounds are incorrect, or it's a different word, set isCorrect to false. Only set isCorrect to true if the pronunciation is accurate and clear.` }
       ] 
     },
     config: { 
@@ -209,12 +211,13 @@ export const evaluatePronunciation = async (base64Audio: string, targetText: str
       responseSchema: { 
         type: Type.OBJECT, 
         properties: { 
-          score: { type: Type.NUMBER, description: "A score from 0-100" }, 
+          score: { type: Type.NUMBER }, 
           feedback: { type: Type.STRING }, 
           isCorrect: { type: Type.BOOLEAN } 
         }, 
         required: ["score", "feedback", "isCorrect"] 
-      } 
+      },
+      thinkingConfig: { thinkingLevel: "LOW" } as any
     }
   });
   return extractJson(response.text);
@@ -281,11 +284,30 @@ export const generateHSKQuestions = async (level: number, userLang: Language = '
   return extractJson(response.text);
 };
 
-export const recognizeImage = async (base64Data: string) => {
+export const recognizeImage = async (base64Data: string, targetChar?: string) => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const prompt = targetChar 
+    ? `Analyze the handwritten character. Does it PRECISELY match "${targetChar}"? 
+       Check for: 
+       1. Correct strokes and structure.
+       2. No missing or extra strokes.
+       3. It must be the EXACT character "${targetChar}".
+       If it matches perfectly, return "${targetChar}". 
+       If there are any errors, missing strokes, or it's a different character, return "incorrect". 
+       Return ONLY "${targetChar}" or "incorrect".`
+    : "Identify the primary Chinese character. Return ONLY the text.";
+
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: { parts: [{ inlineData: { mimeType: 'image/jpeg', data: base64Data } }, { text: "Extract and identify all Chinese characters in this image." }] }
+    contents: { 
+      parts: [
+        { inlineData: { mimeType: 'image/jpeg', data: base64Data } }, 
+        { text: prompt }
+      ] 
+    },
+    config: {
+      thinkingConfig: { thinkingLevel: "LOW" } as any
+    }
   });
   return response.text?.trim() || "";
 };

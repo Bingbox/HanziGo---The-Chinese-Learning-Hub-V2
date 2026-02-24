@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Unit, Exercise } from '../types';
 import { useTranslation } from '../App';
 import { evaluatePronunciation, generateLessonSpeech, recognizeImage, decodeBase64, decodeAudioData } from '../services/geminiService';
+import { questionBankService } from '../services/questionBankService';
 
 const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
   <div className={`${size} relative animate-bounce`}>
@@ -12,49 +13,6 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
   </div>
 );
 
-const UNIT_EXERCISES_MAP: Record<string, Exercise[]> = {
-  'u1': [
-    { id: 'u1e1', type: 'LISTEN', question: 'exListenHello', chinese: '你好', pinyin: 'nǐ hǎo', answer: '你好', options: ['你好', '谢谢', '再见'] },
-    { id: 'u1e2', type: 'SPEAK', question: 'exSayHello', chinese: '你好', pinyin: 'nǐ hǎo', answer: '你好' },
-    { id: 'u1e3', type: 'WRITE', question: 'exWritePerson', chinese: '人', pinyin: 'rén', answer: '人' }
-  ],
-  'u8': [
-    { id: 'u8e1', type: 'SELECT', question: 'exCharThree', chinese: '三', pinyin: 'sān', answer: '三', options: ['一', '二', '三', '四'] },
-    { id: 'u8e2', type: 'LISTEN', question: 'exListenEight', chinese: '八', pinyin: 'bā', answer: '八', options: ['六', '七', '八', '九'] },
-    { id: 'u8e3', type: 'SPEAK', question: 'exSay10', chinese: '十点', pinyin: 'shí diǎn', answer: '十点' }
-  ],
-  'u4': [
-    { id: 'u4e1', type: 'SELECT', question: 'exWakeUp', chinese: '起床', pinyin: 'qǐchuáng', answer: '起床', options: ['睡觉', '起床', '吃饭'] },
-    { id: 'u4e2', type: 'SPEAK', question: 'exSayWork', chinese: '我去上班', pinyin: 'wǒ qù shàngbān', answer: '我去上班' },
-    { id: 'u4e3', type: 'READ', question: 'exWhatIsSleep', chinese: '睡觉', pinyin: 'shuìjiào', answer: 'optionSleep', options: ['optionSleep', 'optionEat', 'optionRun'] }
-  ],
-  'u2': [
-    { id: 'u2e1', type: 'SELECT', question: 'exWhatIsSleep', chinese: '吃饭', pinyin: 'chī fàn', answer: 'optionEat', options: ['optionSleep', 'optionEat', 'optionRun'] },
-    { id: 'u2e2', type: 'LISTEN', question: 'exListenHello', chinese: '好喝', pinyin: 'hǎohē', answer: '好喝', options: ['好吃', '好喝', '好闻'] },
-    { id: 'u2e3', type: 'SPEAK', question: 'exSayHello', chinese: '我想吃饭', pinyin: 'wǒ xiǎng chīfàn', answer: '我想吃饭' }
-  ],
-  'u5': [
-    { id: 'u5e1', type: 'READ', question: 'exWhatIsExpensive', chinese: '太贵了', pinyin: 'tài guì le', answer: 'optionTooExpensive', options: ['optionTooExpensive', 'optionVeryCheap', 'optionHowMuch'] },
-    { id: 'u5e2', type: 'SPEAK', question: 'exSayHowMuch', chinese: '多少钱？', pinyin: 'duōshǎo qián?', answer: '多少钱？' },
-    { id: 'u5e3', type: 'LISTEN', question: 'exListenCheap', chinese: '便宜', pinyin: 'piányi', answer: '便宜', options: ['便宜', '贵', '打折'] }
-  ],
-  'u6': [
-    { id: 'u6e1', type: 'SELECT', question: 'exWhichFriend', chinese: '朋友', pinyin: 'péngyou', answer: '朋友', options: ['老师', '学生', '朋友'] },
-    { id: 'u6e2', type: 'SPEAK', question: 'exSayNiceToMeet', chinese: '很高兴认识你', pinyin: 'hěn gāoxìng rènshi nǐ', answer: '很高兴认识你' },
-    { id: 'u6e3', type: 'LISTEN', question: 'exListenFamily', chinese: '家人', pinyin: 'jiārén', answer: '家人', options: ['朋友', '老师', '家人'] }
-  ],
-  'u3': [
-    { id: 'u3e1', type: 'SELECT', question: 'exIdentifySubway', chinese: '地铁站', pinyin: 'dìtiě zhàn', answer: '地铁站', options: ['火车站', '地铁站', '飞机场'] },
-    { id: 'u3e2', type: 'READ', question: 'exWhatIsAirport', chinese: '飞机场', pinyin: 'fēijī chǎng', answer: 'optionAirport', options: ['optionAirport', 'optionHotel', 'optionTaxi'] },
-    { id: 'u3e3', type: 'WRITE', question: 'exWriteExit', chinese: '出', pinyin: 'chū', answer: '出' }
-  ],
-  'u7': [
-    { id: 'u7e1', type: 'READ', question: 'exWhatIsRedEnvelope', chinese: '红包', pinyin: 'hóngbāo', answer: 'optionRedEnvelope', options: ['optionRedEnvelope', 'optionLantern', 'optionTeaCup'] },
-    { id: 'u7e2', type: 'SPEAK', question: 'exSayHappyNewYear', chinese: '新年快乐', pinyin: 'xīnnián kuàilè', answer: '新年快乐' },
-    { id: 'u7e3', type: 'LISTEN', question: 'exListenCalligraphy', chinese: '书法', pinyin: 'shūfǎ', answer: '书法', options: ['国画', '书法', '京剧'] }
-  ]
-};
-
 const Learn: React.FC = () => {
   const { language, t, allUnits, activeUnitId, setActiveUnitId } = useTranslation();
   const [activeUnit, setActiveUnit] = useState<Unit | null>(null);
@@ -62,8 +20,13 @@ const Learn: React.FC = () => {
   const [userSelection, setUserSelection] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
+  const [audioLoading, setAudioLoading] = useState(false);
+  const [speakingLoading, setSpeakingLoading] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
   const [unitExercises, setUnitExercises] = useState<Exercise[]>([]);
+  const [sessionResults, setSessionResults] = useState<boolean[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
+  const nextTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -80,9 +43,38 @@ const Learn: React.FC = () => {
     }
   }, [activeUnitId, allUnits, setActiveUnitId]);
 
+  useEffect(() => {
+    if (isCorrect === true) {
+      nextTimerRef.current = setTimeout(() => {
+        handleNextStep();
+      }, 1500);
+    }
+    return () => {
+      if (nextTimerRef.current) clearTimeout(nextTimerRef.current);
+    };
+  }, [isCorrect]);
+
+  useEffect(() => {
+    if (unitExercises.length > 0 && unitExercises[currentExerciseIdx]?.type === 'LISTEN') {
+      playAudio(unitExercises[currentExerciseIdx].chinese);
+    }
+  }, [currentExerciseIdx, unitExercises]);
+
+  const handleNextStep = () => {
+    if (currentExerciseIdx < unitExercises.length - 1) {
+      setCurrentExerciseIdx(p => p + 1);
+      resetState();
+    } else {
+      setShowSummary(true);
+    }
+  };
+
   const startLesson = (unit: any) => {
-    const exercises = (UNIT_EXERCISES_MAP as any)[unit.id] || (UNIT_EXERCISES_MAP as any)['u1'];
+    const completionPercent = (unit.completed / unit.lessons) * 100;
+    const exercises = questionBankService.getSessionExercises(unit.id, 10, completionPercent);
     setUnitExercises(exercises);
+    setSessionResults([]);
+    setShowSummary(false);
     setActiveUnit(unit);
     setCurrentExerciseIdx(0);
     resetState();
@@ -93,13 +85,20 @@ const Learn: React.FC = () => {
     setIsCorrect(null);
     setFeedback('');
     setLoading(false);
+    setAudioLoading(false);
+    setSpeakingLoading(false);
   };
 
   const playAudio = async (text: string) => {
-    setLoading(true);
+    if (!text) return;
+    setAudioLoading(true);
     try {
-      if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-      if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+      }
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
       const base64Audio = await generateLessonSpeech(text);
       if (base64Audio) {
         const decoded = decodeBase64(base64Audio);
@@ -108,8 +107,14 @@ const Learn: React.FC = () => {
         source.buffer = buffer;
         source.connect(audioContextRef.current.destination);
         source.start();
+      } else {
+        console.warn("No audio data received from AI");
       }
-    } catch (e) {} finally { setLoading(false); }
+    } catch (e) {
+      console.error("Audio playback failed", e);
+    } finally {
+      setAudioLoading(false);
+    }
   };
 
   const handleWriteCheck = async () => {
@@ -118,10 +123,15 @@ const Learn: React.FC = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-      const result = await recognizeImage(base64);
       const target = unitExercises[currentExerciseIdx].chinese;
-      const correct = result.includes(target);
+      const result = await recognizeImage(base64, target);
+      const correct = result === target;
       setIsCorrect(correct);
+      setSessionResults(prev => {
+        const next = [...prev];
+        next[currentExerciseIdx] = correct;
+        return next;
+      });
       setFeedback(correct ? t('perfectStroke') : `${t('detected')}: "${result}". ${t('target')}: "${target}"`);
     } catch (e) { setFeedback(t('recognitionError')); } finally { setLoading(false); }
   };
@@ -135,7 +145,7 @@ const Learn: React.FC = () => {
       audioChunksRef.current = [];
       recorder.ondataavailable = (e) => audioChunksRef.current.push(e.data);
       recorder.onstop = async () => {
-        setLoading(true);
+        setSpeakingLoading(true);
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
@@ -144,8 +154,17 @@ const Learn: React.FC = () => {
           try {
             const result = await evaluatePronunciation(base64, unitExercises[currentExerciseIdx].chinese, language, mimeType);
             setIsCorrect(result.isCorrect);
+            setSessionResults(prev => {
+              const next = [...prev];
+              next[currentExerciseIdx] = result.isCorrect;
+              return next;
+            });
             setFeedback(`${t('score')}: ${result.score} - ${result.feedback}`);
-          } catch (e) { setFeedback(t('micError')); } finally { setLoading(false); }
+          } catch (e) { 
+            setFeedback(t('micError')); 
+          } finally { 
+            setSpeakingLoading(false); 
+          }
         };
         stream.getTracks().forEach(track => track.stop());
       };
@@ -165,6 +184,11 @@ const Learn: React.FC = () => {
     setUserSelection(opt);
     const correct = opt === unitExercises[currentExerciseIdx].answer;
     setIsCorrect(correct);
+    setSessionResults(prev => {
+      const next = [...prev];
+      next[currentExerciseIdx] = correct;
+      return next;
+    });
     setFeedback(correct ? t('fantastic') : t('keepTrying'));
   };
 
@@ -186,6 +210,60 @@ const Learn: React.FC = () => {
   };
 
   if (activeUnit) {
+    if (showSummary) {
+      const score = sessionResults.filter(r => r).length;
+      return (
+        <div className="fixed inset-0 z-[300] bg-[#f9f7f2] flex flex-col p-6 animate-in slide-in-from-right duration-300 overflow-y-auto">
+          <div className="max-w-2xl mx-auto w-full flex flex-col h-full">
+            <header className="flex justify-between items-center mb-12">
+              <h2 className="text-2xl font-black text-[#1A1A1A]">{t('sessionSummary')}</h2>
+              <button onClick={() => setActiveUnit(null)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-[#1A1A1A] transition-colors">✕</button>
+            </header>
+
+            <div className="flex-1 space-y-8">
+              <div className="bg-white p-12 rounded-[2.5rem] border border-[#f0ede5] shadow-2xl text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#BD1023] via-[#E9C46A] to-[#2D8C61]" />
+                <div className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-4">{t('totalScore')}</div>
+                <div className="text-8xl font-black bg-clip-text text-transparent bg-gradient-to-br from-[#1A1A1A] to-[#666666] mb-6">{Math.round((score / unitExercises.length) * 100)}%</div>
+                <p className="text-gray-500 font-bold text-lg">{t('scoreDesc', { correct: score, total: unitExercises.length })}</p>
+              </div>
+
+              <div className="space-y-6 pb-12">
+                <h3 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em] px-4">{t('reviewAnswers')}</h3>
+                {unitExercises.map((ex, idx) => (
+                  <div key={ex.id} className="bg-white p-8 rounded-3xl border border-[#f0ede5] flex items-center gap-8 shadow-sm hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0 shadow-inner ${sessionResults[idx] ? 'bg-[#eefaf3] text-[#2D8C61]' : 'bg-[#fdf0f1] text-[#BD1023]'}`}>
+                      {sessionResults[idx] ? '✓' : '✕'}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{t(ex.question)}</p>
+                      <div className="flex items-baseline gap-4">
+                        <span className="text-2xl font-black text-[#1A1A1A] chinese-font">{ex.chinese}</span>
+                        <span className="text-sm font-medium text-gray-500 italic">{ex.pinyin}</span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{t('correctAnswer')}</p>
+                      <p className="text-base font-black text-[#BD1023] bg-[#fdf0f1] px-3 py-1 rounded-lg">{t(ex.answer) !== ex.answer ? t(ex.answer) : ex.answer}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <footer className="py-10 bg-[#f9f7f2] border-t border-[#f0ede5] -mx-6 px-10 sticky bottom-0 z-20">
+              <button 
+                onClick={() => setActiveUnit(null)} 
+                className="w-full py-4 bg-[#1A1A1A] text-white rounded-xl font-black text-xs hover:bg-[#BD1023] transition-colors shadow-lg active:scale-95 uppercase tracking-widest"
+              >
+                {t('finishLesson')}
+              </button>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
     const ex = unitExercises[currentExerciseIdx];
     return (
       <div className="fixed inset-0 z-[300] bg-[#f9f7f2] flex flex-col p-6 animate-in slide-in-from-right duration-300 overflow-y-auto">
@@ -193,9 +271,9 @@ const Learn: React.FC = () => {
           <header className="flex justify-between items-center mb-8">
             <button onClick={() => setActiveUnit(null)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-[#1A1A1A] transition-colors">✕</button>
             <div className="flex-1 px-8">
-              <div className="h-2 w-full bg-[#f0ede5] rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#f0ede5] rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#BD1023] to-[#E9C46A] transition-all duration-500 ease-out" 
+                  className="h-full bg-gradient-to-r from-[#BD1023] via-[#E9C46A] to-[#2D8C61] transition-all duration-700 ease-out shadow-lg" 
                   style={{ width: `${((currentExerciseIdx + 1) / unitExercises.length) * 100}%` }}
                 />
               </div>
@@ -205,13 +283,20 @@ const Learn: React.FC = () => {
 
           <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
             <h3 className="text-sm font-black text-[#BD1023] uppercase tracking-[0.2em] mb-4">{t('exerciseType' + (ex.type === 'SELECT' || ex.type === 'READ' ? 'SelectRead' : ex.type))}</h3>
-            <h2 className="text-2xl font-black text-[#1A1A1A] mb-12 tracking-tight">{t(ex.question)}</h2>
+            <h2 className="text-2xl font-black text-[#1A1A1A] mb-12 tracking-tight">
+              {t(ex.question, { meaning: t(ex.meaning), chinese: ex.chinese })}
+            </h2>
 
             {(ex.type === 'SELECT' || ex.type === 'READ' || ex.type === 'LISTEN') && (
               <div className="w-full space-y-4">
                 {ex.type === 'LISTEN' && (
-                  <button onClick={() => playAudio(ex.chinese)} className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-[#fdf0f1] mx-auto mb-10 hover:scale-105 transition-transform group">
-                    <span className="group-hover:scale-125 transition-transform">🔊</span>
+                  <button 
+                    onClick={() => !audioLoading && playAudio(ex.chinese)} 
+                    className={`w-24 h-24 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-[#fdf0f1] mx-auto mb-10 transition-all group ${audioLoading ? 'opacity-50 cursor-wait' : 'hover:scale-105'}`}
+                  >
+                    <span className={`${audioLoading ? 'animate-spin' : 'group-hover:scale-125 transition-transform'}`}>
+                      {audioLoading ? '⏳' : '🔊'}
+                    </span>
                   </button>
                 )}
                 {ex.type === 'READ' && (
@@ -220,17 +305,22 @@ const Learn: React.FC = () => {
                     <div className="text-xl text-[#BD1023] font-bold tracking-[0.2em] uppercase">{ex.pinyin}</div>
                   </div>
                 )}
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3 w-full">
                   {ex.options?.map((opt, i) => (
                     <button
                       key={i}
                       onClick={() => handleSelectOption(opt)}
-                      className={`p-6 rounded-2xl border-2 font-black text-xl transition-all
+                      className={`group p-4 rounded-xl border border-[#f0ede5] font-black text-base transition-all duration-200 flex items-center justify-between
                         ${userSelection === opt 
-                          ? (isCorrect ? 'border-[#2D8C61] bg-[#eefaf3] text-[#2D8C61]' : 'border-[#BD1023] bg-[#fdf0f1] text-[#BD1023]') 
-                          : 'border-[#f0ede5] bg-white hover:border-gray-200 shadow-sm'}`}
+                          ? (isCorrect ? 'border-[#2D8C61] bg-[#eefaf3] text-[#2D8C61] shadow-sm' : 'border-[#BD1023] bg-[#fdf0f1] text-[#BD1023] shadow-sm') 
+                          : 'bg-white hover:border-gray-300 active:scale-[0.98]'}`}
                     >
-                      {t(opt) !== opt ? t(opt) : opt}
+                      <span className="flex-1 text-center">{t(opt) !== opt ? t(opt) : opt}</span>
+                      {userSelection === opt && (
+                        <span className="text-lg animate-in zoom-in duration-200">
+                          {isCorrect ? '✓' : '✕'}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -244,15 +334,18 @@ const Learn: React.FC = () => {
                   <div className="text-2xl text-[#BD1023] font-black tracking-[0.2em] uppercase relative z-10 text-wrap">{ex.pinyin}</div>
                 </div>
                 <div className="flex flex-col items-center gap-6">
-                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em]">{isRecording ? t('analyzingSpeech') : t('holdToSpeak')}</p>
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.4em]">
+                    {speakingLoading ? t('analyzingSpeech') : (isRecording ? t('recording') : t('holdToSpeak'))}
+                  </p>
                   <button 
                     onMouseDown={startRecording} 
                     onMouseUp={stopRecording} 
                     onTouchStart={startRecording}
                     onTouchEnd={stopRecording}
-                    className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all mx-auto ${isRecording ? 'bg-[#BD1023] animate-pulse text-white scale-125' : 'bg-[#1A1A1A] text-white hover:scale-110'}`}
+                    disabled={speakingLoading}
+                    className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all mx-auto ${speakingLoading ? 'bg-gray-200 cursor-wait' : (isRecording ? 'bg-[#BD1023] animate-pulse text-white scale-125' : 'bg-[#1A1A1A] text-white hover:scale-110')}`}
                   >
-                    🎤
+                    {speakingLoading ? '⏳' : '🎤'}
                   </button>
                 </div>
               </div>
@@ -282,33 +375,31 @@ const Learn: React.FC = () => {
             )}
 
             {isCorrect !== null && (
-              <div className={`mt-10 p-6 rounded-2xl w-full animate-in zoom-in duration-300 border-2 ${isCorrect ? 'bg-[#eefaf3] border-[#2D8C61]/20 text-[#2D8C61]' : 'bg-[#fdf0f1] border-[#BD1023]/20 text-[#BD1023]'}`}>
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${isCorrect ? 'bg-[#2D8C61] text-white' : 'bg-[#BD1023] text-white'}`}>
-                    {isCorrect ? '✓' : '✕'}
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-black uppercase tracking-widest mb-1">{isCorrect ? t('fantastic') : t('keepTrying')}</p>
-                    <p className="text-xs font-medium opacity-80">{feedback}</p>
-                  </div>
+              <div className={`mt-8 p-4 rounded-xl w-full animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-4 ${isCorrect ? 'text-[#2D8C61]' : 'text-[#BD1023]'}`}>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm shrink-0 ${isCorrect ? 'bg-[#2D8C61] text-white' : 'bg-[#BD1023] text-white'}`}>
+                  {isCorrect ? '✓' : '✕'}
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-black uppercase tracking-widest">{isCorrect ? t('fantastic') : t('keepTrying')}</p>
+                  <p className="text-[10px] font-medium opacity-70 leading-tight">{feedback}</p>
                 </div>
               </div>
             )}
           </div>
 
-          <footer className="mt-auto py-10 bg-[#f9f7f2] border-t border-[#f0ede5] -mx-6 px-10">
+          <footer className="mt-auto py-8 bg-[#f9f7f2] border-t border-[#f0ede5] -mx-6 px-10">
             {isCorrect === null ? (
               <button 
                 onClick={ex.type === 'WRITE' ? handleWriteCheck : () => {}} 
-                disabled={(!userSelection && ex.type !== 'WRITE' && ex.type !== 'SPEAK') || loading || (ex.type === 'SPEAK' && isRecording)} 
-                className="w-full py-7 bg-[#1A1A1A] text-white rounded-xl font-black text-xl shadow-2xl disabled:opacity-10 active:scale-95 transition-all transform hover:-translate-y-1 uppercase tracking-widest"
+                disabled={(!userSelection && ex.type !== 'WRITE' && ex.type !== 'SPEAK') || loading || audioLoading || speakingLoading || (ex.type === 'SPEAK' && isRecording)} 
+                className="w-full py-4 bg-[#1A1A1A] text-white rounded-xl font-black text-xs hover:bg-[#BD1023] transition-colors shadow-lg active:scale-95 uppercase tracking-widest disabled:opacity-20"
               >
-                {ex.type === 'SPEAK' && isRecording ? t('recording') : t('checkAnswer')}
+                {speakingLoading ? t('analyzingSpeech') : (ex.type === 'SPEAK' && isRecording ? t('recording') : t('checkAnswer'))}
               </button>
             ) : (
               <button 
-                onClick={isCorrect ? () => { if (currentExerciseIdx < unitExercises.length - 1) { setCurrentExerciseIdx(p => p + 1); resetState(); } else { setActiveUnit(null); } } : () => setIsCorrect(null)} 
-                className={`w-full py-7 rounded-xl font-black text-xl text-white shadow-2xl transition-all active:scale-95 transform hover:-translate-y-1 uppercase tracking-widest ${isCorrect ? 'bg-[#2D8C61]' : 'bg-[#BD1023]'}`}
+                onClick={isCorrect ? handleNextStep : () => setIsCorrect(null)} 
+                className={`w-full py-4 rounded-xl font-black text-xs text-white shadow-lg transition-all active:scale-95 uppercase tracking-widest ${isCorrect ? 'bg-[#2D8C61]' : 'bg-[#BD1023]'}`}
               >
                 {isCorrect ? t('nextStep') : t('tryAgain')}
               </button>

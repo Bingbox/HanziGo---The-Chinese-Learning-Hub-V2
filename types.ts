@@ -9,7 +9,7 @@ export enum View {
   SETTINGS = 'SETTINGS',
 }
 
-export type Language = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'ko' | 'ru' | 'ar' | 'zh_hk';
+export type Language = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'ko' | 'ru' | 'ar' | 'zh_hk' | 'zh';
 
 export interface User {
   id: string;
@@ -92,6 +92,8 @@ export interface Exercise {
   pinyin: string;
   chinese: string;
   audioUrl?: string;
+  difficulty: number;
+  meaning: string;
 }
 
 export interface HSKLevel {

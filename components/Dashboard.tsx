@@ -44,10 +44,10 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
   ], [t]);
 
   const coreSkills = useMemo(() => [
-    { name: t('vocabulary'), key: 'vocabulary', color: 'bg-[#BD1023]', glow: 'shadow-red-50' },
-    { name: t('grammar'), key: 'grammar', color: 'bg-[#1A1A1A]', glow: 'shadow-gray-100' },
-    { name: t('listening'), key: 'listening', color: 'bg-[#2D8C61]', glow: 'shadow-emerald-50' },
-    { name: t('reading'), key: 'reading', color: 'bg-[#E9C46A]', glow: 'shadow-yellow-50' },
+    { name: t('skillVocab'), key: 'vocabulary', color: 'bg-[#BD1023]', glow: 'shadow-red-50' },
+    { name: t('skillGrammar'), key: 'grammar', color: 'bg-[#1A1A1A]', glow: 'shadow-gray-100' },
+    { name: t('skillListening'), key: 'listening', color: 'bg-[#2D8C61]', glow: 'shadow-emerald-50' },
+    { name: t('skillReading'), key: 'reading', color: 'bg-[#E9C46A]', glow: 'shadow-yellow-50' },
   ], [t]);
 
   const handleModuleClick = (unit: Unit) => {

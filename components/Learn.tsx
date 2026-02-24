@@ -132,7 +132,7 @@ const Learn: React.FC = () => {
         next[currentExerciseIdx] = correct;
         return next;
       });
-      setFeedback(correct ? t('perfectStroke') : `${t('detected')}: "${result}". ${t('target')}: "${target}"`);
+      setFeedback(correct ? t('perfectStroke') : `${t('detected')}: "${result}". ${t('target')}: "${target}" (${unitExercises[currentExerciseIdx].pinyin})`);
     } catch (e) { setFeedback(t('recognitionError')); } finally { setLoading(false); }
   };
 
@@ -182,14 +182,28 @@ const Learn: React.FC = () => {
 
   const handleSelectOption = (opt: string) => {
     setUserSelection(opt);
-    const correct = opt === unitExercises[currentExerciseIdx].answer;
+    const ex = unitExercises[currentExerciseIdx];
+    const correct = opt === ex.answer;
     setIsCorrect(correct);
     setSessionResults(prev => {
       const next = [...prev];
       next[currentExerciseIdx] = correct;
       return next;
     });
-    setFeedback(correct ? t('fantastic') : t('keepTrying'));
+    
+    if (correct) {
+      setFeedback(t('fantastic'));
+    } else {
+      let hintText = t('keepTrying');
+      if (ex.type === 'READ') {
+        hintText = `${t('keepTrying')} ${t('hint')}: ${ex.pinyin}`;
+      } else if (ex.type === 'LISTEN') {
+        hintText = `${t('keepTrying')} ${t('hint')}: ${t(ex.meaning)}`;
+      } else if (ex.type === 'SELECT') {
+        hintText = `${t('keepTrying')} ${t('hint')}: ${ex.pinyin}`;
+      }
+      setFeedback(hintText);
+    }
   };
 
   const draw = (e: any) => {

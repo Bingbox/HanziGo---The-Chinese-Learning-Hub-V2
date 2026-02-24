@@ -108,8 +108,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
       </header>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 bg-white rounded-2xl p-8 text-[#1A1A1A] relative overflow-hidden shadow-sm border border-[#f0ede5] flex flex-col min-h-[350px]">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#fdf0f1] rounded-full translate-x-16 -translate-y-16 blur-2xl opacity-50" />
+        <div className="lg:col-span-7 bg-[#1A1A1A] rounded-3xl p-8 text-white relative overflow-hidden shadow-xl flex flex-col min-h-[350px]">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#2a2a2a] rounded-full translate-x-16 -translate-y-16 blur-3xl opacity-50" />
             
             <div className="relative z-10 flex justify-between items-start mb-8">
                 <div>
@@ -117,16 +117,16 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                   <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">{t('productivityPeak')}</p>
                 </div>
                 {selectedDay !== null && (
-                  <div className="text-right bg-[#f9f7f2] px-4 py-2 rounded-lg border border-[#f0ede5] transition-all">
+                  <div className="text-right bg-[#2a2a2a] px-4 py-2 rounded-xl border border-white/10 transition-all">
                     <p className="text-[7px] font-black text-[#BD1023] uppercase tracking-widest mb-0.5">{t('selectedDetail')}</p>
-                    <p className="text-lg font-black text-[#1A1A1A]">{weeklyData[selectedDay].xp} XP</p>
+                    <p className="text-lg font-black text-white">{weeklyData[selectedDay].xp} XP</p>
                   </div>
                 )}
             </div>
             
             <div className="relative z-10 flex-1 flex flex-col justify-end mt-4">
-                <div className="absolute left-0 right-0 bottom-[60%] border-t border-dashed border-[#f0ede5] z-0">
-                   <span className="absolute -top-4 right-0 text-[7px] font-black text-gray-300 uppercase tracking-widest">{t('dailyGoal')}</span>
+                <div className="absolute left-0 right-0 bottom-[60%] border-t border-dashed border-white/10 z-0">
+                   <span className="absolute -top-4 right-0 text-[7px] font-black text-gray-500 uppercase tracking-widest">{t('dailyGoal')}</span>
                 </div>
 
                 <div className="flex items-end gap-3 h-32 md:gap-4 relative z-10">
@@ -136,14 +136,14 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                           className="flex-1 flex flex-col items-center gap-3 group cursor-pointer"
                           onClick={() => setSelectedDay(i)}
                         >
-                            <div className="w-full bg-[#f9f7f2] rounded-xl relative flex items-end overflow-hidden h-full border border-[#f0ede5] transition-all group-hover:bg-[#f2efe6]">
+                            <div className="w-full bg-[#2a2a2a] rounded-xl relative flex items-end overflow-hidden h-full border border-white/5 transition-all group-hover:bg-[#333]">
                                 <div 
                                     className={`w-full rounded-t-md transition-all duration-700 ease-out
-                                      ${selectedDay === i ? 'bg-gradient-to-t from-[#BD1023] to-[#E9C46A] shadow-md shadow-red-100' : 'bg-gray-200 group-hover:bg-gray-300'}`} 
+                                      ${selectedDay === i ? 'bg-gradient-to-t from-[#BD1023] to-[#ff4d4d] shadow-lg shadow-red-900/50' : 'bg-gray-600 group-hover:bg-gray-500'}`} 
                                     style={{ height: `${item.percent}%` }}
                                 ></div>
                             </div>
-                            <span className={`text-[8px] font-black tracking-widest transition-colors ${selectedDay === i ? 'text-[#BD1023]' : 'text-gray-400'}`}>
+                            <span className={`text-[8px] font-black tracking-widest transition-colors ${selectedDay === i ? 'text-[#ff4d4d]' : 'text-gray-500'}`}>
                               {item.day}
                             </span>
                         </div>
@@ -151,34 +151,34 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                 </div>
             </div>
 
-            <div className="relative z-10 grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[#f0ede5]">
+            <div className="relative z-10 grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/10">
                 <div className="text-center">
-                    <p className="text-[8px] text-gray-400 font-black uppercase mb-1">{t('avgDaily')}</p>
-                    <p className="text-base font-black text-[#1A1A1A]">581 XP</p>
+                    <p className="text-[8px] text-gray-500 font-black uppercase mb-1">{t('avgDaily')}</p>
+                    <p className="text-base font-black text-white">581 XP</p>
                 </div>
-                <div className="text-center border-x border-[#f0ede5]">
-                    <p className="text-[8px] text-gray-400 font-black uppercase mb-1">{t('weeklyGoal')}</p>
+                <div className="text-center border-x border-white/10">
+                    <p className="text-[8px] text-gray-500 font-black uppercase mb-1">{t('weeklyGoal')}</p>
                     <p className="text-base font-black text-[#2D8C61]">82%</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[8px] text-gray-400 font-black uppercase mb-1">{t('bestDay')}</p>
-                    <p className="text-base font-black text-[#BD1023]">{weeklyData[3].day}</p>
+                    <p className="text-[8px] text-gray-500 font-black uppercase mb-1">{t('bestDay')}</p>
+                    <p className="text-base font-black text-[#ff4d4d]">{weeklyData[3].day}</p>
                 </div>
             </div>
         </div>
 
-        <div className="lg:col-span-5 bg-white rounded-2xl p-8 border border-[#f0ede5] shadow-sm flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(#e2dfd5_1px,transparent_1px)] [background-size:20px_20px] opacity-20 pointer-events-none" />
+        <div className="lg:col-span-5 bg-[#f4f1e8] rounded-3xl p-8 border border-[#e8e4d9] shadow-inner flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(#d5d1c5_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
             <div className="relative z-10">
-                <h4 className="text-xl font-black mb-8 tracking-tight">{t('skillRadar')}</h4>
+                <h4 className="text-xl font-black mb-8 tracking-tight text-[#1A1A1A]">{t('skillRadar')}</h4>
                 <div className="space-y-6">
                     {coreSkills.map((skill) => (
                         <div key={skill.key}>
                             <div className="flex justify-between text-[9px] font-black uppercase tracking-widest mb-1.5">
-                                <span className="text-gray-400">{skill.name}</span>
+                                <span className="text-gray-500">{skill.name}</span>
                                 <span className="text-[#1A1A1A]">{(user?.stats as any)?.[skill.key] || 0}%</span>
                             </div>
-                            <div className="h-2.5 w-full bg-[#f9f7f2] rounded-full overflow-hidden p-0.5 border border-[#f0ede5]">
+                            <div className="h-2.5 w-full bg-white/60 rounded-full overflow-hidden p-0.5 border border-white/40">
                                 <div 
                                   className={`h-full rounded-full transition-all duration-1000 delay-300 ${skill.color} shadow-sm ${skill.glow}`} 
                                   style={{ width: `${(user?.stats as any)?.[skill.key] || 0}%` }}
@@ -190,7 +190,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
             </div>
             <button 
                 onClick={() => setView(View.LEARN)}
-                className="w-full py-4 bg-[#1A1A1A] text-white rounded-xl font-black text-sm hover:bg-[#BD1023] transition-all mt-10 shadow-lg shadow-gray-200 uppercase tracking-widest relative z-10"
+                className="w-full py-4 bg-[#BD1023] text-white rounded-xl font-black text-sm hover:bg-[#9a0d1c] transition-all mt-10 shadow-xl shadow-red-900/20 uppercase tracking-widest relative z-10"
             >
                 {t('resumeTraining')}
             </button>
@@ -214,23 +214,24 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
                 <div 
                   key={unit.id} 
                   onClick={() => handleModuleClick(unit)}
-                  className="bg-white p-6 rounded-2xl border border-[#f0ede5] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all cursor-pointer group flex flex-col h-full min-h-[240px] relative overflow-hidden"
+                  className="bg-white p-8 rounded-3xl border border-[#f0ede5] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full min-h-[260px] relative overflow-hidden"
                 >
-                    <div className="flex items-start gap-4 mb-4 relative z-10">
-                      <div className={`w-12 h-12 shrink-0 aspect-square ${unit.color} rounded-xl flex items-center justify-center text-2xl shadow-md transition-all group-hover:scale-110 border-2 border-white`}>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-transparent to-gray-50 rounded-bl-full -z-0 opacity-50 group-hover:scale-110 transition-transform duration-500" />
+                    <div className="flex items-start gap-5 mb-6 relative z-10">
+                      <div className={`w-14 h-14 shrink-0 aspect-square ${unit.color} rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-all group-hover:scale-110 group-hover:rotate-3 border-4 border-white`}>
                         {unit.icon}
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-lg font-black text-[#1A1A1A] leading-tight group-hover:text-[#BD1023] transition-colors tracking-tight text-wrap">{unit.title}</h4>
-                        <div className="inline-flex px-2 py-0.5 bg-[#f9f7f2] rounded mt-2 border border-[#f0ede5]">
-                          <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest leading-none">{unit.focus}</p>
+                      <div className="flex-1 pt-1">
+                        <h4 className="text-xl font-black text-[#1A1A1A] leading-tight group-hover:text-[#BD1023] transition-colors tracking-tight text-wrap">{unit.title}</h4>
+                        <div className="inline-flex px-2.5 py-1 bg-[#f9f7f2] rounded-md mt-3 border border-[#f0ede5] group-hover:border-[#BD1023]/20 transition-colors">
+                          <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none">{unit.focus}</p>
                         </div>
                       </div>
                     </div>
-                    <p className="text-gray-500 font-medium mb-6 flex-1 leading-relaxed text-sm italic relative z-10">"{unit.description}"</p>
-                    <div className="mt-auto pt-4 border-t border-[#f0ede5] flex justify-between items-center text-[9px] font-black text-gray-400 uppercase tracking-widest group-hover:text-[#BD1023] transition-colors relative z-10">
+                    <p className="text-gray-500 font-medium mb-8 flex-1 leading-relaxed text-sm italic relative z-10">"{unit.description}"</p>
+                    <div className="mt-auto pt-5 border-t border-[#f0ede5] flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-[#BD1023] transition-colors relative z-10">
                       {t('resumeTraining')}
-                      <span className="text-[#BD1023] opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1">→</span>
+                      <span className="text-[#BD1023] opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-2">→</span>
                     </div>
                 </div>
             ))}
@@ -245,27 +246,28 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         
         <div 
           onClick={handleCultureSpotlightClick}
-          className="bg-white rounded-2xl p-8 lg:p-10 border border-[#f0ede5] shadow-sm hover:shadow-xl transition-all cursor-pointer group relative overflow-hidden"
+          className="bg-[#BD1023] rounded-3xl p-8 lg:p-10 border border-[#9a0d1c] shadow-xl hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-8 text-[10rem] font-black text-[#BD1023]/5 chinese-font select-none pointer-events-none group-hover:scale-105 transition-transform duration-700">
+          <div className="absolute top-0 right-0 p-8 text-[10rem] font-black text-white/5 chinese-font select-none pointer-events-none group-hover:scale-105 transition-transform duration-700">
              {cultureSpotlight.chineseTitle.charAt(0)}
           </div>
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors duration-700" />
           <div className="flex flex-col md:flex-row gap-8 lg:gap-10 items-center relative z-10">
-            <div className="w-24 h-24 bg-[#fdf0f1] rounded-2xl flex items-center justify-center text-4xl shadow-lg border-2 border-white shrink-0 group-hover:rotate-6 transition-transform duration-500">
+            <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center text-4xl shadow-lg border-2 border-white/20 shrink-0 group-hover:rotate-6 transition-transform duration-500">
                🏮
             </div>
             <div className="flex-1 space-y-3">
                <div className="flex items-center gap-3">
-                  <span className="text-[8px] font-black text-[#BD1023] uppercase tracking-[0.2em] bg-[#fdf0f1] px-3 py-1 rounded-lg border border-[#fae2e4]">Culture Spotlight</span>
-                  <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest italic">{cultureSpotlight.pinyinTitle}</span>
+                  <span className="text-[8px] font-black text-[#BD1023] uppercase tracking-[0.2em] bg-white px-3 py-1 rounded-lg border border-white/80 shadow-sm">Culture Spotlight</span>
+                  <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest italic">{cultureSpotlight.pinyinTitle}</span>
                </div>
-               <h4 className="text-3xl font-black text-[#1A1A1A] tracking-tight group-hover:text-[#BD1023] transition-colors">
+               <h4 className="text-3xl font-black text-white tracking-tight group-hover:text-[#f9f7f2] transition-colors">
                  {cultureSpotlight.chineseTitle} • {t(cultureSpotlight.id)}
                </h4>
-               <p className="text-gray-500 font-medium text-base max-w-3xl leading-relaxed">
+               <p className="text-white/80 font-medium text-base max-w-3xl leading-relaxed">
                  {cultureSpotlight.summary}
                </p>
-               <div className="pt-2 flex items-center gap-2 text-[#BD1023] font-black text-xs uppercase tracking-widest">
+               <div className="pt-2 flex items-center gap-2 text-white font-black text-xs uppercase tracking-widest">
                   {t('readDeepDive')}
                   <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
                </div>

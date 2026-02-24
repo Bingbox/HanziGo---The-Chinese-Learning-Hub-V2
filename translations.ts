@@ -50,6 +50,7 @@ export const translations: Record<Language, any> = {
     compounds: 'Compounds',
     errorLoadingContent: 'Failed to load content. Please try again later.',
     errorReflection: 'Unable to generate reflection due to content loading error.',
+    hint: 'Hint',
 
     // Learn module titles
     introToPinyin: 'Introduction to Pinyin',
@@ -422,6 +423,7 @@ export const translations: Record<Language, any> = {
     compounds: 'Compuestos',
     errorLoadingContent: 'No se pudo cargar el contenido. Inténtalo de nuevo más tarde.',
     errorReflection: 'No se pudo generar la reflexión debido a un error de carga de contenido.',
+    hint: 'Pista',
 
     // Learn module titles
     introToPinyin: 'Introducción al Pinyin',
@@ -793,6 +795,7 @@ export const translations: Record<Language, any> = {
     compounds: 'Composés',
     errorLoadingContent: 'Échec du chargement du contenu. Veuillez réessayer plus tard.',
     errorReflection: 'Impossible de générer la réflexion en raison d\'une erreur de chargement du contenu.',
+    hint: 'Indice',
 
     // Learn module titles
     introToPinyin: 'Introduction au Pinyin',
@@ -1164,6 +1167,7 @@ export const translations: Record<Language, any> = {
     compounds: 'Zusammensetzungen',
     errorLoadingContent: 'Inhalt konnte nicht geladen werden. Bitte versuchen Sie es später noch einmal.',
     errorReflection: 'Reflexion konnte aufgrund eines Inhaltsladefehlers nicht generiert werden.',
+    hint: 'Hinweis',
 
     // Learn module titles
     introToPinyin: 'Einführung in Pinyin',
@@ -1535,6 +1539,7 @@ export const translations: Record<Language, any> = {
     compounds: '複合語',
     errorLoadingContent: 'コンテンツの読み込みに失敗しました。後でもう一度お試しください。',
     errorReflection: 'コンテンツ読み込みエラーのため、考察を生成できませんでした。',
+    hint: 'ヒント',
 
     // Learn module titles
     introToPinyin: 'ピンイン入門',
@@ -1903,6 +1908,7 @@ export const translations: Record<Language, any> = {
     compounds: '복합어',
     errorLoadingContent: '콘텐츠를 로드하지 못했습니다. 나중에 다시 시도해 주세요.',
     errorReflection: '콘텐츠 로드 오류로 인해 반성을 생성할 수 없습니다.',
+    hint: '힌트',
 
     introToPinyin: '병음 입문',
     numbersAndCounting: '숫자 및 세기',
@@ -2263,6 +2269,7 @@ export const translations: Record<Language, any> = {
     compounds: 'Составные слова',
     errorLoadingContent: 'Не удалось загрузить контент. Пожалуйста, повторите попытку позже.',
     errorReflection: 'Не удалось сгенерировать рефлексию из-за ошибки загрузки контента.',
+    hint: 'Подсказка',
 
     introToPinyin: 'Введение в пиньинь',
     numbersAndCounting: 'Числа и счет',
@@ -2623,6 +2630,7 @@ export const translations: Record<Language, any> = {
     compounds: 'المركبات',
     errorLoadingContent: 'فشل تحميل المحتوى. يرجى المحاولة مرة أخرى لاحقًا.',
     errorReflection: 'غير قادر على إنشاء انعكاس بسبب خطأ في تحميل المحتوى.',
+    hint: 'تلميح',
 
     introToPinyin: 'مقدمة في البينيين',
     numbersAndCounting: 'الأرقام والعد',
@@ -2983,6 +2991,7 @@ export const translations: Record<Language, any> = {
     compounds: '複合詞',
     errorLoadingContent: '內容載入失敗。請稍後再試。',
     errorReflection: '由於內容載入錯誤，無法生成反思。',
+    hint: '提示',
 
     introToPinyin: '拼音入門',
     numbersAndCounting: '數字與計數',
@@ -3310,6 +3319,7 @@ export const translations: Record<Language, any> = {
     compounds: '词组',
     errorLoadingContent: '加载内容失败。请稍后再试。',
     errorReflection: '由于加载内容出错，无法生成反思。',
+    hint: '提示',
     introToPinyin: '拼音入门',
     numbersAndCounting: '数字与计数',
     dailyLife: '日常生活与常规',

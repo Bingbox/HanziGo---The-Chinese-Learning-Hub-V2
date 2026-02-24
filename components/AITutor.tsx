@@ -385,12 +385,12 @@ const AITutor: React.FC = () => {
                     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(input); }
                   }}
                   placeholder={t('tutorPlaceholder')}
-                  className="w-full p-5 pr-24 rounded-3xl border-2 border-[#f0ede5] shadow-xl focus:border-[#BD1023] focus:ring-4 focus:ring-[#fdf0f1] outline-none transition-all text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
+                  className="w-full p-4 md:p-5 pr-20 md:pr-24 rounded-3xl border-2 border-[#f0ede5] shadow-xl focus:border-[#BD1023] focus:ring-4 focus:ring-[#fdf0f1] outline-none transition-all text-sm md:text-base font-medium resize-none bg-white/50 backdrop-blur-sm"
                 />
                 <button
                   onClick={() => handleSend(input)}
                   disabled={!input.trim() || isTyping || isTranscribing}
-                  className="absolute right-3 bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl font-black text-xs hover:bg-[#BD1023] transition-all disabled:opacity-20 uppercase tracking-widest shadow-lg"
+                  className="absolute right-2 md:right-3 bg-[#1A1A1A] text-white px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-black text-[10px] md:text-xs hover:bg-[#BD1023] transition-all disabled:opacity-20 uppercase tracking-widest shadow-lg"
                 >
                   {t('send')}
                 </button>

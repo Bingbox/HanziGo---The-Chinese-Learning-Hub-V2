@@ -170,27 +170,28 @@ const Dictionary: React.FC = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch(query)}
             placeholder={t('searchPlaceholder')}
-            className="w-full p-5 pl-14 pr-44 rounded-2xl bg-white border border-[#f0ede5] shadow-xl focus:border-[#BD1023] outline-none transition-all text-lg font-medium text-[#1A1A1A]"
+            className="w-full p-4 md:p-5 pl-12 md:pl-14 pr-[140px] md:pr-44 rounded-2xl bg-white border border-[#f0ede5] shadow-xl focus:border-[#BD1023] outline-none transition-all text-base md:text-lg font-medium text-[#1A1A1A]"
           />
-          <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl opacity-30">
+          <span className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-xl opacity-30">
             <SearchIcon /> 
           </span>
           
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+          <div className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2">
             {query && (
-              <button onClick={() => setQuery('')} className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-colors">✕</button>
+              <button onClick={() => setQuery('')} className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-colors">✕</button>
             )}
             <button 
               onMouseDown={startRecording} onMouseUp={stopRecording}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all
+              onTouchStart={startRecording} onTouchEnd={stopRecording}
+              className={`w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center transition-all
                 ${isRecording ? 'bg-[#BD1023] text-white animate-pulse' : 'bg-[#f9f7f2] text-gray-400 hover:bg-[#f2efe6]'}`}
             >
               <MicIcon active={isRecording} /> 
             </button>
-            <button onClick={openCamera} className="w-10 h-10 bg-[#f9f7f2] text-gray-400 rounded-xl flex items-center justify-center hover:bg-[#f2efe6] transition-colors">
+            <button onClick={openCamera} className="w-8 h-8 md:w-10 md:h-10 bg-[#f9f7f2] text-gray-400 rounded-xl flex items-center justify-center hover:bg-[#f2efe6] transition-colors">
               <CameraIcon /> 
             </button>
-            <button onClick={() => handleSearch(query)} className="ml-2 bg-[#1A1A1A] text-white px-6 py-3 rounded-xl font-black text-xs hover:bg-[#BD1023] transition-colors shadow-lg active:scale-95 uppercase tracking-widest">{t('go')}</button>
+            <button onClick={() => handleSearch(query)} className="ml-1 md:ml-2 bg-[#1A1A1A] text-white px-3 md:px-6 py-2 md:py-3 rounded-xl font-black text-[10px] md:text-xs hover:bg-[#BD1023] transition-colors shadow-lg active:scale-95 uppercase tracking-widest">{t('go')}</button>
           </div>
         </div>
       </div>

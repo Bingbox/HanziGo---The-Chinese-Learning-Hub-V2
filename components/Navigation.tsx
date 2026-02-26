@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View } from '../types';
-import { useTranslation } from '../App';
+import { useExam } from '../App';
 
 interface NavigationProps {
   currentView: View;
@@ -57,7 +57,7 @@ const BrandLogo: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
 );
 
 const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
-  const { t, user } = useTranslation();
+  const { t, user } = useExam();
 
   const items = [
     { id: View.DASHBOARD, label: t('home'), Icon: Icons.Home },
@@ -65,7 +65,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
     { id: View.DICTIONARY, label: t('dict'), Icon: Icons.Dictionary },
     { id: View.AI_TUTOR, label: t('tutor'), Icon: Icons.Tutor },
     { id: View.CULTURE, label: t('explore'), Icon: Icons.Culture },
-    { id: View.HSK, label: t('tests'), Icon: Icons.Exam },
+    { id: View.EXAM, label: t('tests'), Icon: Icons.Exam },
   ];
 
   return (

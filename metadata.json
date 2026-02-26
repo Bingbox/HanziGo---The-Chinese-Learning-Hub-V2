@@ -1,8 +1,5 @@
 {
   "name": "HanziGo - The Chinese Learning Hub V3",
-  "description": "An all-in-one Chinese learning platform combining AI-powered dictionary tools, gamified lessons, HSK prep, and cultural immersion.",
-  "requestFramePermissions": [
-    "microphone",
-    "camera"
-  ]
+  "description": "An application for taking HSK 3.0 mock exams, featuring 9 levels of difficulty, a simulated question bank, random question selection, automatic scoring, and a history of past results.",
+  "requestFramePermissions": []
 }

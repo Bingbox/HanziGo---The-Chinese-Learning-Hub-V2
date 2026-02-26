@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { dictionaryLookup, recognizeImage, transcribeAudio } from '../services/geminiService';
 import { WordEntry } from '../types';
-import { useTranslation } from '../App';
+import { useExam } from '../App';
 
 const BrandLoader: React.FC<{ size?: string; animate?: boolean; grayscale?: boolean }> = ({ size = "w-24 h-24", animate = true, grayscale = false }) => (
   <div className={`${size} relative ${animate ? 'animate-bounce' : ''} ${grayscale ? 'grayscale opacity-30' : ''}`}>
@@ -32,7 +32,7 @@ const MicIcon = ({ active }: { active?: boolean }) => (
 );
 
 const Dictionary: React.FC = () => {
-  const { language, t } = useTranslation();
+  const { language, t } = useExam();
   const [query, setQuery] = useState('');
   const [result, setResult] = useState<WordEntry | null>(null);
   const [loading, setLoading] = useState(false);

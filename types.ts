@@ -3,7 +3,7 @@ export enum View {
   DASHBOARD = 'DASHBOARD',
   LEARN = 'LEARN',
   DICTIONARY = 'DICTIONARY',
-  HSK = 'HSK',
+  EXAM = 'EXAM',
   CULTURE = 'CULTURE',
   AI_TUTOR = 'AI_TUTOR',
   SETTINGS = 'SETTINGS',
@@ -104,9 +104,19 @@ export interface HSKLevel {
 
 export interface HSKQuestion {
   id: string;
-  question: string;
-  content: string;
+  level: number;
+  questionKey: string;
+  content?: string;
   options: string[];
   answer: string;
   explanation: string;
+}
+
+export interface ExamRecord {
+  id: string;
+  level: number;
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+  date: number; // Unix timestamp
 }

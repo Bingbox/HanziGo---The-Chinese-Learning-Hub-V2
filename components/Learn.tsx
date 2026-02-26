@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Unit, Exercise } from '../types';
-import { useTranslation } from '../App';
+import { useExam } from '../App';
 import { evaluatePronunciation, generateLessonSpeech, recognizeImage, decodeBase64, decodeAudioData } from '../services/geminiService';
 import { questionBankService } from '../services/questionBankService';
 
@@ -14,7 +14,7 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-12 h-12" }) => (
 );
 
 const Learn: React.FC = () => {
-  const { language, t, allUnits, activeUnitId, setActiveUnitId } = useTranslation();
+  const { language, t, allUnits, activeUnitId, setActiveUnitId } = useExam();
   const [activeUnit, setActiveUnit] = useState<Unit | null>(null);
   const [currentExerciseIdx, setCurrentExerciseIdx] = useState(0);
   const [userSelection, setUserSelection] = useState<string>('');

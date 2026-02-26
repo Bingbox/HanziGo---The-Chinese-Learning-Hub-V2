@@ -6,9 +6,9 @@ import Dictionary from './components/Dictionary';
 import AITutor from './components/AITutor';
 import CultureFeed from './components/CultureFeed';
 import Learn from './components/Learn';
-import HSKCenter from './components/HSKCenter';
+import ExamCenter from './components/ExamCenter';
 import Settings from './components/Settings';
-import { View, Language, User, Unit } from './types';
+import { View, Language, User, Unit, ExamRecord } from './types';
 import { translations } from './translations';
 
 interface LanguageContextType {
@@ -22,13 +22,15 @@ interface LanguageContextType {
   setActiveUnitId: (id: string | null) => void;
   activeCultureTopic: string | null;
   setActiveCultureTopic: (id: string | null) => void;
+  examHistory: ExamRecord[];
+  addExamRecord: (record: Omit<ExamRecord, 'id' | 'date'>) => void;
 }
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const useTranslation = () => {
+export const useExam = () => {
   const context = useContext(LanguageContext);
-  if (!context) throw new Error('useTranslation must be used within LanguageProvider');
+  if (!context) throw new Error('useExam must be used within LanguageProvider');
   return context;
 };
 
@@ -37,6 +39,7 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState<Language>('en');
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
   const [activeCultureTopic, setActiveCultureTopic] = useState<string | null>(null);
+  const [examHistory, setExamHistory] = useState<ExamRecord[]>([]);
   
   const [user, setUser] = useState<User | null>({
     id: 'u-001',
@@ -86,6 +89,9 @@ const App: React.FC = () => {
     
     const savedUser = localStorage.getItem('hanzigo_user');
     if (savedUser) setUser(JSON.parse(savedUser));
+
+    const savedHistory = localStorage.getItem('hanzigo_exam_history');
+    if (savedHistory) setExamHistory(JSON.parse(savedHistory));
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -101,6 +107,19 @@ const App: React.FC = () => {
     else localStorage.removeItem('hanzigo_user');
   };
 
+  const addExamRecord = (record: Omit<ExamRecord, 'id' | 'date'>) => {
+    const newRecord: ExamRecord = {
+      ...record,
+      id: `ex-${Date.now()}`,
+      date: Date.now(),
+    };
+    setExamHistory(prev => {
+      const updatedHistory = [newRecord, ...prev];
+      localStorage.setItem('hanzigo_exam_history', JSON.stringify(updatedHistory));
+      return updatedHistory;
+    });
+  };
+
   const renderContent = () => {
     switch (currentView) {
       case View.DASHBOARD: return <Dashboard setView={setView} />;
@@ -108,7 +127,7 @@ const App: React.FC = () => {
       case View.AI_TUTOR: return <AITutor />;
       case View.CULTURE: return <CultureFeed />;
       case View.LEARN: return <Learn />;
-      case View.HSK: return <HSKCenter />;
+      case View.EXAM: return <ExamCenter />;
       case View.SETTINGS: return <Settings />;
       default: return <Dashboard setView={setView} />;
     }
@@ -117,7 +136,8 @@ const App: React.FC = () => {
   return (
     <LanguageContext.Provider value={{ 
       language, setLanguage: handleSetLanguage, t, user, setUser: handleSetUser, 
-      allUnits, activeUnitId, setActiveUnitId, activeCultureTopic, setActiveCultureTopic 
+      allUnits, activeUnitId, setActiveUnitId, activeCultureTopic, setActiveCultureTopic, 
+      examHistory, addExamRecord 
     }}>
       <div className={`flex h-screen w-screen overflow-hidden bg-gray-50 flex-col md:flex-row ${language === 'ar' ? 'rtl font-arabic' : 'ltr'}`}>
         <Navigation currentView={currentView} setView={setView} />

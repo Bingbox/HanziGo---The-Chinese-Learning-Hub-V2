@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getAITutorResponseStream, generateLessonSpeech, decodeBase64, decodeAudioData, transcribeAudio } from '../services/geminiService';
 import { ChatMessage, TutorSession, TutorMode } from '../types';
-import { useTranslation } from '../App';
+import { useExam } from '../App';
 
 const Icons = {
   Speaker: ({ active, loading }: { active?: boolean; loading?: boolean }) => (
@@ -37,7 +37,7 @@ const MeiAvatar: React.FC = () => (
 );
 
 const AITutor: React.FC = () => {
-  const { language, t } = useTranslation();
+  const { language, t } = useExam();
   const [mode, setMode] = useState<TutorMode>('TEXT');
   const [showHistory, setShowHistory] = useState(false);
   const [sessions, setSessions] = useState<TutorSession[]>([]);

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useTranslation } from '../App';
+import { useExam } from '../App';
 import { Language, User, StoredUser } from '../types';
 import { translations } from '../translations';
 
@@ -25,7 +25,7 @@ const SettingsIcons = {
 };
 
 const Settings: React.FC = () => {
-  const { language, setLanguage, t, user, setUser } = useTranslation();
+  const { language, setLanguage, t, user, setUser } = useExam();
   const [activeTab, setActiveTab] = useState<'profile' | 'account' | 'language'>('profile');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [loginEmail, setLoginEmail] = useState('');

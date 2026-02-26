@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { generateCulturalDeepDive, translateCultureArticle } from '../services/geminiService';
-import { useTranslation } from '../App';
+
+import { useExam } from '../App';
 import { PRESET_CULTURE_CONTENT } from '../cultureData';
 
 interface CulturalCategory {
@@ -24,62 +24,70 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-24 h-24" }) => (
 );
 
 const CultureFeed: React.FC = () => {
-  const { language, t, activeCultureTopic, setActiveCultureTopic } = useTranslation();
+  const { language, t, activeCultureTopic, setActiveCultureTopic } = useExam();
   const [selectedCategory, setSelectedCategory] = useState<CulturalCategory | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const categories: CulturalCategory[] = useMemo(() => [
-    { 
-      id: 'philosophy', title: t('catPhilosophy'), desc: t('descPhilosophy'), overviewKey: 'overviewPhilosophy', icon: '☯️', color: 'bg-slate-900',
-      subTopics: ['confucianism', 'taoism', 'mohism', 'chinese_buddhism', 'neo_confucianism'] 
-    },
-    { 
-      id: 'history', title: t('catHistory'), desc: t('descHistory'), overviewKey: 'overviewHistory', icon: '📜', color: 'bg-amber-800',
-      subTopics: ['dynasties_timeline', 'silk_road', 'forbidden_city', 'great_wall', 'civil_exams'] 
-    },
-    { 
-      id: 'language', title: t('catLanguage'), desc: t('descLanguage'), overviewKey: 'overviewLanguage', icon: '🖌️', color: 'bg-red-700',
-      subTopics: ['evolution_hanzi', 'calligraphy_styles', 'famous_idioms', 'chinese_poetry', 'classical_lit'] 
-    },
-    { 
-      id: 'art', title: t('catArt'), desc: t('descArt'), overviewKey: 'overviewArt', icon: '🎭', color: 'bg-indigo-700',
-      subTopics: ['peking_opera', 'trad_painting', 'folk_music', 'sculpture', 'dance'] 
-    },
-    { 
-      id: 'aesthetics', title: t('catAesthetics'), desc: t('descAesthetics'), overviewKey: 'overviewAesthetics', icon: '🍵', color: 'bg-emerald-800',
-      subTopics: ['tea_culture', 'suzhou_gardens', 'porcelain_arts', 'color_symbolism', 'ink_aesthetics'] 
-    },
-    { 
-      id: 'festivals', title: t('catFestivals'), desc: t('descFestivals'), overviewKey: 'overviewFestivals', icon: '🏮', color: 'bg-orange-600',
-      subTopics: ['lunar_new_year', 'mid_autumn', 'dragon_boat', 'lantern_festival', 'qingming'] 
-    },
-    { 
-      id: 'food', title: t('catFood'), desc: t('descFoodCat'), overviewKey: 'overviewFood', icon: '🥟', color: 'bg-yellow-600',
-      subTopics: ['eight_cuisines', 'dim_sum', 'dumplings', 'tea_pairing', 'street_food'] 
-    },
-    { 
-      id: 'crafts', title: t('catCrafts'), desc: t('descCrafts'), overviewKey: 'overviewCrafts', icon: '🏺', color: 'bg-teal-700',
-      subTopics: ['silk_weaving', 'paper_cutting', 'cloisonne', 'jade_carving', 'woodwork'] 
-    },
-    { 
-      id: 'architecture', title: t('catArchitecture'), desc: t('descArchitecture'), overviewKey: 'overviewArchitecture', icon: '🏯', color: 'bg-stone-800',
-      subTopics: ['feng_shui', 'courtyards', 'pagodas', 'bridges', 'imperial_palaces'] 
-    },
-    { 
-      id: 'ethics', title: t('catEthics'), desc: t('descEthics'), overviewKey: 'overviewEthics', icon: '🧧', color: 'bg-rose-700',
-      subTopics: ['filial_piety', 'hospitality', 'etiquette', 'loyalty', 'humility'] 
-    },
-    { 
-      id: 'medicine', title: t('catMedicine'), desc: t('descMedicine'), overviewKey: 'overviewMedicine', icon: '🌿', color: 'bg-green-700',
-      subTopics: ['tcm_fundamentals', 'acupuncture', 'yin_yang', 'herbs', 'qi_gong'] 
-    },
-    { 
-      id: 'martial_arts', title: t('catMartialArts'), desc: t('descMartialArts'), overviewKey: 'overviewMartialArts', icon: '🥋', color: 'bg-blue-900',
-      subTopics: ['shaolin_kungfu', 'tai_chi', 'wuxia_culture', 'weapons', 'wing_chun'] 
-    }
-  ], [t]);
+  const categories: CulturalCategory[] = useMemo(() => {
+    const presetKeys = Object.keys(PRESET_CULTURE_CONTENT);
+    const allCategories = [
+      { 
+        id: 'philosophy', title: t('catPhilosophy'), desc: t('descPhilosophy'), overviewKey: 'overviewPhilosophy', icon: '☯️', color: 'bg-slate-900',
+        subTopics: ['confucianism', 'taoism', 'mohism', 'chinese_buddhism', 'neo_confucianism'] 
+      },
+      { 
+        id: 'history', title: t('catHistory'), desc: t('descHistory'), overviewKey: 'overviewHistory', icon: '📜', color: 'bg-amber-800',
+        subTopics: ['dynasties_timeline', 'silk_road', 'forbidden_city', 'great_wall', 'civil_exams'] 
+      },
+      { 
+        id: 'language', title: t('catLanguage'), desc: t('descLanguage'), overviewKey: 'overviewLanguage', icon: '🖌️', color: 'bg-red-700',
+        subTopics: ['evolution_hanzi', 'calligraphy_styles', 'famous_idioms', 'chinese_poetry', 'classical_lit'] 
+      },
+      { 
+        id: 'art', title: t('catArt'), desc: t('descArt'), overviewKey: 'overviewArt', icon: '🎭', color: 'bg-indigo-700',
+        subTopics: ['peking_opera', 'trad_painting', 'folk_music', 'sculpture', 'dance'] 
+      },
+      { 
+        id: 'aesthetics', title: t('catAesthetics'), desc: t('descAesthetics'), overviewKey: 'overviewAesthetics', icon: '🍵', color: 'bg-emerald-800',
+        subTopics: ['tea_culture', 'suzhou_gardens', 'porcelain_arts', 'color_symbolism', 'ink_aesthetics'] 
+      },
+      { 
+        id: 'festivals', title: t('catFestivals'), desc: t('descFestivals'), overviewKey: 'overviewFestivals', icon: '🏮', color: 'bg-orange-600',
+        subTopics: ['lunar_new_year', 'mid_autumn', 'dragon_boat', 'lantern_festival', 'qingming'] 
+      },
+      { 
+        id: 'food', title: t('catFood'), desc: t('descFoodCat'), overviewKey: 'overviewFood', icon: '🥟', color: 'bg-yellow-600',
+        subTopics: ['eight_cuisines', 'dim_sum', 'dumplings', 'tea_pairing', 'street_food'] 
+      },
+      { 
+        id: 'crafts', title: t('catCrafts'), desc: t('descCrafts'), overviewKey: 'overviewCrafts', icon: '🏺', color: 'bg-teal-700',
+        subTopics: ['silk_weaving', 'paper_cutting', 'cloisonne', 'jade_carving', 'woodwork'] 
+      },
+      { 
+        id: 'architecture', title: t('catArchitecture'), desc: t('descArchitecture'), overviewKey: 'overviewArchitecture', icon: '🏯', color: 'bg-stone-800',
+        subTopics: ['feng_shui', 'courtyards', 'pagodas', 'bridges', 'imperial_palaces'] 
+      },
+      { 
+        id: 'ethics', title: t('catEthics'), desc: t('descEthics'), overviewKey: 'overviewEthics', icon: '🧧', color: 'bg-rose-700',
+        subTopics: ['filial_piety', 'hospitality', 'etiquette', 'loyalty', 'humility'] 
+      },
+      { 
+        id: 'medicine', title: t('catMedicine'), desc: t('descMedicine'), overviewKey: 'overviewMedicine', icon: '🌿', color: 'bg-green-700',
+        subTopics: ['tcm_fundamentals', 'acupuncture', 'yin_yang', 'herbs', 'qi_gong'] 
+      },
+      { 
+        id: 'martial_arts', title: t('catMartialArts'), desc: t('descMartialArts'), overviewKey: 'overviewMartialArts', icon: '🥋', color: 'bg-blue-900',
+        subTopics: ['shaolin_kungfu', 'tai_chi', 'wuxia_culture', 'weapons', 'wing_chun'] 
+      }
+    ];
+
+    return allCategories.map(category => ({
+      ...category,
+      subTopics: category.subTopics.filter(topic => presetKeys.includes(topic))
+    })).filter(category => category.subTopics.length > 0);
+  }, [t]);
 
   // Handle deep linking from Dashboard
   useEffect(() => {
@@ -92,38 +100,22 @@ const CultureFeed: React.FC = () => {
     }
   }, [activeCultureTopic, categories, setActiveCultureTopic]);
 
-  const fetchContent = async (topicId: string) => {
+  const fetchContent = (topicId: string) => {
     setLoading(true);
     setContent(null);
 
     const preset = PRESET_CULTURE_CONTENT[topicId];
-    try {
-      if (preset) {
-        const localizedArticle = await translateCultureArticle(preset, language);
-        setContent({
-          title: localizedArticle.chineseTitle,
-          pinyinTitle: localizedArticle.pinyinTitle,
-          contentChinese: localizedArticle.fullContentChinese,
-          contentTranslated: localizedArticle.fullContentTranslated,
-          vocabulary: localizedArticle.keyConcepts,
-          reflection: localizedArticle.reflection,
-          isPreset: true
-        });
-      } else {
-        const topicName = t(topicId);
-        const data = await generateCulturalDeepDive(topicName, language);
-        setContent({
-          title: data.chineseTitle,
-          pinyinTitle: data.pinyinTitle,
-          contentChinese: data.fullContentChinese,
-          contentTranslated: data.fullContentTranslated,
-          vocabulary: data.keyConcepts,
-          reflection: data.reflection,
-          isPreset: false
-        });
-      }
-    } catch (e) {
-      console.error(e);
+    if (preset) {
+      setContent({
+        title: preset.chineseTitle,
+        pinyinTitle: preset.pinyinTitle,
+        contentChinese: preset.fullContentChinese,
+        contentTranslated: t(`fullContent_${topicId}`),
+        vocabulary: preset.keyConcepts.map(concept => ({...concept, meaning: t(`${topicId}_${concept.word}`) })),
+        reflection: t(`reflection_${topicId}`),
+        isPreset: true
+      });
+    } else {
       setContent({
         title: "Error",
         pinyinTitle: "Cuòwù",
@@ -133,9 +125,8 @@ const CultureFeed: React.FC = () => {
         reflection: t('errorReflection'),
         isPreset: false
       });
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {

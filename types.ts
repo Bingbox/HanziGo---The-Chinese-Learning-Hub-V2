@@ -102,14 +102,27 @@ export interface HSKLevel {
   title: string;
 }
 
+export enum QuestionType {
+  SingleChoice = 'SingleChoice',
+  MultipleSelect = 'MultipleSelect',
+  TrueFalse = 'TrueFalse',
+  FillInTheBlank = 'FillInTheBlank',
+  ShortAnswer = 'ShortAnswer',
+  Analysis = 'Analysis',
+}
+
 export interface HSKQuestion {
   id: string;
   level: number;
-  questionKey: string;
-  content?: string;
-  options: string[];
-  answer: string;
-  explanation: string;
+  type: QuestionType;
+  question: Record<string, string>;
+  options?: Record<string, string[]>;
+  blanks?: Record<string, string[]>;
+  correctAnswer?: string | boolean;
+  correctAnswers?: string[];
+  referenceAnswer?: Record<string, string>;
+  scoringCriteria?: Record<string, string>;
+  score: number;
 }
 
 export interface ExamRecord {

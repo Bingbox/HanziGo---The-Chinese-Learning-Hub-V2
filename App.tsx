@@ -58,7 +58,7 @@ const App: React.FC = () => {
   });
 
   const t = useCallback((key: string, params?: Record<string, any>) => {
-    let text = translations[language]?.[key] || translations['en']?.[key] || key;
+    let text = translations[language]?.[key] || translations['en']?.[key] || translations['zh']?.[key] || key;
     if (params) {
       Object.keys(params).forEach(p => {
         text = text.replace(`{${p}}`, String(params[p]));

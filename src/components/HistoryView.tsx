@@ -12,7 +12,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({ history, onBack }) => 
       <button onClick={onBack} className="mb-4 text-sm text-white/70 hover:text-white">← Back to Levels</button>
       <h2 className="text-3xl font-bold text-white mb-6">Exam History</h2>
       
-      {history.length === 0 ? (
+      {!history || history.length === 0 ? (
         <p className="text-center text-white/60">You haven't completed any exams yet.</p>
       ) : (
         <div className="space-y-4">

@@ -1,15 +1,22 @@
-import { HSKQuestion } from '../../types';
+import { Question } from '../types/hsk';
+import { hsk1Questions } from './hsk1';
+import { hsk2Questions } from './hsk2';
+import { hsk3Questions } from './hsk3';
+import { hsk4Questions } from './hsk4';
+import { hsk5Questions } from './hsk5';
+import { hsk6Questions } from './hsk6';
+import { hsk7Questions } from './hsk7';
+import { hsk8Questions } from './hsk8';
+import { hsk9Questions } from './hsk9';
 
-// NOTE: This is a sample question bank. For a full HSK simulation, this would need to be significantly expanded.
-export const hskQuestionBank: Record<number, HSKQuestion[]> = {
-  1: [
-    { id: 'hsk1-1', level: 1, questionKey: 'q_character_to_pinyin', content: '苹果', options: ['píngguǒ', 'xiāngjiāo', 'xīguā', 'cǎoméi'], answer: 'píngguǒ', explanation: 'hsk1_1_e' },
-    { id: 'hsk1-2', level: 1, questionKey: 'q_translate_hello', options: ['再见', '谢谢', '你好', '不客气'], answer: '你好', explanation: 'hsk1_2_e' },
-    { id: 'hsk1-3', level: 1, questionKey: 'q_character_to_pinyin', content: '再见', options: ['zàijiàn', 'hēshuǐ', 'chīfàn', 'kànshū'], answer: 'zàijiàn', explanation: 'hsk1_3_e' },
-    { id: 'hsk1-4', level: 1, questionKey: 'q_translate_thank_you', options: ['不客气', '没关系', '对不起', '谢谢'], answer: '谢谢', explanation: 'hsk1_4_e' },
-  ],
-  2: [
-    { id: 'hsk2-1', level: 2, questionKey: 'q_character_to_pinyin', content: '猫', options: ['māo', 'gǒu', 'niǎo', 'yú'], answer: 'māo', explanation: 'hsk2_1_e' },
-    { id: 'hsk2-2', level: 2, questionKey: 'q_translate_dog', options: ['猫', '狗', '鸟', '鱼'], answer: '狗', explanation: 'hsk2_2_e' },
-  ]
+export const hskQuestionBank: Record<number, Question[]> = {
+  1: hsk1Questions,
+  2: hsk2Questions,
+  3: hsk3Questions,
+  4: hsk4Questions,
+  5: hsk5Questions,
+  6: hsk6Questions,
+  7: hsk7Questions,
+  8: hsk8Questions,
+  9: hsk9Questions,
 };

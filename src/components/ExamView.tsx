@@ -54,14 +54,34 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
 
       switch (q.type) {
         case QuestionType.SingleChoice:
-          if (userAnswer === (q as SingleChoiceQuestion).correctAnswer) {
+          const scQ = q as SingleChoiceQuestion;
+          let isCorrect = false;
+          if (typeof scQ.correctAnswer === 'string') {
+            isCorrect = userAnswer === scQ.correctAnswer;
+          } else {
+            // Check if user answer matches any of the correct answers (multilingual)
+            // Or specifically the current language one
+            const correctAns = scQ.correctAnswer[language] || scQ.correctAnswer['zh'];
+            isCorrect = userAnswer === correctAns;
+          }
+          
+          if (isCorrect) {
             correctAnswersCount++;
           }
           break;
         case QuestionType.MultipleSelect:
           const msQ = q as MultipleSelectQuestion;
-          const correctSelectAnswers = [...(msQ.correctAnswers || [])].sort();
+          let correctSelectAnswers: string[] = [];
+          if (Array.isArray(msQ.correctAnswers)) {
+            correctSelectAnswers = [...msQ.correctAnswers].sort();
+          } else {
+             // If it's a record, try to get answers for current language, fallback to 'zh'
+             const answers = msQ.correctAnswers[language] || msQ.correctAnswers['zh'] || [];
+             correctSelectAnswers = [...answers].sort();
+          }
+          
           const userSelectAnswers = [...(userAnswer as string[] || [])].sort();
+          // Simple array comparison after sorting
           if (JSON.stringify(correctSelectAnswers) === JSON.stringify(userSelectAnswers)) {
             correctAnswersCount++;
           }

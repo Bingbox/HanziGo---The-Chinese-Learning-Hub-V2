@@ -29,8 +29,8 @@ export const hsk2Questions: Question[] = [
     },
     options: {
       zh: ['汽车', '飞机', '桌子', '椅子'],
-      en: ['Car', 'Airplane', 'Table', 'Chair'],
-      ko: ['자동차', '비행기', '책상', '의자'],
+      en: ['汽车', '飞机', '桌子', '椅子'],
+      ko: ['汽车', '飞机', '桌子', '椅子'],
     },
     correctAnswers: ['汽车', '飞机'],
     score: 10,

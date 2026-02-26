@@ -43,12 +43,29 @@ export class ExamService {
   static gradeObjectiveQuestion(question: Question, userAnswer: any): boolean {
     switch (question.type) {
       case QuestionType.SingleChoice:
-        return question.correctAnswer === userAnswer;
+        if (typeof question.correctAnswer === 'string') {
+          return question.correctAnswer === userAnswer;
+        } else {
+          return Object.values(question.correctAnswer).includes(userAnswer);
+        }
       case QuestionType.MultipleSelect:
         if (!Array.isArray(userAnswer)) return false;
+        
+        let correctAnswersArray: string[] = [];
+        if (Array.isArray(question.correctAnswers)) {
+          correctAnswersArray = question.correctAnswers;
+        } else {
+          // If it's a Record, we need to check if the user's answers match any language's correct answers
+          // A simpler approach is to flatten all possible correct answers across languages
+          // But since the user selects from one language's options, their answers will be from that language
+          const allPossibleAnswers = Object.values(question.correctAnswers).flat();
+          return userAnswer.length === question.correctAnswers['zh'].length &&
+                 userAnswer.every((ans) => allPossibleAnswers.includes(ans));
+        }
+
         return (
-          userAnswer.length === question.correctAnswers.length &&
-          userAnswer.every((ans) => question.correctAnswers.includes(ans))
+          userAnswer.length === correctAnswersArray.length &&
+          userAnswer.every((ans) => correctAnswersArray.includes(ans))
         );
       case QuestionType.TrueFalse:
         return question.correctAnswer === userAnswer;

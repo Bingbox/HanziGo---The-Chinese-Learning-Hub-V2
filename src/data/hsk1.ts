@@ -48,8 +48,8 @@ export const hsk1Questions: Question[] = [
     },
     options: {
       zh: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
-      en: ['Drink (hē)', 'Eat (chī)', 'See (kàn)', 'Speak (shuō)'],
-      ko: ['마시다 (hē)', '먹다 (chī)', '보다 (kàn)', '말하다 (shuō)'],
+      en: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
+      ko: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
     },
     correctAnswers: ['吃 (chī)'],
     score: 5,

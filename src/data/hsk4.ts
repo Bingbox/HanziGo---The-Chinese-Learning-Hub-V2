@@ -15,7 +15,11 @@ export const hsk4Questions: Question[] = [
       en: ['Environmental protection', 'Economic development', 'Social harmony', 'Cultural exchange'],
       ko: ['환경 보호', '경제 발전', '사회 화합', '문화 교류'],
     },
-    correctAnswer: 'Environmental protection',
+    correctAnswer: {
+      zh: 'Environmental protection',
+      en: 'Environmental protection',
+      ko: '환경 보호',
+    },
     score: 5,
   },
   {

@@ -15,7 +15,11 @@ export const hsk6Questions: Question[] = [
       en: ['Sustainable development', 'Economic growth', 'Environmental protection', 'Social progress'],
       ko: ['지속 가능한 발전', '경제 성장', '환경 보호', '사회적 진보'],
     },
-    correctAnswer: 'Sustainable development',
+    correctAnswer: {
+      zh: 'Sustainable development',
+      en: 'Sustainable development',
+      ko: '지속 가능한 발전',
+    },
     score: 5,
   },
   {

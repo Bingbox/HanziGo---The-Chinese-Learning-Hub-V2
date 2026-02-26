@@ -30,7 +30,11 @@ export const hsk3Questions: Question[] = [
         '지난 주말에 뭐 했어요?'
       ],
     },
-    correctAnswer: 'What are your plans for the weekend?',
+    correctAnswer: {
+      zh: 'What are your plans for the weekend?',
+      en: 'What are your plans for the weekend?',
+      ko: '주말에 무슨 계획이 있어요?',
+    },
     score: 5,
   },
   {

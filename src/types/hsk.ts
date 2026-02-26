@@ -17,13 +17,13 @@ export interface BaseQuestion {
 export interface SingleChoiceQuestion extends BaseQuestion {
   type: QuestionType.SingleChoice;
   options: Record<string, string[]>; // 支持多语言
-  correctAnswer: string; // 单个正确选项的值
+  correctAnswer: string | Record<string, string>; // 单个正确选项的值，支持多语言
 }
 
 export interface MultipleSelectQuestion extends BaseQuestion {
   type: QuestionType.MultipleSelect;
   options: Record<string, string[]>; // 支持多语言
-  correctAnswers: string[]; // 多个正确选项的值数组
+  correctAnswers: string[] | Record<string, string[]>; // 多个正确选项的值数组，支持多语言
 }
 
 export interface TrueFalseQuestion extends BaseQuestion {

@@ -41,7 +41,7 @@ const ExamCenter: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("该级别题库正在扩充中，请稍后再试！"); 
+      alert(t('examLevelComingSoon')); 
     } finally {
       setLoading(false);
     }
@@ -146,7 +146,7 @@ const ExamCenter: React.FC = () => {
                     : 'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}
               >
                 {val ? <CheckCircle2 size={48} /> : <XCircle size={48} />}
-                <span className="font-black text-2xl">{val ? "正确 (True)" : "错误 (False)"}</span>
+                <span className="font-black text-2xl">{val ? t('trueLabel') : t('falseLabel')}</span>
               </button>
             ))}
           </div>
@@ -182,7 +182,7 @@ const ExamCenter: React.FC = () => {
           <div className="mt-8">
             <textarea 
               rows={8}
-              placeholder="请在此输入您的回答..."
+              placeholder={t('shortAnswerPlaceholder')}
               value={currentAnswer || ''}
               onChange={(e) => handleAnswer(q.id, e.target.value)}
               className="w-full p-8 rounded-3xl border-2 border-gray-100 focus:border-red-600 focus:ring-0 font-medium text-xl chinese-font bg-white shadow-sm"
@@ -199,9 +199,9 @@ const ExamCenter: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-12 text-center">
         <BrandLoader />
-        <h3 className="text-2xl font-black text-gray-900 mb-4 mt-12 tracking-tight">正在准备试卷...</h3>
+        <h3 className="text-2xl font-black text-gray-900 mb-4 mt-12 tracking-tight">{t('preparingExam')}</h3>
         <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] max-w-sm leading-relaxed">
-          正在为您生成 HSK {selectedLevel?.level} 级模拟试题，请稍候
+          {t('preparingGuidance').replace('{level}', selectedLevel?.level.toString() || '').replace('{lang}', t('langName'))}
         </p>
       </div>
     );
@@ -217,19 +217,19 @@ const ExamCenter: React.FC = () => {
         <header className="flex flex-col mb-12">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-black shadow-lg shadow-red-100">
+              <div className="w-12 h-12 border-2 border-red-600 rounded-lg flex items-center justify-center text-red-600 font-black shadow-lg shadow-red-50">
                 {selectedLevel?.level}
               </div>
               <div>
-                <h2 className="text-xl font-black text-gray-900">HSK {selectedLevel?.level} 模拟考试</h2>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">官方标准仿真测试</p>
+                <h2 className="text-xl font-black text-gray-900">{t('mockExamTitle').replace('{level}', selectedLevel?.level.toString() || '')}</h2>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('officialSimulation')}</p>
               </div>
             </div>
             <button 
               onClick={() => setTestStarted(false)} 
               className="px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-xl font-black text-[10px] hover:bg-gray-900 hover:text-white transition-all uppercase tracking-widest active:scale-95 shadow-sm"
             >
-              退出考试
+              {t('quit')}
             </button>
           </div>
           <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -239,14 +239,14 @@ const ExamCenter: React.FC = () => {
             />
           </div>
           <div className="flex justify-between mt-2">
-             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">题目 {currentIdx + 1} / {questions.length}</span>
-             <span className="text-[10px] font-black text-red-600 uppercase tracking-widest">{Math.round(progress)}% 已完成</span>
+             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('questionLabel')} {currentIdx + 1} / {questions.length}</span>
+             <span className="text-[10px] font-black text-red-600 uppercase tracking-widest">{t('progressComplete').replace('{percent}', Math.round(progress).toString())}</span>
           </div>
         </header>
 
         <div className="flex-1 space-y-10">
           <div className="bg-gray-50 p-10 md:p-14 rounded-3xl border border-gray-100 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-8 text-8xl font-black text-gray-200/20 select-none">试</div>
+            <div className="absolute top-0 right-0 p-8 text-8xl font-black text-gray-200/20 select-none">{t('examBgChar')}</div>
             <h3 className="text-lg font-black text-red-600 uppercase tracking-widest mb-6">
               {q.question?.[lang] || q.question?.['zh']}
             </h3>
@@ -255,7 +255,7 @@ const ExamCenter: React.FC = () => {
                  {q.type}
                </span>
                <span className="px-3 py-1 bg-gray-200 text-gray-600 text-[10px] font-black rounded-full uppercase tracking-widest">
-                 {q.score} 分
+                 {t('scorePoints').replace('{score}', q.score.toString())}
                </span>
             </div>
           </div>
@@ -269,7 +269,7 @@ const ExamCenter: React.FC = () => {
             disabled={currentIdx === 0} 
             className="flex items-center gap-2 px-8 py-4 text-gray-900 font-black uppercase tracking-widest text-xs disabled:opacity-0 transition-opacity"
           >
-            <ChevronLeft size={16}/> 上一题
+            <ChevronLeft size={16}/> {t('prevQuestion')}
           </button>
           
           <button 
@@ -277,9 +277,9 @@ const ExamCenter: React.FC = () => {
             className="flex items-center gap-2 px-12 py-5 bg-gray-900 text-white rounded-xl font-black shadow-2xl hover:bg-red-600 transition-all active:scale-95 uppercase tracking-[0.2em] text-sm"
           >
             {currentIdx === questions.length - 1 ? (
-              <><Send size={16}/> 提交试卷</>
+              <><Send size={16}/> {t('finishExam')}</>
             ) : (
-              <>下一题 <ChevronRight size={16}/></>
+              <>{t('nextQuestion')} <ChevronRight size={16}/></>
             )}
           </button>
         </footer>
@@ -306,16 +306,16 @@ const ExamCenter: React.FC = () => {
                {percentage}%
              </div>
           </div>
-          <h2 className="text-4xl font-black text-gray-900">考试完成！</h2>
+          <h2 className="text-4xl font-black text-gray-900">{t('examComplete')}</h2>
           <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">
-            您答对了 {correctCount} 道题，共 {totalQuestions} 道题
+            {t('scoreDetail').replace('{score}', correctCount.toString()).replace('{total}', totalQuestions.toString())}
           </p>
         </div>
 
         <div className="space-y-12 mb-20">
           <h3 className="text-xl font-black text-gray-900 flex items-center gap-3">
              <span className="w-1.5 h-8 bg-red-600 rounded-full"></span>
-             详细解析
+             {t('pedagogicalAnalysis')}
           </h3>
           
           {questions.map((q, i) => {
@@ -327,10 +327,10 @@ const ExamCenter: React.FC = () => {
                 <div className={`w-2 md:w-4 ${isSubjective ? 'bg-blue-500' : (isCorrect ? 'bg-emerald-500' : 'bg-red-500')}`} />
                 <div className="p-10 flex-1">
                   <div className="flex justify-between items-start mb-6">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">题目 {i + 1} ({q.type})</span>
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('questionLabel')} {i + 1} ({q.type})</span>
                     <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border
                       ${isSubjective ? 'bg-blue-50 text-blue-600 border-blue-100' : (isCorrect ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100')}`}>
-                      {isSubjective ? "待评分" : (isCorrect ? "正确" : "错误")}
+                      {isSubjective ? t('pendingScore') : (isCorrect ? t('hskCorrectStatus') : t('hskIncorrectStatus'))}
                     </span>
                   </div>
                   <p className="text-2xl font-black text-gray-900 mb-4 chinese-font">
@@ -339,13 +339,13 @@ const ExamCenter: React.FC = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 p-8 bg-gray-50 rounded-xl border border-gray-100">
                     <div>
-                      <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">您的回答</h4>
+                      <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{t('yourResponse')}</h4>
                       <p className={`text-lg font-black ${isSubjective ? 'text-blue-600' : (isCorrect ? 'text-emerald-600' : 'text-red-600')}`}>
                         {Array.isArray(answers[q.id]) ? answers[q.id].join(', ') : String(answers[q.id] || '未回答')}
                       </p>
                     </div>
                     <div>
-                      <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">正确答案 / 参考答案</h4>
+                      <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{t('correctAnswerLabel')}</h4>
                       <p className="text-lg font-black text-gray-900">
                         {q.correctAnswer !== undefined ? String(q.correctAnswer) : 
                          (q.correctAnswers ? q.correctAnswers.join(', ') : 
@@ -354,7 +354,7 @@ const ExamCenter: React.FC = () => {
                     </div>
                     {(q.scoringCriteria || q.referenceAnswer) && (
                       <div className="md:col-span-2 pt-6 border-t border-gray-200">
-                        <h4 className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-3">解析与标准</h4>
+                        <h4 className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-3">{t('teacherInsight')}</h4>
                         <p className="text-gray-700 leading-relaxed font-medium">
                           {q.scoringCriteria?.[lang] || q.scoringCriteria?.['zh'] || q.referenceAnswer?.[lang] || q.referenceAnswer?.['zh']}
                         </p>
@@ -372,13 +372,13 @@ const ExamCenter: React.FC = () => {
             onClick={() => { setResultsMode(false); setTestStarted(false); }} 
             className="px-12 py-5 bg-gray-900 text-white rounded-xl font-black shadow-xl hover:bg-red-600 transition-all uppercase tracking-widest text-xs"
           >
-            返回考试中心
+            {t('returnToExamHub')}
           </button>
           <button 
             onClick={() => startTest(selectedLevel!)} 
             className="px-12 py-5 bg-white text-gray-900 border border-gray-200 rounded-xl font-black shadow-sm hover:bg-gray-50 transition-all uppercase tracking-widest text-xs"
           >
-            重新测试
+            {t('retryTest')}
           </button>
         </div>
       </div>
@@ -389,9 +389,9 @@ const ExamCenter: React.FC = () => {
     <div className="p-6 md:p-12 lg:p-16 max-w-7xl mx-auto space-y-16 animate-in fade-in duration-1000">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
         <div className="max-w-2xl">
-          <h2 className="text-5xl font-black text-gray-900 mb-6 tracking-tight">考试中心</h2>
+          <h2 className="text-5xl font-black text-gray-900 mb-6 tracking-tight">{t('tests')}</h2>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
-            基于 HSK 3.0 标准的仿真模拟测试系统。涵盖 1-9 级全级别题库，支持多种题型，助您精准评估汉语水平。
+            {t('examCenterDesc')}
           </p>
         </div>
       </header>
@@ -400,7 +400,7 @@ const ExamCenter: React.FC = () => {
         {Object.entries(categorizedLevels).map(([category, levels]) => (
           <div key={category}>
             <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight border-l-4 border-red-500 pl-4">
-              {category === 'beginner' ? "初级 (Level 1-3)" : category === 'intermediate' ? "中级 (Level 4-6)" : "高级 (Level 7-9)"}
+              {t(category)}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {(levels as HSKLevelData[]).map((h) => (
@@ -414,22 +414,26 @@ const ExamCenter: React.FC = () => {
                   
                   <div className="flex-1 flex flex-col w-full relative z-10">
                     <div className="mb-4">
-                        <p className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">HSK {h.level}</p>
-                        <h4 className="text-2xl font-black text-gray-900 mb-2">
-                          {h.level <= 3 ? "初级模拟卷" : h.level <= 6 ? "中级模拟卷" : "高级模拟卷"}
-                        </h4>
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 border-2 border-red-600 rounded-xl flex items-center justify-center text-red-600 font-black text-2xl shadow-sm">
+                            {h.level}
+                          </div>
+                          <h4 className="text-2xl font-black text-gray-900">
+                            HSK {h.level}
+                          </h4>
+                        </div>
                         <p className="text-gray-500 text-sm font-medium h-12">
-                          包含听力、阅读、写作、翻译及口语综合评估。
+                          {t(h.descriptionKey)}
                         </p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4 w-full my-6 text-center">
                        <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                          <p className="text-gray-400 font-black text-[8px] uppercase mb-1 flex items-center justify-center gap-1"><BookOpen size={10}/> 词汇量</p>
+                          <p className="text-gray-400 font-black text-[8px] uppercase mb-1 flex items-center justify-center gap-1"><BookOpen size={10}/> {t('vocabCount')}</p>
                           <p className="text-base font-black text-gray-900">{h.vocab.toLocaleString()}</p>
                        </div>
                        <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                          <p className="text-gray-400 font-black text-[8px] uppercase mb-1 flex items-center justify-center gap-1"><BarChart3 size={10}/> 预计用时</p>
+                          <p className="text-gray-400 font-black text-[8px] uppercase mb-1 flex items-center justify-center gap-1"><BarChart3 size={10}/> {t('estTime')}</p>
                           <p className="text-base font-black text-gray-900">45m</p>
                        </div>
                     </div>
@@ -439,7 +443,7 @@ const ExamCenter: React.FC = () => {
                     onClick={() => startTest(h)} 
                     className="w-full mt-auto py-4 bg-gray-900 text-white rounded-xl font-black hover:bg-red-600 transition-all shadow-xl active:scale-95 uppercase tracking-[0.2em] text-xs relative z-10 flex items-center justify-center gap-2"
                   >
-                     <Zap size={14}/> 开始模拟考试
+                     <Zap size={14}/> {t('startMock')}
                   </button>
                 </div>
               ))}
@@ -449,12 +453,12 @@ const ExamCenter: React.FC = () => {
 
         {examHistory.length > 0 && (
           <div className="pt-8 border-t border-gray-100">
-            <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight border-l-4 border-red-500 pl-4">考试历史</h3>
+            <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight border-l-4 border-red-500 pl-4">{t('examHistory')}</h3>
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-2">
               {examHistory.slice(0, 5).map(record => (
                 <div key={record.id} className="flex justify-between items-center py-3 px-5 rounded-xl bg-gray-50 border border-gray-100">
                   <div>
-                    <p className="font-black text-gray-900">HSK {record.level} 模拟考试</p>
+                    <p className="font-black text-gray-900">{t('mockExamTitle').replace('{level}', record.level.toString())}</p>
                     <p className="text-xs text-gray-400 font-bold">{new Date(record.date).toLocaleDateString()}</p>
                   </div>
                   <div className={`text-2xl font-black ${record.percentage >= 80 ? 'text-emerald-500' : record.percentage >= 50 ? 'text-orange-500' : 'text-red-500'}`}>

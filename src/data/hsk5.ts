@@ -15,7 +15,11 @@ export const hsk5Questions: Question[] = [
       en: ['Economic globalization', 'Cultural diversity', 'Political stability', 'Technological innovation'],
       ko: ['경제 세계화', '문화 다양성', '정치적 안정', '기술 혁신'],
     },
-    correctAnswer: 'Economic globalization',
+    correctAnswer: {
+      zh: 'Economic globalization',
+      en: 'Economic globalization',
+      ko: '경제 세계화',
+    },
     score: 5,
   },
   {

@@ -15,7 +15,11 @@ export const hsk7Questions: Question[] = [
       en: ['Quantum mechanics', 'Classical mechanics', 'Thermodynamics', 'Electromagnetism'],
       ko: ['양자 역학', '고전 역학', '열역학', '전자기학'],
     },
-    correctAnswer: 'Quantum mechanics',
+    correctAnswer: {
+      zh: 'Quantum mechanics',
+      en: 'Quantum mechanics',
+      ko: '양자 역학',
+    },
     score: 10,
   },
 ];

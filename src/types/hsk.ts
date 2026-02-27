@@ -5,6 +5,8 @@ export enum QuestionType {
   FillInTheBlank = 'FillInTheBlank',
   ShortAnswer = 'ShortAnswer',
   Analysis = 'Analysis',
+  Translation = 'Translation',
+  Speaking = 'Speaking',
 }
 
 export interface BaseQuestion {
@@ -48,12 +50,25 @@ export interface AnalysisQuestion extends BaseQuestion {
   scoringCriteria?: Record<string, string>; // 评分标准，支持多语言
 }
 
+export interface TranslationQuestion extends BaseQuestion {
+  type: QuestionType.Translation;
+  referenceAnswer: Record<string, string>; // 参考译文
+}
+
+export interface SpeakingQuestion extends BaseQuestion {
+  type: QuestionType.Speaking;
+  referenceAnswer?: Record<string, string>; // 参考回答
+  audioUrl?: string; // 题目音频（可选）
+}
+
 export type Question = SingleChoiceQuestion
   | MultipleSelectQuestion
   | TrueFalseQuestion
   | FillInTheBlankQuestion
   | ShortAnswerQuestion
-  | AnalysisQuestion;
+  | AnalysisQuestion
+  | TranslationQuestion
+  | SpeakingQuestion;
 
 export interface Exam {
   level: number;

@@ -80,7 +80,16 @@ const ExamCenter: React.FC = () => {
 
   const renderQuestionInput = (q: HSKQuestion) => {
     const currentAnswer = answers[q.id];
-    const lang = language === 'zh' ? 'zh' : (language === 'ko' ? 'ko' : 'en');
+    // Check if the current language is supported in the question's options or question text
+    // If not, fallback to 'en', then 'zh'
+    const supportedLangs = Object.keys(q.question || {});
+    let lang = language;
+    if (!supportedLangs.includes(lang)) {
+        lang = 'en';
+        if (!supportedLangs.includes(lang)) {
+            lang = 'zh';
+        }
+    }
 
     switch (q.type) {
       case QuestionType.SingleChoice:
@@ -178,6 +187,8 @@ const ExamCenter: React.FC = () => {
 
       case QuestionType.ShortAnswer:
       case QuestionType.Analysis:
+      case QuestionType.Translation:
+      case QuestionType.Speaking:
         return (
           <div className="mt-8">
             <textarea 
@@ -210,7 +221,14 @@ const ExamCenter: React.FC = () => {
   if (testStarted && !resultsMode) {
     const q = questions[currentIdx];
     const progress = ((currentIdx + 1) / questions.length) * 100;
-    const lang = language === 'zh' ? 'zh' : (language === 'ko' ? 'ko' : 'en');
+    const supportedLangs = Object.keys(q.question || {});
+    let lang = language;
+    if (!supportedLangs.includes(lang)) {
+        lang = 'en';
+        if (!supportedLangs.includes(lang)) {
+            lang = 'zh';
+        }
+    }
 
     return (
       <div className="max-w-4xl mx-auto p-6 md:p-12 min-h-screen flex flex-col bg-white animate-in slide-in-from-right duration-500">
@@ -296,7 +314,14 @@ const ExamCenter: React.FC = () => {
     });
     const totalQuestions = questions.length;
     const percentage = Math.round((correctCount / totalQuestions) * 100);
-    const lang = language === 'zh' ? 'zh' : (language === 'ko' ? 'ko' : 'en');
+    const supportedLangs = Object.keys(questions[0]?.question || {});
+    let lang = language;
+    if (!supportedLangs.includes(lang)) {
+        lang = 'en';
+        if (!supportedLangs.includes(lang)) {
+            lang = 'zh';
+        }
+    }
 
     return (
       <div className="max-w-4xl mx-auto p-6 md:p-12 animate-in fade-in zoom-in duration-700">
@@ -320,7 +345,7 @@ const ExamCenter: React.FC = () => {
           
           {questions.map((q, i) => {
             const isCorrect = ExamService.gradeObjectiveQuestion(q as any, answers[q.id]);
-            const isSubjective = q.type === QuestionType.ShortAnswer || q.type === QuestionType.Analysis;
+            const isSubjective = q.type === QuestionType.ShortAnswer || q.type === QuestionType.Analysis || q.type === QuestionType.Translation || q.type === QuestionType.Speaking;
 
             return (
               <div key={q.id} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row">

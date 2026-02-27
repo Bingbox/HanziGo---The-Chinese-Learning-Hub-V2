@@ -109,6 +109,8 @@ export enum QuestionType {
   FillInTheBlank = 'FillInTheBlank',
   ShortAnswer = 'ShortAnswer',
   Analysis = 'Analysis',
+  Translation = 'Translation',
+  Speaking = 'Speaking',
 }
 
 export interface HSKQuestion {

@@ -5,16 +5,16 @@ export class ExamService {
   /**
    * HSK Exam Structure Configuration
    */
-  private static examStructure: Record<number, { listening: number; reading: number; writing: number }> = {
+  private static examStructure: Record<number, { listening: number; reading: number; writing: number; translation?: number; speaking?: number }> = {
     1: { listening: 20, reading: 20, writing: 0 }, // Total 40
     2: { listening: 35, reading: 25, writing: 0 }, // Total 60
     3: { listening: 40, reading: 30, writing: 10 }, // Total 80
     4: { listening: 45, reading: 40, writing: 15 }, // Total 100
     5: { listening: 45, reading: 45, writing: 10 }, // Total 100
-    6: { listening: 50, reading: 50, writing: 10 }, // Total 110 (User requested 10 writing)
-    7: { listening: 40, reading: 40, writing: 10 }, // Placeholder for 7-9
-    8: { listening: 40, reading: 40, writing: 10 },
-    9: { listening: 40, reading: 40, writing: 10 },
+    6: { listening: 50, reading: 50, writing: 10 }, // Total 110
+    7: { listening: 40, reading: 47, writing: 2, translation: 4, speaking: 5 }, // Total 98
+    8: { listening: 40, reading: 47, writing: 2, translation: 4, speaking: 5 }, // Total 98
+    9: { listening: 40, reading: 47, writing: 2, translation: 4, speaking: 5 }, // Total 98
   };
 
   /**
@@ -29,7 +29,7 @@ export class ExamService {
     }
 
     const structure = this.examStructure[level] || { listening: 20, reading: 20, writing: 0 };
-    const totalQuestionsNeeded = structure.listening + structure.reading + structure.writing;
+    const totalQuestionsNeeded = structure.listening + structure.reading + structure.writing + (structure.translation || 0) + (structure.speaking || 0);
 
     // Filter questions by type (heuristic based on ID or content if explicit type is missing, 
     // but currently we rely on the bank having mixed types. 

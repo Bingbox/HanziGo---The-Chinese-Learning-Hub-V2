@@ -1,45 +1,125 @@
 import { Question, QuestionType } from '../types/hsk';
 
 export const hsk5Questions: Question[] = [
+  // 听力模拟 (Listening Simulation) - Single Choice
   {
-    id: 'hsk5-sc-1',
+    id: 'hsk5-l1-1',
     level: 5,
     type: QuestionType.SingleChoice,
     question: {
-      zh: '“经济全球化”是什么意思？',
-      en: 'What does "经济全球化" mean?',
-      ko: '"经济全球化"은 무슨 뜻입니까?',
+      zh: '[听力模拟] 听对话，选择正确答案：\n女：明天上午 9 点我准时到。\n男：我觉得还是提前几分钟吧。\n问：男的主要是什么意思？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 明天上午 9 点我准时到。\nMale: 我觉得还是提前几分钟吧。\nQuestion: What does the man mainly mean?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 明天上午 9 点我准时到。\n남: 我觉得还是提前几分钟吧。\n질문: 남자의 주요 의미는 무엇입니까?',
     },
     options: {
-      zh: ['Economic globalization', 'Cultural diversity', 'Political stability', 'Technological innovation'],
-      en: ['Economic globalization', 'Cultural diversity', 'Political stability', 'Technological innovation'],
-      ko: ['경제 세계화', '문화 다양성', '정치적 안정', '기술 혁신'],
+      zh: ['A. 9点太早了', 'B. 他不会迟到', 'C. 可能不参加', 'D. 应该早点儿来'],
+      en: ['A. 9点太早了', 'B. 他不会迟到', 'C. 可能不参加', 'D. 应该早点儿来'],
+      ko: ['A. 9点太早了', 'B. 他不会迟到', 'C. 可能不参加', 'D. 应该早点儿来'],
     },
     correctAnswer: {
-      zh: 'Economic globalization',
-      en: 'Economic globalization',
-      ko: '경제 세계화',
+      zh: 'D. 应该早点儿来',
+      en: 'D. 应该早点儿来',
+      ko: 'D. 应该早点儿来',
     },
-    score: 5,
+    score: 10,
   },
   {
-    id: 'hsk5-an-1',
+    id: 'hsk5-l2-1',
+    level: 5,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[听力模拟] 听对话，选择正确答案：\n女：您好！欢迎光临。请问您几位？\n男：三个，我们提前预订了。\n女：好的，请问先生您怎么称呼？\n男：我姓李。\n女：李先生，里面请，靠窗户的那个桌子是给您留的。\n问：根据对话，下列哪项正确？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 您好！欢迎光临。请问您几位？\nMale: 三个，我们提前预订了。\nFemale: 好的，请问先生您怎么称呼？\nMale: 我姓李。\nFemale: 李先生，里面请，靠窗户的那个桌子是给您留的。\nQuestion: According to the dialogue, which of the following is correct?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 您好！欢迎光临。请问您几位？\n남: 三个，我们提前预订了。\n여: 好的，请问先生您怎么称呼？\n남: 我姓李。\n여: 李先生，里面请，靠窗户的那个桌子是给您留的。\n질문: 대화 내용과 일치하는 것은 무엇입니까?',
+    },
+    options: {
+      zh: ['A. 他们在饭店', 'B. 现在是下午', 'C. 他们在开会', 'D. 男的想买桌子'],
+      en: ['A. 他们在饭店', 'B. 现在是下午', 'C. 他们在开会', 'D. 男的想买桌子'],
+      ko: ['A. 他们在饭店', 'B. 现在是下午', 'C. 他们在开会', 'D. 男的想买桌子'],
+    },
+    correctAnswer: {
+      zh: 'A. 他们在饭店',
+      en: 'A. 他们在饭店',
+      ko: 'A. 他们在饭店',
+    },
+    score: 10,
+  },
+  // 阅读 (Reading) - Single Choice (Fill in the blank in context)
+  {
+    id: 'hsk5-r1-1',
+    level: 5,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择合适的词语填空：\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
+      en: '[Reading] Choose the appropriate word to fill in the blank:\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
+      ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
+    },
+    options: {
+      zh: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
+      en: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
+      ko: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
+    },
+    correctAnswer: 'C. 可惜',
+    score: 15,
+  },
+  // 阅读 (Reading) - Single Choice (Comprehension)
+  {
+    id: 'hsk5-r2-1',
+    level: 5,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 阅读短文，选择正确答案：\n从1995年开始，学校每年举行一次演讲比赛，到现在已经是第15届了。今年的比赛定在下周六，对于这场比赛，我非常有把握，我要争取发挥出最好水平，你们就等我的好消息吧。\n★ 根据这段话，可以知道：',
+      en: '[Reading] Read the text and choose the correct answer:\n从1995年开始，学校每年举行一次演讲比赛，到现在已经是第15届了。今年的比赛定在下周六，对于这场比赛，我非常有把握，我要争取发挥出最好水平，你们就等我的好消息吧。\n★ According to this passage, we can know:',
+      ko: '[읽기] 다음 글을 읽고 올바른 답을 고르세요:\n从1995年开始，学校每年举行一次演讲比赛，到现在已经是第15届了。今年的比赛定在下周六，对于这场比赛，我非常有把握，我要争取发挥出最好水平，你们就等我的好消息吧。\n★ 이 단락에 따르면 알 수 있는 것은:',
+    },
+    options: {
+      zh: ['A. 比赛安排在周六下午', 'B. 我每年都参加这个比赛', 'C. 我对这次比赛很有信心', 'D. 这场比赛的水平不是很高'],
+      en: ['A. 比赛安排在周六下午', 'B. 我每年都参加这个比赛', 'C. 我对这次比赛很有信心', 'D. 这场比赛的水平不是很高'],
+      ko: ['A. 比赛安排在周六下午', 'B. 我每年都参加这个比赛', 'C. 我对这次比赛很有信心', 'D. 这场比赛的水平不是很高'],
+    },
+    correctAnswer: {
+      zh: 'C. 我对这次比赛很有信心',
+      en: 'C. 我对这次比赛很有信心',
+      ko: 'C. 我对这次比赛很有信心',
+    },
+    score: 15,
+  },
+  // 书写 (Writing) - Rearrange words
+  {
+    id: 'hsk5-w1-1',
+    level: 5,
+    type: QuestionType.ShortAnswer,
+    question: {
+      zh: '[书写] 完成句子（排列词语）：\n大笑 / 忍不住 / 起来 / 他',
+      en: '[Writing] Complete the sentence (rearrange the words):\n大笑 / 忍不住 / 起来 / 他',
+      ko: '[쓰기] 문장 완성하기 (단어 배열):\n大笑 / 忍不住 / 起来 / 他',
+    },
+    referenceAnswer: {
+      zh: '他忍不住大笑起来。',
+      en: '他忍不住大笑起来。',
+      ko: '他忍不住大笑起来。',
+    },
+    score: 25,
+  },
+  // 书写 (Writing) - Short Essay
+  {
+    id: 'hsk5-w2-1',
     level: 5,
     type: QuestionType.Analysis,
     question: {
-      zh: '请分析“只有……才……”和“无论……都……”的用法。',
-      en: 'Please analyze the usage of "只有……才……" and "无论……都……".',
-      ko: '"只有……才……"와 "无论……都……"의 용법을 분석하세요.',
+      zh: '[书写] 请结合下列词语（要全部使用），写一篇80字左右的短文：\n元旦、放松、礼物、表演、善良',
+      en: '[Writing] Please write a short essay of about 80 words using all the following words:\n元旦 (New Year\'s Day), 放松 (relax), 礼物 (gift), 表演 (performance), 善良 (kind)',
+      ko: '[쓰기] 다음 단어들을 모두 사용하여 80자 내외의 짧은 글을 쓰세요:\n元旦, 放松, 礼物, 表演, 善良',
     },
     referenceAnswer: {
-      zh: '“只有……才……”表示必要条件；“无论……都……”表示无条件。',
-      en: '"只有……才……" (zhǐyǒu...cái...) indicates a necessary condition; "无论……都……" (wúlùn...dōu...) indicates no condition.',
-      ko: '"只有……才……"는 필요 조건을 나타내고, "无论……都……"는 무조건을 나타냅니다.',
+      zh: '（参考范文）元旦那天，我们公司举办了晚会。大家终于可以放松一下了。晚会上有很多精彩的表演，我还收到了一份特别的礼物。送我礼物的是一位非常善良的同事，我感到很温暖。',
+      en: '(Sample Essay) On New Year\'s Day, our company held a party. Everyone could finally relax. There were many wonderful performances at the party, and I also received a special gift. The person who gave me the gift is a very kind colleague, and I felt very warm.',
+      ko: '(모범 답안) 새해 첫날, 우리 회사는 파티를 열었습니다. 모두가 마침내 휴식을 취할 수 있었습니다. 파티에는 멋진 공연이 많았고, 저도 특별한 선물을 받았습니다. 선물을 준 사람은 매우 착한 동료였고, 저는 마음이 따뜻해졌습니다.',
     },
     scoringCriteria: {
-      zh: '准确区分必要条件与无条件即可得分。',
-      en: 'Correctly distinguish between necessary condition and no condition to get points.',
-      ko: '필요 조건과 무조건을 정확하게 구분하면 점수를 얻을 수 있습니다.',
+      zh: '包含所有词语，语句通顺，逻辑合理，字数符合要求即可得分。',
+      en: 'Points are awarded if all words are included, sentences are fluent, logic is reasonable, and the word count meets the requirement.',
+      ko: '모든 단어가 포함되고, 문장이 자연스러우며, 논리가 합리적이고, 글자 수 요구 사항을 충족하면 점수를 얻습니다.',
     },
     score: 25,
   },

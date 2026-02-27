@@ -40,7 +40,7 @@ function App() {
   const startExam = (level: number) => {
     try {
       setSelectedLevel(level);
-      const exam = ExamService.generateMockExam(level, 10); // 默认生成10道题进行测试
+      const exam = ExamService.generateMockExam(level); // 使用默认配置生成试卷
       setExamQuestions(exam.questions);
       setCurrentView('exam');
     } catch (error) {

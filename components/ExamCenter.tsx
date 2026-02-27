@@ -29,7 +29,7 @@ const ExamCenter: React.FC = () => {
     setLoading(true);
     setSelectedLevel(level);
     try {
-      const exam = ExamService.generateMockExam(level.level, level.questionCount);
+      const exam = ExamService.generateMockExam(level.level);
       if (exam.questions && exam.questions.length > 0) {
         setQuestions(exam.questions as any);
         setTestStarted(true);
@@ -434,7 +434,7 @@ const ExamCenter: React.FC = () => {
                        </div>
                        <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
                           <p className="text-gray-400 font-black text-[8px] uppercase mb-1 flex items-center justify-center gap-1"><BarChart3 size={10}/> {t('estTime')}</p>
-                          <p className="text-base font-black text-gray-900">45m</p>
+                          <p className="text-base font-black text-gray-900">{h.duration}m</p>
                        </div>
                     </div>
                   </div>

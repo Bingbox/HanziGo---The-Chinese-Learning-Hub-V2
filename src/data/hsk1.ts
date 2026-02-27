@@ -1,127 +1,156 @@
 import { Question, QuestionType } from '../types/hsk';
 
 export const hsk1Questions: Question[] = [
-  // 单选题 (Single Choice)
+  // 听力模拟 (Listening Simulation) - True/False
   {
-    id: 'hsk1-sc-1',
-    level: 1,
-    type: QuestionType.SingleChoice,
-    question: {
-      zh: '“你好”的拼音是？',
-      en: 'What is the pinyin for "你好"?',
-      ko: '"你好"의 병음은 무엇입니까?',
-    },
-    options: {
-      zh: ['nǐ hǎo', 'ní hǎo', 'nǐ hǎo ma', 'nǐ hǎo ne'],
-      en: ['nǐ hǎo', 'ní hǎo', 'nǐ hǎo ma', 'nǐ hǎo ne'],
-      ko: ['nǐ hǎo', 'ní hǎo', 'nǐ hǎo ma', 'nǐ hǎo ne'],
-    },
-    correctAnswer: 'nǐ hǎo',
-    score: 5,
-  },
-  {
-    id: 'hsk1-sc-2',
-    level: 1,
-    type: QuestionType.SingleChoice,
-    question: {
-      zh: '“谢谢”的拼音是？',
-      en: 'What is the pinyin for "谢谢"?',
-      ko: '"谢谢"의 병음은 무엇입니까?',
-    },
-    options: {
-      zh: ['xièxie', 'zàijiàn', 'bùkèqi', 'méiguānxī'],
-      en: ['xièxie', 'zàijiàn', 'bùkèqi', 'méiguānxī'],
-      ko: ['xièxie', 'zàijiàn', 'bùkèqi', 'méiguānxī'],
-    },
-    correctAnswer: 'xièxie',
-    score: 5,
-  },
-  // 多选题 (Multiple Select)
-  {
-    id: 'hsk1-ms-1',
-    level: 1,
-    type: QuestionType.MultipleSelect,
-    question: {
-      zh: '以下哪些词语是表示“吃”的动作？',
-      en: 'Which of the following words represent the action of "eating"?',
-      ko: '다음 중 "먹다"라는 동작을 나타내는 단어는 무엇입니까?',
-    },
-    options: {
-      zh: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
-      en: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
-      ko: ['喝 (hē)', '吃 (chī)', '看 (kàn)', '说 (shuō)'],
-    },
-    correctAnswers: ['吃 (chī)'],
-    score: 5,
-  },
-  // 判断题 (True/False)
-  {
-    id: 'hsk1-tf-1',
+    id: 'hsk1-l1-1',
     level: 1,
     type: QuestionType.TrueFalse,
     question: {
-      zh: '“是”的意思是“yes”。',
-      en: '"是" means "yes".',
-      ko: '"是"는 "yes"라는 뜻입니다.',
+      zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：坐 出租车 (zuò chūzūchē)\n图片：🚴‍♂️ (骑自行车)',
+      en: '[Listening Simulation] True or False:\nAudio: 坐 出租车 (zuò chūzūchē)\nPicture: 🚴‍♂️ (Riding a bike)',
+      ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 坐 出租车 (zuò chūzūchē)\n사진: 🚴‍♂️ (자전거 타기)',
+    },
+    correctAnswer: false,
+    score: 10,
+  },
+  {
+    id: 'hsk1-l1-2',
+    level: 1,
+    type: QuestionType.TrueFalse,
+    question: {
+      zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：喝 水 (hē shuǐ)\n图片：🥛 (喝水)',
+      en: '[Listening Simulation] True or False:\nAudio: 喝 水 (hē shuǐ)\nPicture: 🥛 (Drinking water)',
+      ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 喝 水 (hē shuǐ)\n사진: 🥛 (물 마시기)',
     },
     correctAnswer: true,
-    score: 5,
+    score: 10,
   },
-  // 填空题 (Fill in the Blank)
+  // 听力模拟 (Listening Simulation) - Single Choice
   {
-    id: 'hsk1-fb-1',
+    id: 'hsk1-l3-1',
+    level: 1,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[听力模拟] 听对话，选择正确答案：\n男：这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n女：七十块。 (Qīshí kuài.)\n问：椅子多少钱？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: 这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\nFemale: 七十块。 (Qīshí kuài.)\nQuestion: How much is the chair?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n여: 七十块。 (Qīshí kuài.)\n질문: 의자는 얼마입니까?',
+    },
+    options: {
+      zh: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
+      en: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
+      ko: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
+    },
+    correctAnswer: {
+      zh: 'B. 70块 (70 kuài)',
+      en: 'B. 70块 (70 kuài)',
+      ko: 'B. 70块 (70 kuài)',
+    },
+    score: 10,
+  },
+  {
+    id: 'hsk1-l4-1',
+    level: 1,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[听力模拟] 听对话，选择正确答案：\n女：下午我去商店，我想买一些水果。 (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n问：她下午去哪里？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 下午我去商店，我想买一些水果。 (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\nQuestion: Where is she going in the afternoon?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 下午我去商店，我想买一些水果。 (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n질문: 그녀는 오후에 어디에 갑니까?',
+    },
+    options: {
+      zh: ['A. 商店 (shāngdiàn)', 'B. 医院 (yīyuàn)', 'C. 学校 (xuéxiào)'],
+      en: ['A. 商店 (shāngdiàn)', 'B. 医院 (yīyuàn)', 'C. 学校 (xuéxiào)'],
+      ko: ['A. 商店 (shāngdiàn)', 'B. 医院 (yīyuàn)', 'C. 学校 (xuéxiào)'],
+    },
+    correctAnswer: 'A. 商店 (shāngdiàn)',
+    score: 10,
+  },
+  // 阅读 (Reading) - Single Choice
+  {
+    id: 'hsk1-r1-1',
+    level: 1,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择与词语意思一致的图片：\n电视 (diànshì)',
+      en: '[Reading] Choose the picture that matches the word:\n电视 (diànshì)',
+      ko: '[읽기] 단어의 의미와 일치하는 사진을 고르세요:\n电视 (diànshì)',
+    },
+    options: {
+      zh: ['A. 📺', 'B. ✈️', 'C. 🍎'],
+      en: ['A. 📺', 'B. ✈️', 'C. 🍎'],
+      ko: ['A. 📺', 'B. ✈️', 'C. 🍎'],
+    },
+    correctAnswer: 'A. 📺',
+    score: 10,
+  },
+  {
+    id: 'hsk1-r2-1',
+    level: 1,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择与句子意思一致的图片：\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
+      en: '[Reading] Choose the picture that matches the sentence:\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
+      ko: '[읽기] 문장의 의미와 일치하는 사진을 고르세요:\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
+    },
+    options: {
+      zh: ['A. 🏃‍♂️', 'B. 😴', 'C. 📖'],
+      en: ['A. 🏃‍♂️', 'B. 😴', 'C. 📖'],
+      ko: ['A. 🏃‍♂️', 'B. 😴', 'C. 📖'],
+    },
+    correctAnswer: 'B. 😴',
+    score: 10,
+  },
+  {
+    id: 'hsk1-r3-1',
+    level: 1,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 为下面的句子选择正确的回答：\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
+      en: '[Reading] Choose the correct response for the following sentence:\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
+      ko: '[읽기] 다음 문장에 대한 올바른 대답을 고르세요:\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
+    },
+    options: {
+      zh: ['A. 7点了。 (7 diǎn le.)', 'B. 坐出租车。 (Zuò chūzūchē.)', 'C. 苹果。 (Píngguǒ.)'],
+      en: ['A. 7点了。 (7 diǎn le.)', 'B. 坐出租车。 (Zuò chūzūchē.)', 'C. 苹果。 (Píngguǒ.)'],
+      ko: ['A. 7点了。 (7 diǎn le.)', 'B. 坐出租车。 (Zuò chūzūchē.)', 'C. 苹果。 (Píngguǒ.)'],
+    },
+    correctAnswer: 'B. 坐出租车。 (Zuò chūzūchē.)',
+    score: 10,
+  },
+  // 阅读 (Reading) - Fill in the Blank
+  {
+    id: 'hsk1-r4-1',
     level: 1,
     type: QuestionType.FillInTheBlank,
     question: {
-      zh: '我爱___。',
-      en: 'I love ___.',
-      ko: '나는 ___를 사랑한다.',
+      zh: '[阅读] 选择合适的词语填空：\n喂，张先生在（ ___ ）吗？\n\n备选词语：\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
+      en: '[Reading] Choose the appropriate word to fill in the blank:\n喂，张先生在（ ___ ）吗？\n\nOptions:\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
+      ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n喂，张先生在（ ___ ）吗？\n\n보기:\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
     },
     blanks: {
       zh: ['___'],
       en: ['___'],
       ko: ['___'],
     },
-    correctAnswers: ['你'],
-    score: 5,
+    correctAnswers: ['A'],
+    score: 15,
   },
-  // 简答题 (Short Answer)
   {
-    id: 'hsk1-sa-1',
+    id: 'hsk1-r4-2',
     level: 1,
-    type: QuestionType.ShortAnswer,
+    type: QuestionType.FillInTheBlank,
     question: {
-      zh: '请用汉语写出“Thank you”。',
-      en: 'Please write "Thank you" in Chinese.',
-      ko: '"Thank you"를 중국어로 쓰세요.',
+      zh: '[阅读] 选择合适的词语填空：\n我7点30分去（ ___ ），10点前回来。\n\n备选词语：\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
+      en: '[Reading] Choose the appropriate word to fill in the blank:\n我7点30分去（ ___ ），10点前回来。\n\nOptions:\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
+      ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n我7点30分去（ ___ ），10点前回来。\n\n보기:\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
     },
-    referenceAnswer: {
-      zh: '谢谢',
-      en: '谢谢 (xièxie)',
-      ko: '谢谢 (xièxie)',
+    blanks: {
+      zh: ['___'],
+      en: ['___'],
+      ko: ['___'],
     },
-    score: 10,
-  },
-  // 分析题 (Analysis)
-  {
-    id: 'hsk1-an-1',
-    level: 1,
-    type: QuestionType.Analysis,
-    question: {
-      zh: '请解释“你好”的含义和使用场景。',
-      en: 'Please explain the meaning and usage scenarios of "你好".',
-      ko: '"你好"의 의미와 사용 상황을 설명하세요.',
-    },
-    referenceAnswer: {
-      zh: '“你好”是汉语中最常见的问候语，意为“Hello”。通常用于两个人见面时打招呼。',
-      en: '"你好" (nǐ hǎo) is the most common greeting in Chinese, meaning "Hello". It is usually used to greet people when meeting.',
-      ko: '"你好"는 중국어에서 가장 흔한 인사말로 "안녕하세요"라는 뜻입니다. 보통 두 사람이 만났을 때 인사하는 데 사용됩니다.',
-    },
-    scoringCriteria: {
-      zh: '解释含义和使用场景，表达清晰即可得分。',
-      en: 'Explain the meaning and usage scenarios clearly to get points.',
-      ko: '의미와 사용 상황을 명확하게 설명하면 점수를 얻을 수 있습니다.',
-    },
+    correctAnswers: ['C'],
     score: 15,
   },
 ];
+

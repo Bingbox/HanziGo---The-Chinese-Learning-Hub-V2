@@ -10,6 +10,7 @@ export const hsk5Questions: Question[] = [
       zh: '[听力模拟] 听对话，选择正确答案：\n女：明天上午 9 点我准时到。\n男：我觉得还是提前几分钟吧。\n问：男的主要是什么意思？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 明天上午 9 点我准时到。\nMale: 我觉得还是提前几分钟吧。\nQuestion: What does the man mainly mean?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 明天上午 9 点我准时到。\n남: 我觉得还是提前几分钟吧。\n질문: 남자의 주요 의미는 무엇입니까?',
+      ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n女：明日午前9時に時間通りに到着します。\n男：やはり数分早めに来たほうがいいと思います。\n質問：男の人は主に何を意味していますか？',
     },
     options: {
       zh: ['A. 9点太早了', 'B. 他不会迟到', 'C. 可能不参加', 'D. 应该早点儿来'],
@@ -23,6 +24,25 @@ export const hsk5Questions: Question[] = [
       ko: 'D. 应该早点儿来',
       ja: 'D. 早く来るべきだ',
     },
+    score: 10,
+  },
+  {
+    id: 'hsk5-l1-2',
+    level: 5,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[听力模拟] 听对话，选择正确答案：\n男：这份报告你看了吗？有什么意见？\n女：我还没来得及细看，等我看完再告诉你吧。\n问：女的是什么意思？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: Have you read this report? Any opinions?\nFemale: I haven\'t had time to look at it in detail yet. I\'ll tell you after I finish reading it.\nQuestion: What does the woman mean?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 이 보고서 읽어봤나요? 의견이 있나요?\n여: 아직 자세히 볼 시간이 없었어요. 다 읽고 나서 알려드릴게요.\n질문: 여자의 말은 무슨 뜻입니까?',
+      ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：この報告書は読みましたか？何か意見はありますか？\n女：まだ詳しく見る時間がありませんでした。読み終わったら教えます。\n質問：女の人は何を意味していますか？',
+    },
+    options: {
+      zh: ['A. 报告写得很好', 'B. 她不想看报告', 'C. 她还没看完', 'D. 她没有意见'],
+      en: ['A. The report is well written', 'B. She doesn\'t want to read it', 'C. She hasn\'t finished reading it', 'D. She has no opinion'],
+      ko: ['A. 보고서가 잘 작성되었다', 'B. 그녀는 보고서를 읽고 싶지 않다', 'C. 그녀는 아직 다 읽지 않았다', 'D. 그녀는 의견이 없다'],
+      ja: ['A. 報告書はよく書けている', 'B. 彼女は報告書を読みたくない', 'C. 彼女はまだ読み終わっていない', 'D. 彼女は意見がない'],
+    },
+    correctAnswer: 'C. 她还没看完',
     score: 10,
   },
   {
@@ -57,13 +77,34 @@ export const hsk5Questions: Question[] = [
       zh: '[阅读] 选择合适的词语填空：\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n在高速行驶的火车上，有一位老人不小心把刚买的新鞋从窗口掉下去一只，周围的人都觉得很（ ___ ）。',
+      ja: '[リーディング] 空欄に適切な語句を選んでください：\n高速で走る列車の中で、ある老人が誤って買ったばかりの新しい靴を窓から片方落としてしまいました。周りの人々はとても（ ___ ）と感じました。',
     },
     options: {
       zh: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
       en: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
       ko: ['A. 浪费', 'B. 伤心', 'C. 可惜', 'D. 痛苦'],
+      ja: ['A. 無駄', 'B. 悲しい', 'C. 惜しい', 'D. 苦しい'],
     },
     correctAnswer: 'C. 可惜',
+    score: 15,
+  },
+  {
+    id: 'hsk5-r1-2',
+    level: 5,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择合适的词语填空：\n机会总是留给有（ ___ ）的人。',
+      en: '[Reading] Choose the appropriate word to fill in the blank:\nOpportunities are always reserved for those who are ( ___ ).',
+      ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n기회는 항상 ( ___ ) 된 사람에게 돌아갑니다.',
+      ja: '[リーディング] 空欄に適切な語句を選んでください：\nチャンスは常に ( ___ ) ができている人のためにあります。',
+    },
+    options: {
+      zh: ['A. 准备', 'B. 打算', 'C. 计划', 'D. 安排'],
+      en: ['A. Prepared', 'B. Intending', 'C. Planning', 'D. Arranging'],
+      ko: ['A. 준비', 'B. 작정', 'C. 계획', 'D. 배치'],
+      ja: ['A. 準備', 'B. つもり', 'C. 計画', 'D. 手配'],
+    },
+    correctAnswer: 'A. 准备',
     score: 15,
   },
   // 阅读 (Reading) - Single Choice (Comprehension)

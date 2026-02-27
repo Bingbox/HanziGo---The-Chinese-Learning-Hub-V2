@@ -28,6 +28,32 @@ export const hsk2Questions: Question[] = [
     correctAnswer: false,
     score: 10,
   },
+  {
+    id: 'hsk2-l1-3',
+    level: 2,
+    type: QuestionType.TrueFalse,
+    question: {
+      zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n图片：🏃‍♂️ (跑步)',
+      en: '[Listening Simulation] True or False:\nAudio: 他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\nPicture: 🏃‍♂️ (Running)',
+      ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n사진: 🏃‍♂️ (달리기 중)',
+      ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n写真：🏃‍♂️ (走る)',
+    },
+    correctAnswer: true,
+    score: 10,
+  },
+  {
+    id: 'hsk2-l1-4',
+    level: 2,
+    type: QuestionType.TrueFalse,
+    question: {
+      zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：外边下雨了。 (Wàibian xiàyǔ le.)\n图片：☀️ (晴天)',
+      en: '[Listening Simulation] True or False:\nAudio: 外边下雨了。 (Wàibian xiàyǔ le.)\nPicture: ☀️ (Sunny)',
+      ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 外边下雨了。 (Wàibian xiàyǔ le.)\n사진: ☀️ (맑음)',
+      ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：外边下雨了。 (Wàibian xiàyǔ le.)\n写真：☀️ (晴れ)',
+    },
+    correctAnswer: false,
+    score: 10,
+  },
   // 听力模拟 (Listening Simulation) - Single Choice
   {
     id: 'hsk2-l2-1',
@@ -89,6 +115,44 @@ export const hsk2Questions: Question[] = [
       ja: ['A. ⚽', 'B. 🏀', 'C. 🎾'],
     },
     correctAnswer: 'B. 🏀',
+    score: 10,
+  },
+  {
+    id: 'hsk2-r1-2',
+    level: 2,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择与句子意思一致的图片：\n我喜欢喝咖啡。 (Wǒ xǐhuan hē kāfēi.)',
+      en: '[Reading] Choose the picture that matches the sentence:\n我喜欢喝咖啡。 (Wǒ xǐhuan hē kāfēi.)',
+      ko: '[읽기] 문장의 의미와 일치하는 사진을 고르세요:\n我喜欢喝咖啡。 (Wǒ xǐhuan hē kāfēi.)',
+      ja: '[リーディング] 文の意味と一致する写真を選んでください：\n我喜欢喝咖啡。 (Wǒ xǐhuan hē kāfēi.)',
+    },
+    options: {
+      zh: ['A. ☕', 'B. 🍵', 'C. 🥛'],
+      en: ['A. ☕', 'B. 🍵', 'C. 🥛'],
+      ko: ['A. ☕', 'B. 🍵', 'C. 🥛'],
+      ja: ['A. ☕', 'B. 🍵', 'C. 🥛'],
+    },
+    correctAnswer: 'A. ☕',
+    score: 10,
+  },
+  {
+    id: 'hsk2-r1-3',
+    level: 2,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[阅读] 选择与句子意思一致的图片：\n他在看报纸呢。 (Tā zài kàn bàozhǐ ne.)',
+      en: '[Reading] Choose the picture that matches the sentence:\n他在看报纸呢。 (Tā zài kàn bàozhǐ ne.)',
+      ko: '[읽기] 문장의 의미와 일치하는 사진을 고르세요:\n他在看报纸呢。 (Tā zài kàn bàozhǐ ne.)',
+      ja: '[リーディング] 文の意味と一致する写真を選んでください：\n他在看报纸呢。 (Tā zài kàn bàozhǐ ne.)',
+    },
+    options: {
+      zh: ['A. 📖', 'B. 📰', 'C. 💻'],
+      en: ['A. 📖', 'B. 📰', 'C. 💻'],
+      ko: ['A. 📖', 'B. 📰', 'C. 💻'],
+      ja: ['A. 📖', 'B. 📰', 'C. 💻'],
+    },
+    correctAnswer: 'B. 📰',
     score: 10,
   },
   // 阅读 (Reading) - Fill in the Blank

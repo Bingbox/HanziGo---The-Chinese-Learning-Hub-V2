@@ -40,29 +40,27 @@ export class ExamService {
     
     let selectedQuestions: Question[] = [];
     
-    // Simple strategy: Shuffle and repeat until we reach the count
-    // In a real app, we would query by section (Listening, Reading, Writing).
-    // Here we assume the bank has a mix. We will try to balance if possible, 
-    // but primarily ensure the total count matches the user's request for the "Mock Exam" experience.
-    
-    // Separate by type if possible to distribute? 
-    // Our current QuestionType doesn't explicitly map 1:1 to "Listening/Reading" sections 
-    // (e.g. SingleChoice can be both). 
-    // So we will just fill to the total count for now.
-    
+    // Separate questions by section if possible (Listening, Reading, Writing)
+    // For now, we just shuffle the entire pool and pick unique ones.
     let pool = [...allQuestions];
-    while (selectedQuestions.length < totalQuestionsNeeded) {
-        if (pool.length === 0) {
-            pool = [...allQuestions]; // Refill pool if exhausted
-        }
-        const randomIndex = Math.floor(Math.random() * pool.length);
-        const q = pool.splice(randomIndex, 1)[0];
-        
-        // Clone the question to ensure unique object references if we modify them later (though we don't here)
-        // We append a suffix to ID to make it unique for React keys
-        const uniqueQ = { ...q, id: `${q.id}_${selectedQuestions.length}` };
+    
+    // Shuffle the pool
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    const actualNeeded = Math.min(totalQuestionsNeeded, pool.length);
+    
+    for (let i = 0; i < actualNeeded; i++) {
+        const q = pool[i];
+        // Clone the question and ensure unique ID for React keys
+        const uniqueQ = { ...q, id: `${q.id}_exam_${i}` };
         selectedQuestions.push(uniqueQ);
     }
+    
+    // If we don't have enough questions, we just return what we have.
+    // In a real scenario, we'd want to warn the user or the developer.
     
     // 计算总分
     const totalScore = selectedQuestions.reduce((sum, q) => sum + q.score, 0);

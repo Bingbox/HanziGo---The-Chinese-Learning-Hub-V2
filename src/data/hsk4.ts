@@ -28,6 +28,32 @@ export const hsk4Questions: Question[] = [
     correctAnswer: false,
     score: 10,
   },
+  {
+    id: 'hsk4-l1-3',
+    level: 4,
+    type: QuestionType.TrueFalse,
+    question: {
+      zh: '[听力模拟] 请判断录音与陈述是否一致：\n录音：虽然他只学了一年的汉语，但是他已经能听懂大部分中国人的谈话了。\n★ 他的汉语水平提高得很快。',
+      en: '[Listening Simulation] True or False based on the audio:\nAudio: 虽然他只学了一年的汉语，但是他已经能听懂大部分中国人的谈话了。\n★ 他的汉语水平提高得很快。 (His Chinese level has improved very quickly.)',
+      ko: '[듣기 시뮬레이션] 녹음과 별표(*) 문장이 일치하는지 판단하세요:\n녹음: 虽然他只学了一年的汉语，但是他已经能听懂大部分中国人的谈话了。\n★ 彼の中国語レベルは非常に速く向上しました。',
+      ja: '[リスニング模擬] 音声と陳述が一致しているか判断してください：\n音声：虽然他只学了一年的汉语，但是他已经能听懂大部分中国人的谈话了。\n★ 彼の中国語レベルは非常に速く向上しました。',
+    },
+    correctAnswer: true,
+    score: 10,
+  },
+  {
+    id: 'hsk4-l1-4',
+    level: 4,
+    type: QuestionType.TrueFalse,
+    question: {
+      zh: '[听力模拟] 请判断录音与陈述是否一致：\n录音：如果你想减肥，除了少吃东西，还要坚持运动。\n★ 减肥只需要少吃东西。',
+      en: '[Listening Simulation] True or False based on the audio:\nAudio: 如果你想减肥，除了少吃东西，还要坚持运动。\n★ 减肥只需要少吃东西。 (Losing weight only requires eating less.)',
+      ko: '[듣기 시뮬레이션] 녹음과 별표(*) 문장이 일치하는지 판단하세요:\n녹음: 如果你想减肥，除了少吃东西，还要坚持运动。\n★ 살을 빼려면 적게 먹기만 하면 됩니다.',
+      ja: '[リスニング模擬] 音声と陳述が一致しているか判断してください：\n音声：如果你想减肥，除了少吃东西，还要坚持运动。\n★ ダイエットには食べる量を減らすだけで十分です。',
+    },
+    correctAnswer: false,
+    score: 10,
+  },
   // 听力模拟 (Listening Simulation) - Single Choice
   {
     id: 'hsk4-l2-1',
@@ -51,6 +77,25 @@ export const hsk4Questions: Question[] = [
       ko: 'D. 有加油站',
       ja: 'D. ガソリンスタンドがある',
     },
+    score: 10,
+  },
+  {
+    id: 'hsk4-l2-2',
+    level: 4,
+    type: QuestionType.SingleChoice,
+    question: {
+      zh: '[听力模拟] 听对话，选择正确答案：\n男：你对这儿的生活习惯了吗？\n女：刚开始有点儿不习惯，现在已经没问题了。\n问：女的现在觉得这儿的生活怎么样？',
+      en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: Are you used to the life here?\nFemale: I wasn\'t used to it at first, but now it\'s no problem.\nQuestion: How does the woman feel about the life here now?',
+      ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 여기 생활에 익숙해졌나요?\n여: 처음에는 좀 익숙하지 않았는데, 지금은 문제없어요.\n질문: 여자는 지금 여기 생활이 어떻다고 생각합니까?',
+      ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：こちらの生活には慣れましたか？\n女：最初は少し慣れませんでしたが、今はもう大丈夫です。\n質問：女の人は今、こちらの生活をどう感じていますか？',
+    },
+    options: {
+      zh: ['A. 不习惯', 'B. 还可以', 'C. 已经习惯了', 'D. 很辛苦'],
+      en: ['A. Not used to it', 'B. Okay', 'C. Already used to it', 'D. Very hard'],
+      ko: ['A. 익숙하지 않다', 'B. 괜찮다', 'C. 이미 익숙해졌다', 'D. 매우 힘들다'],
+      ja: ['A. 慣れない', 'B. まあまあ', 'C. すでに慣れた', 'D. とても大変'],
+    },
+    correctAnswer: 'C. 已经习惯了',
     score: 10,
   },
   // 阅读 (Reading) - Fill in the Blank

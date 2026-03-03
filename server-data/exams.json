@@ -1,0 +1,26 @@
+[
+  {
+    "title": "初级 (Beginner)",
+    "levels": [
+      { "level": 1, "description": "掌握150个常用词语，理解并使用简单的句子。", "disabled": false },
+      { "level": 2, "description": "掌握300个常用词语，能就熟悉的日常话题进行简单交流。", "disabled": false },
+      { "level": 3, "description": "掌握600个常用词语，能完成生活、学习、工作等方面的基本交流。", "disabled": false }
+    ]
+  },
+  {
+    "title": "中级 (Intermediate)",
+    "levels": [
+      { "level": 4, "description": "掌握1200个常用词语，能就较广泛话题进行交流。", "disabled": false },
+      { "level": 5, "description": "掌握2500个常用词语，能阅读报刊杂志，欣赏电影电视节目。", "disabled": false },
+      { "level": 6, "description": "掌握5000个及以上常用词语，能轻松理解听到的或读到的信息。", "disabled": false }
+    ]
+  },
+  {
+    "title": "高级 (Advanced)",
+    "levels": [
+      { "level": 7, "description": "掌握高级词汇和复杂语法，能进行深入的专业讨论。", "disabled": false },
+      { "level": 8, "description": "具备极高的语言素养，能理解复杂的学术和文学作品。", "disabled": false },
+      { "level": 9, "description": "母语级水平，能自如应对各种复杂的语言环境。", "disabled": false }
+    ]
+  }
+]

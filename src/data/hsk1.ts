@@ -8,6 +8,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：坐 出租车 (zuò chūzūchē)\n图片：🚴‍♂️ (骑自行车)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：坐 出租車 (zuò chūzūchē)\n圖片：🚴‍♂️ (騎自行車)',
       en: '[Listening Simulation] True or False:\nAudio: 坐 出租车 (zuò chūzūchē)\nPicture: 🚴‍♂️ (Riding a bike)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 坐 出租车 (zuò chūzūchē)\n사진: 🚴‍♂️ (자전거 타기)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：坐 出租车 (zuò chūzūchē)\n写真：🚴‍♂️ (自転車に乗る)',
@@ -21,6 +22,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：看 书 (kàn shū)\n图片：📖 (看书)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：看 書 (kàn shū)\n圖片：📖 (看書)',
       en: '[Listening Simulation] True or False:\nAudio: 看 书 (kàn shū)\nPicture: 📖 (Reading a book)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 看 书 (kàn shū)\n사진: 📖 (책 읽기)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：看 书 (kàn shū)\n写真：📖 (本を読む)',
@@ -34,6 +36,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：打 电话 (dǎ diànhuà)\n图片：🍎 (苹果)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：打 電話 (dǎ diànhuà)\n圖片：🍎 (蘋果)',
       en: '[Listening Simulation] True or False:\nAudio: 打 电话 (dǎ diànhuà)\nPicture: 🍎 (Apple)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 打 电话 (dǎ diànhuà)\n사진: 🍎 (사과)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：打 电话 (dǎ diànhuà)\n写真：🍎 (りんご)',
@@ -47,6 +50,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：吃 米饭 (chī mǐfàn)\n图片：🍚 (米饭)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：吃 米飯 (chī mǐfàn)\n圖片：🍚 (米飯)',
       en: '[Listening Simulation] True or False:\nAudio: 吃 米饭 (chī mǐfàn)\nPicture: 🍚 (Rice)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 吃 米饭 (chī mǐfàn)\n사진: 🍚 (밥)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：吃 米饭 (chī mǐfàn)\n写真：🍚 (ご飯)',
@@ -60,6 +64,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：写 字 (xiě zì)\n图片：✍️ (写字)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：寫 字 (xiě zì)\n圖片：✍️ (寫字)',
       en: '[Listening Simulation] True or False:\nAudio: 写 字 (xiě zì)\nPicture: ✍️ (Writing)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 写 字 (xiě zì)\n사진: ✍️ (글씨 쓰기)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：写 字 (xiě zì)\n写真：✍️ (字を書く)',
@@ -73,6 +78,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：听 音乐 (tīng yīnyuè)\n图片：📺 (电视)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：聽 音樂 (tīng yīnyuè)\n圖片：📺 (電視)',
       en: '[Listening Simulation] True or False:\nAudio: 听 音乐 (tīng yīnyuè)\nPicture: 📺 (TV)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 听 音乐 (tīng yīnyuè)\n사진: 📺 (텔레비전)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：听 音乐 (tīng yīnyuè)\n写真：📺 (テレビ)',
@@ -87,18 +93,21 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n男：这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n女：七十块。 (Qīshí kuài.)\n问：椅子多少钱？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n男：这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n女：七十块。 (Qīshí kuài.)\n問：椅子多少錢？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: 这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\nFemale: 七十块。 (Qīshí kuài.)\nQuestion: How much is the chair?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n여: 七十块。 (Qīshí kuài.)\n질문: 의자는 얼마입니까?',
       ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：这个椅子多少钱？ (Zhège yǐzi duōshao qián?)\n女：七十块。 (Qīshí kuài.)\n質問：椅子はいくらですか？',
     },
     options: {
       zh: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
+      'zh-TW': ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
       en: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
       ko: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
       ja: ['A. 17块 (17 kuài)', 'B. 70块 (70 kuài)', 'C. 7块 (7 kuài)'],
     },
     correctAnswer: {
       zh: 'B. 70块 (70 kuài)',
+      'zh-TW': 'B. 70块 (70 kuài)',
       en: 'B. 70块 (70 kuài)',
       ko: 'B. 70块 (70 kuài)',
       ja: 'B. 70块 (70 kuài)',
@@ -111,6 +120,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n女：下午我去商店，我想买一些水果。 (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n问：她下午去哪里？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n女：下午我去商店，我想買一些水果。 (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n問：她下午去哪裡？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 下午我去商店，我想买一些水果. (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\nQuestion: Where is she going in the afternoon?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 下午我去商店，我想买一些水果. (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n질문: 그녀는 오후에 어디에 갑니까?',
       ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n女：下午我去商店，我想买一些水果. (Xiàwǔ wǒ qù shāngdiàn, wǒ xiǎng mǎi yìxiē shuǐguǒ.)\n質問：彼女は午後にどこへ行きますか？',
@@ -130,6 +140,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n男：你几点去学校？ (Nǐ jǐ diǎn qù xuéxiào?)\n女：八点。 (Bā diǎn.)\n问：她几点去学校？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n男：你幾點去學校？ (Nǐ jǐ diǎn qù xuéxiào?)\n女：八點。 (Bā diǎn.)\n問：她幾點去學校？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: 你几点去学校？ (Nǐ jǐ diǎn qù xuéxiào?)\nFemale: 八点。 (Bā diǎn.)\nQuestion: What time is she going to school?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 你几点去学校？ (Nǐ jǐ diǎn qù xuéxiào?)\n여: 八点。 (Bā diǎn.)\n질문: 그녀는 몇 시에 학교에 갑니까?',
       ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：你几点去学校？ (Nǐ jǐ diǎn qù xuéxiào?)\n女：八点。 (Bā diǎn.)\n質問：彼女は何時に学校へ行きますか？',
@@ -149,6 +160,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n男：你会说汉语吗？ (Nǐ huì shuō Hànyǔ ma?)\n女：我会说一点儿。 (Wǒ huì shuō yìdiǎnr.)\n问：女的会说什么？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n男：你會說漢語嗎？ (Nǐ huì shuō Hànyǔ ma?)\n女：我會說一點兒。 (Wǒ huì shuō yìdiǎnr.)\n問：女的會說什麼？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: 你会说汉语吗？ (Nǐ huì shuō Hànyǔ ma?)\nFemale: 我会说一点儿。 (Wǒ huì shuō yìdiǎnr.)\nQuestion: What can the woman speak?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 你会说汉语吗？ (Nǐ huì shuō Hànyǔ ma?)\n여: 我会说一点儿。 (Wǒ huì shuō yìdiǎnr.)\n질문: 여자는 무엇을 말할 수 있습니까?',
       ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：你会说汉语吗？ (Nǐ huì shuō Hànyǔ ma?)\n女：我会说一点儿。 (Wǒ huì shuō yìdiǎnr.)\n質問：彼女は何を話せますか？',
@@ -169,6 +181,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[阅读] 选择与词语意思一致的图片：\n电视 (diànshì)',
+      'zh-TW': '[閱讀] 選擇與詞語意思一致的圖片：\n電視 (diànshì)',
       en: '[Reading] Choose the picture that matches the word:\n电视 (diànshì)',
       ko: '[읽기] 단어의 의미와 일치하는 사진을 고르세요:\n电视 (diànshì)',
       ja: '[リーディング] 単語の意味と一致する写真を選んでください：\n电视 (diànshì)',
@@ -188,6 +201,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[阅读] 选择与句子意思一致的图片：\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
+      'zh-TW': '[閱讀] 選擇與句子意思一致的圖片：\n他在睡覺呢。 (Tā zài shuìjiào ne.)',
       en: '[Reading] Choose the picture that matches the sentence:\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
       ko: '[읽기] 문장의 의미와 일치하는 사진을 고르세요:\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
       ja: '[リーディング] 文の意味と一致する写真を選んでください：\n他在睡觉呢。 (Tā zài shuìjiào ne.)',
@@ -207,6 +221,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[阅读] 为下面的句子选择正确的回答：\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
+      'zh-TW': '[閱讀] 為下面的句子選擇正確的回答：\n你怎麼去那個飯店？ (Nǐ zěnme qù nàge fàndiàn?)',
       en: '[Reading] Choose the correct response for the following sentence:\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
       ko: '[읽기] 다음 문장에 대한 올바른 대답을 고르세요:\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
       ja: '[リーディング] 次の文に対する正しい答えを選んでください：\n你怎么去那个饭店？ (Nǐ zěnme qù nàge fàndiàn?)',
@@ -227,6 +242,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.FillInTheBlank,
     question: {
       zh: '[阅读] 选择合适的词语填空：\n喂，张先生在（ ___ ）吗？\n\n备选词语：\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
+      'zh-TW': '[閱讀] 選擇合適的詞語填空：\n喂，張先生在（ ___ ）嗎？\n\n備選詞語：\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 學習 (xuéxí)',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n喂，张先生在（ ___ ）吗？\n\nOptions:\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n喂，张先生在（ ___ ）吗？\n\n보기:\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
       ja: '[リーディング] 空欄に適切な語句を選んでください：\n喂，张先生在（ ___ ）吗？\n\n選択肢：\nA. 家 (jiā)\nB. 名字 (míngzi)\nC. 学习 (xuéxí)',
@@ -246,6 +262,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.FillInTheBlank,
     question: {
       zh: '[阅读] 选择合适的词语填空：\n我7点30分去（ ___ ），10点前回来。\n\n备选词语：\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
+      'zh-TW': '[閱讀] 選擇合適的詞語填空：\n我7點30分去（ ___ ），10點前回來。\n\n備選詞語：\nA. 對不起 (duìbuqǐ)\nB. 看見 (kànjiàn)\nC. 火車站 (huǒchēzhàn)',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n我7点30分去（ ___ ），10点前回来。\n\nOptions:\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n我7点30分去（ ___ ），10点前回来。\n\n보기:\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
       ja: '[リーディング] 空欄に適切な語句を選んでください：\n我7点30分去（ ___ ），10点前回来。\n\n選択肢：\nA. 对不起 (duìbuqǐ)\nB. 看见 (kànjiàn)\nC. 火车站 (huǒchēzhàn)',
@@ -265,6 +282,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.FillInTheBlank,
     question: {
       zh: '[阅读] 选择合适的词语填空：\n你会（ ___ ）汉字吗？\n\n备选词语：\nA. 认识 (rènshi)\nB. 写 (xiě)\nC. 漂亮 (piàoliang)',
+      'zh-TW': '[閱讀] 選擇合適的詞語填空：\n你會（ ___ ）漢字嗎？\n\n備選詞語：\nA. 認識 (rènshi)\nB. 寫 (xiě)\nC. 漂亮 (piàoliang)',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n你会（ ___ ）汉字吗？\n\nOptions:\nA. 认识 (rènshi)\nB. 写 (xiě)\nC. 漂亮 (piàoliang)',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n你会（ ___ ）汉字吗？\n\n보기:\nA. 认识 (rènshi)\nB. 写 (xiě)\nC. 漂亮 (piàoliang)',
       ja: '[リーディング] 空欄に適切な語句を選んでください：\n你会（ ___ ）汉字吗？\n\n選択肢：\nA. 认识 (rènshi)\nB. 写 (xiě)\nC. 漂亮 (piàoliang)',
@@ -284,6 +302,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.FillInTheBlank,
     question: {
       zh: '[阅读] 选择合适的词语填空：\n这里的（ ___ ）很甜，你吃一个吧。\n\n备选词语：\nA. 苹果 (píngguǒ)\nB. 衣服 (yīfu)\nC. 杯子 (bēizi)',
+      'zh-TW': '[閱讀] 選擇合適的詞語填空：\n這裡的（ ___ ）很甜，你吃一個吧。\n\n備選詞語：\nA. 蘋果 (píngguǒ)\nB. 衣服 (yīfu)\nC. 杯子 (bēizi)',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n这里的（ ___ ）很甜，你吃一个吧。\n\nOptions:\nA. 苹果 (píngguǒ)\nB. 衣服 (yīfu)\nC. 杯子 (bēizi)',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n这里的（ ___ ）很甜，你吃一个吧。\n\n보기:\nA. 苹果 (píngguǒ)\nB. 衣服 (yīfu)\nC. 杯子 (bēizi)',
       ja: '[リーディング] 空欄に適切な語句を選んでください：\n这里的（ ___ ）很甜，你吃一个吧。\n\n選択肢：\nA. 苹果 (píngguǒ)\nB. 衣服 (yīfu)\nC. 杯子 (bēizi)',
@@ -303,6 +322,7 @@ export const hsk1Questions: Question[] = [
     type: QuestionType.FillInTheBlank,
     question: {
       zh: '[阅读] 选择合适的词语填空：\n我（ ___ ）在看书，没听见你说话。\n\n备选词语：\nA. 正在 (zhèngzài)\nB. 已经 (yǐjīng)\nC. 非常 (fēicháng)',
+      'zh-TW': '[閱讀] 選擇合適的詞語填空：\n我（ ___ ）在看書，沒聽見你說話。\n\n備選詞語：\nA. 正在 (zhèngzài)\nB. 已經 (yǐjīng)\nC. 非常 (fēicháng)',
       en: '[Reading] Choose the appropriate word to fill in the blank:\n我（ ___ ）在看书，没听见你说话。\n\nOptions:\nA. 正在 (zhèngzài)\nB. 已经 (yǐjīng)\nC. 非常 (fēicháng)',
       ko: '[읽기] 빈칸에 알맞은 단어를 고르세요:\n我（ ___ ）在看书，没听见你说话。\n\n보기:\nA. 正在 (zhèngzài)\nB. 已经 (yǐjīng)\nC. 非常 (fēicháng)',
       ja: '[リーディング] 空欄に適切な語句を選んでください：\n我（ ___ ）在看书，没听见你说话。\n\n選択肢：\nA. 正在 (zhèngzài)\nB. 已经 (yǐjīng)\nC. 非常 (fēicháng)',

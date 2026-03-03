@@ -156,7 +156,7 @@ const AITutor: React.FC = () => {
         fullStreamedText += chunk;
         const rawBodyText = fullStreamedText.replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '').replace(/\[ANALYSIS\][\s\S]*$/, '').trim();
         if (mode === 'VOICE') {
-          const unprocessed = rawBodyText.slice(lastProcessedIndexRef.current);
+          const unprocessed = (rawBodyText || '').slice(lastProcessedIndexRef.current);
           const sentenceEndMatch = unprocessed.match(/[。！？\n]/);
           if (sentenceEndMatch) {
             const endIdx = sentenceEndMatch.index! + 1;
@@ -173,7 +173,7 @@ const AITutor: React.FC = () => {
         });
       }
       const finalRawBody = fullStreamedText.replace(/\[VOCAB\][\s\S]*?\[\/VOCAB\]/g, '').replace(/\[ANALYSIS\][\s\S]*$/, '').trim();
-      if (mode === 'VOICE' && lastProcessedIndexRef.current < finalRawBody.length) queueSpeechChunk(finalRawBody.slice(lastProcessedIndexRef.current));
+      if (mode === 'VOICE' && lastProcessedIndexRef.current < (finalRawBody || '').length) queueSpeechChunk((finalRawBody || '').slice(lastProcessedIndexRef.current));
       const vocabMatches = [...fullStreamedText.matchAll(/\[VOCAB\]([\s\S]*?)\[\/VOCAB\]/g)];
       const vocabItems = vocabMatches.map(m => { try { return JSON.parse(m[1]); } catch(e) { return null; } }).filter(Boolean);
       const analysisMatch = fullStreamedText.match(/\[ANALYSIS\]([\s\S]*?)\[\/ANALYSIS\]/);
@@ -195,7 +195,7 @@ const AITutor: React.FC = () => {
           newSessions[sessionIdx] = { ...newSessions[sessionIdx], messages: finalMessages };
           return newSessions;
         } else {
-          return [{ id: currentSessionId, title: textToSend.slice(0, 20) + '...', date: Date.now(), messages: finalMessages }, ...prev];
+          return [{ id: currentSessionId, title: (textToSend || '').slice(0, 20) + '...', date: Date.now(), messages: finalMessages }, ...prev];
         }
       });
     } catch (err) {} finally { setIsTyping(false); }

@@ -24,86 +24,71 @@ const BrandLoader: React.FC<{ size?: string }> = ({ size = "w-24 h-24" }) => (
 );
 
 const CultureFeed: React.FC = () => {
-  const { language, t, activeCultureTopic, setActiveCultureTopic } = useExam();
+  const { language, t, activeCultureTopic, setActiveCultureTopic, exploreContent } = useExam();
   const [selectedCategory, setSelectedCategory] = useState<CulturalCategory | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [categoryTopics, setCategoryTopics] = useState<any[]>([]);
 
   const categories: CulturalCategory[] = useMemo(() => {
-    const presetKeys = Object.keys(PRESET_CULTURE_CONTENT);
-    const allCategories = [
-      { 
-        id: 'philosophy', title: t('catPhilosophy'), desc: t('descPhilosophy'), overviewKey: 'overviewPhilosophy', icon: '☯️', color: 'bg-slate-900',
-        subTopics: ['confucianism', 'taoism', 'mohism', 'chinese_buddhism', 'neo_confucianism'] 
-      },
-      { 
-        id: 'history', title: t('catHistory'), desc: t('descHistory'), overviewKey: 'overviewHistory', icon: '📜', color: 'bg-amber-800',
-        subTopics: ['dynasties_timeline', 'silk_road', 'forbidden_city', 'great_wall', 'civil_exams'] 
-      },
-      { 
-        id: 'language', title: t('catLanguage'), desc: t('descLanguage'), overviewKey: 'overviewLanguage', icon: '🖌️', color: 'bg-red-700',
-        subTopics: ['evolution_hanzi', 'calligraphy_styles', 'famous_idioms', 'chinese_poetry', 'classical_lit'] 
-      },
-      { 
-        id: 'art', title: t('catArt'), desc: t('descArt'), overviewKey: 'overviewArt', icon: '🎭', color: 'bg-indigo-700',
-        subTopics: ['peking_opera', 'trad_painting', 'folk_music', 'sculpture', 'dance'] 
-      },
-      { 
-        id: 'aesthetics', title: t('catAesthetics'), desc: t('descAesthetics'), overviewKey: 'overviewAesthetics', icon: '🍵', color: 'bg-emerald-800',
-        subTopics: ['tea_culture', 'suzhou_gardens', 'porcelain_arts', 'color_symbolism', 'ink_aesthetics'] 
-      },
-      { 
-        id: 'festivals', title: t('catFestivals'), desc: t('descFestivals'), overviewKey: 'overviewFestivals', icon: '🏮', color: 'bg-orange-600',
-        subTopics: ['lunar_new_year', 'mid_autumn', 'dragon_boat', 'lantern_festival', 'qingming'] 
-      },
-      { 
-        id: 'food', title: t('catFood'), desc: t('descFoodCat'), overviewKey: 'overviewFood', icon: '🥟', color: 'bg-yellow-600',
-        subTopics: ['eight_cuisines', 'dim_sum', 'dumplings', 'tea_pairing', 'street_food'] 
-      },
-      { 
-        id: 'crafts', title: t('catCrafts'), desc: t('descCrafts'), overviewKey: 'overviewCrafts', icon: '🏺', color: 'bg-teal-700',
-        subTopics: ['silk_weaving', 'paper_cutting', 'cloisonne', 'jade_carving', 'woodwork'] 
-      },
-      { 
-        id: 'architecture', title: t('catArchitecture'), desc: t('descArchitecture'), overviewKey: 'overviewArchitecture', icon: '🏯', color: 'bg-stone-800',
-        subTopics: ['feng_shui', 'courtyards', 'pagodas', 'bridges', 'imperial_palaces'] 
-      },
-      { 
-        id: 'ethics', title: t('catEthics'), desc: t('descEthics'), overviewKey: 'overviewEthics', icon: '🧧', color: 'bg-rose-700',
-        subTopics: ['filial_piety', 'hospitality', 'etiquette', 'loyalty', 'humility'] 
-      },
-      { 
-        id: 'medicine', title: t('catMedicine'), desc: t('descMedicine'), overviewKey: 'overviewMedicine', icon: '🌿', color: 'bg-green-700',
-        subTopics: ['tcm_fundamentals', 'acupuncture', 'yin_yang', 'herbs', 'qi_gong'] 
-      },
-      { 
-        id: 'martial_arts', title: t('catMartialArts'), desc: t('descMartialArts'), overviewKey: 'overviewMartialArts', icon: '🥋', color: 'bg-blue-900',
-        subTopics: ['shaolin_kungfu', 'tai_chi', 'wuxia_culture', 'weapons', 'wing_chun'] 
-      }
-    ];
+    return exploreContent.map(cat => ({
+      ...cat,
+      title: t(cat.id) !== cat.id ? t(cat.id) : cat.title,
+      desc: t('desc_' + cat.id) !== ('desc_' + cat.id) ? t('desc_' + cat.id) : cat.desc,
+    }));
+  }, [exploreContent, t]);
 
-    return allCategories.map(category => ({
-      ...category,
-      subTopics: category.subTopics.filter(topic => presetKeys.includes(topic))
-    })).filter(category => category.subTopics.length > 0);
-  }, [t]);
+  useEffect(() => {
+    if (selectedCategory) {
+      const fetchTopics = async () => {
+        try {
+          const res = await fetch(`/api/culture/topics/${selectedCategory.id}`);
+          const data = await res.json();
+          setCategoryTopics(data);
+        } catch (e) {
+          console.error("Failed to fetch topics", e);
+        }
+      };
+      fetchTopics();
+    }
+  }, [selectedCategory]);
 
   // Handle deep linking from Dashboard
   useEffect(() => {
-    if (activeCultureTopic) {
+    if (activeCultureTopic && categories.length > 0) {
       setSelectedTopicId(activeCultureTopic);
       // Find the category that contains this topic
-      const category = categories.find(cat => cat.subTopics.includes(activeCultureTopic));
+      // This is tricky if we don't know which category the topic belongs to.
+      // For now, we'll assume the topic ID might be related or we can search all categories if we had topics pre-loaded.
+      // But since we fetch topics per category, we might need a better way.
+      // Let's just try to find it in the current categories' subTopics if they are IDs.
+      const category = categories.find(cat => cat.subTopics?.includes(activeCultureTopic));
       if (category) setSelectedCategory(category);
       setActiveCultureTopic(null); // Clear the trigger
     }
   }, [activeCultureTopic, categories, setActiveCultureTopic]);
 
-  const fetchContent = (topicId: string) => {
+  const fetchContent = async (topicId: string) => {
     setLoading(true);
     setContent(null);
 
+    // First check if it's in our fetched categoryTopics
+    const topic = categoryTopics.find(t => t.id === topicId);
+    if (topic) {
+      setContent({
+        ...topic,
+        title: topic.chineseTitle,
+        contentChinese: topic.fullContentChinese,
+        contentTranslated: topic.fullContentTranslated,
+        vocabulary: topic.keyConcepts || [],
+        isPreset: false
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Fallback to PRESET_CULTURE_CONTENT
     const preset = PRESET_CULTURE_CONTENT[topicId];
     if (preset) {
       setContent({
@@ -179,7 +164,7 @@ const CultureFeed: React.FC = () => {
               <h3 className="text-2xl font-black text-gray-900 mb-2">{cat.title}</h3>
               <p className="text-gray-400 font-black uppercase tracking-widest text-[10px] mb-4">{cat.desc}</p>
               <div className="flex flex-wrap gap-1.5 opacity-60">
-                {cat.subTopics.slice(0, 3).map(stId => (
+                {(cat.subTopics || []).slice(0, 3).map(stId => (
                   <span key={stId} className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-md text-[8px] font-black uppercase text-gray-500">
                     {t(stId).split('(')[0]}
                   </span>
@@ -218,7 +203,27 @@ const CultureFeed: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {selectedCategory.subTopics.map((topicId) => (
+            {categoryTopics.map((topic) => (
+              <div 
+                key={topic.id} 
+                onClick={() => handleTopicSelect(topic.id)} 
+                className="group p-8 bg-white border border-gray-100 rounded-3xl hover:border-red-600 hover:shadow-2xl transition-all cursor-pointer flex flex-col justify-between aspect-square md:aspect-auto min-h-[220px]"
+              >
+                <div>
+                  <h4 className="text-2xl font-black text-gray-900 group-hover:text-red-600 transition-colors tracking-tight">{topic.chineseTitle || t(topic.id)}</h4>
+                  <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-loose mt-2">
+                    {topic.summary || (t('desc_' + topic.id) !== ('desc_' + topic.id) ? t('desc_' + topic.id) : t('exploreGenericTopic'))}
+                  </p>
+                </div>
+                <div className="flex justify-end mt-10">
+                  <span className="px-5 py-2 bg-gray-50 text-gray-400 font-black text-[9px] uppercase tracking-widest rounded-lg group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
+                    {t('readDeepDive')}
+                  </span>
+                </div>
+              </div>
+            ))}
+            {/* Fallback to subTopics if categoryTopics is empty (e.g. while loading or if no DB topics) */}
+            {categoryTopics.length === 0 && selectedCategory.subTopics?.map((topicId) => (
               <div 
                 key={topicId} 
                 onClick={() => handleTopicSelect(topicId)} 

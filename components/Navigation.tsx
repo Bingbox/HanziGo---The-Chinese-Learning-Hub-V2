@@ -43,6 +43,11 @@ const Icons = {
     <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-[#BD1023] scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
     </svg>
+  ),
+  Admin: ({ active }: { active: boolean }) => (
+    <svg viewBox="0 0 24 24" className={`w-6 h-6 transition-all ${active ? 'fill-[#BD1023] scale-110' : 'fill-none stroke-gray-400 stroke-[1.8]'}`}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 12h7.5" />
+    </svg>
   )
 };
 
@@ -108,7 +113,11 @@ const Navigation: React.FC<NavigationProps> = ({ currentView, setView }) => {
             ))}
           </div>
 
-          <div className="mt-auto pt-8 border-t border-[#f0ede5]">
+          <div className="mt-auto pt-8 border-t border-[#f0ede5] space-y-1.5">
+            <button onClick={() => setView(View.ADMIN)} className={`flex items-center gap-4 w-full px-5 py-3 rounded-xl transition-all font-bold text-sm ${currentView === View.ADMIN ? 'bg-[#fdf0f1] text-[#BD1023] shadow-sm' : 'text-gray-500 hover:bg-[#f9f7f2]'}`}>
+              <Icons.Admin active={currentView === View.ADMIN} />
+              <span>{t('admin') || 'Admin CMS'}</span>
+            </button>
             <button onClick={() => setView(View.SETTINGS)} className={`flex items-center gap-4 w-full px-5 py-3 rounded-xl transition-all font-bold text-sm ${currentView === View.SETTINGS ? 'bg-[#fdf0f1] text-[#BD1023] shadow-sm' : 'text-gray-500 hover:bg-[#f9f7f2]'}`}>
               <Icons.Profile active={currentView === View.SETTINGS} />
               <div className="flex-1 text-left overflow-hidden">

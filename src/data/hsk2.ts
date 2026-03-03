@@ -8,6 +8,7 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：他正在打电话呢。 (Tā zhèngzài dǎ diànhuà ne.)\n图片：📱 (打电话)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：他正在打電話呢。 (Tā zhèngzài dǎ diànhuà ne.)\n圖片：📱 (打電話)',
       en: '[Listening Simulation] True or False:\nAudio: 他正在打电话呢。 (Tā zhèngzài dǎ diànhuà ne.)\nPicture: 📱 (Making a phone call)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 他正在打电话呢。 (Tā zhèngzài dǎ diànhuà ne.)\n사진: 📱 (전화 통화 중)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：他正在打电话呢。 (Tā zhèngzài dǎ diànhuà ne.)\n写真：📱 (電話をかける)',
@@ -21,6 +22,7 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：上午我买了一些鸡蛋。 (Shàngwǔ wǒ mǎile yìxiē jīdàn.)\n图片：🍎 (苹果)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：上午我買了一些雞蛋。 (Shàngwǔ wǒ mǎile yìxiē jīdàn.)\n圖片：🍎 (蘋果)',
       en: '[Listening Simulation] True or False:\nAudio: 上午我买了一些鸡蛋。 (Shàngwǔ wǒ mǎile yìxiē jīdàn.)\nPicture: 🍎 (Apple)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 上午我买了一些鸡蛋。 (Shàngwǔ wǒ mǎile yìxiē jīdàn.)\n사진: 🍎 (사과)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：上午我买了一些鸡蛋。 (Shàngwǔ wǒ mǎile yìxiē jīdàn.)\n写真：🍎 (リンゴ)',
@@ -34,6 +36,7 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n图片：🏃‍♂️ (跑步)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n圖片：🏃‍♂️ (跑步)',
       en: '[Listening Simulation] True or False:\nAudio: 他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\nPicture: 🏃‍♂️ (Running)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n사진: 🏃‍♂️ (달리기 중)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：他正在跑步呢。 (Tā zhèngzài pǎobù ne.)\n写真：🏃‍♂️ (走る)',
@@ -47,6 +50,7 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.TrueFalse,
     question: {
       zh: '[听力模拟] 请判断录音与图片是否一致：\n录音：外边下雨了。 (Wàibian xiàyǔ le.)\n图片：☀️ (晴天)',
+      'zh-TW': '[聽力模擬] 請判斷錄音與圖片是否一致：\n錄音：外边下雨了。 (Wàibian xiàyǔ le.)\n圖片：☀️ (晴天)',
       en: '[Listening Simulation] True or False:\nAudio: 外边下雨了。 (Wàibian xiàyǔ le.)\nPicture: ☀️ (Sunny)',
       ko: '[듣기 시뮬레이션] 녹음과 사진이 일치하는지 판단하세요:\n녹음: 外边下雨了。 (Wàibian xiàyǔ le.)\n사진: ☀️ (맑음)',
       ja: '[リスニング模擬] 音声と写真が一致しているか判断してください：\n音声：外边下雨了。 (Wàibian xiàyǔ le.)\n写真：☀️ (晴れ)',
@@ -61,12 +65,14 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n男：你喜欢什么运动？ (Nǐ xǐhuan shénme yùndòng?)\n女：我最喜欢踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\n问：女的最喜欢什么运动？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n男：你喜歡什麼運動？ (Nǐ xǐhuan shénme yùndòng?)\n女：我最喜歡踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\n問：女的最喜歡什麼運動？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nMale: 你喜欢什么运动？ (Nǐ xǐhuan shénme yùndòng?)\nFemale: 我最喜欢踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\nQuestion: What sport does the female like most?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n남: 你喜欢什么运动？ (Nǐ xǐhuan shénme yùndòng?)\n여: 我最喜欢踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\n질문: 여자가 가장 좋아하는 운동은 무엇입니까?',
-      ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：你喜欢什么运动？ (Nǐ xǐhuan shénme yùndòng?)\n女：我最喜欢踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\n質問：女的最喜欢什么运动？',
+      ja: '[リスニング模擬] 会話を聞いて、正しい答えを選んでください：\n男：你喜欢什么运动？ (Nǐ xǐhuan shénme yùndòng?)\n女：我最喜欢踢足球。 (Wǒ zuì xǐhuan tī zúqiú.)\n質問：女性はどのスポーツが一番好きですか？',
     },
     options: {
       zh: ['A. 跑步 (pǎobù)', 'B. 游泳 (yóuyǒng)', 'C. 踢足球 (tī zúqiú)'],
+      'zh-TW': ['A. 跑步 (pǎobù)', 'B. 游泳 (yóuyǒng)', 'C. 踢足球 (tī zúqiú)'],
       en: ['A. 跑步 (pǎobù)', 'B. 游泳 (yóuyǒng)', 'C. 踢足球 (tī zúqiú)'],
       ko: ['A. 跑步 (pǎobù)', 'B. 游泳 (yóuyǒng)', 'C. 踢足球 (tī zúqiú)'],
       ja: ['A. 跑步 (pǎobù)', 'B. 游泳 (yóuyǒng)', 'C. 踢足球 (tī zúqiú)'],
@@ -80,17 +86,20 @@ export const hsk2Questions: Question[] = [
     type: QuestionType.SingleChoice,
     question: {
       zh: '[听力模拟] 听对话，选择正确答案：\n女：下星期我们要去上海旅游，你去吗？ (Xià xīngqī wǒmen yào qù Shànghǎi lǚyóu, nǐ qù ma?)\n男：太好了！我也去。 (Tài hǎo le! Wǒ yě qù.)\n问：男的是什么意思？',
+      'zh-TW': '[聽力模擬] 聽對話，選擇正確答案：\n女：下星期我们要去上海旅游，你去吗？ (Xià xīngqī wǒmen yào qù Shànghǎi lǚyóu, nǐ qù ma?)\n男：太好了！我也去。 (Tài hǎo le! Wǒ yě qù.)\n問：男的是什麼意思？',
       en: '[Listening Simulation] Listen to the dialogue and choose the correct answer:\nFemale: 下星期我们要去上海旅游，你去吗？ (Xià xīngqī wǒmen yào qù Shànghǎi lǚyóu, nǐ qù ma?)\nMale: 太好了！我也去。 (Tài hǎo le! Wǒ yě qù.)\nQuestion: What does the male mean?',
       ko: '[듣기 시뮬레이션] 대화를 듣고 올바른 답을 고르세요:\n여: 下星期我们要去上海旅游，你去吗？ (Xià xīngqī wǒmen yào qù Shànghǎi lǚyóu, nǐ qù ma?)\n남: 太好了！我也去。 (Tài hǎo le! Wǒ yě qù.)\n질문: 남자의 말은 무슨 뜻입니까?',
     },
     options: {
       zh: ['A. 他也去 (Tā yě qù)', 'B. 他不去 (Tā bú qù)', 'C. 他去过了 (Tā qùguo le)'],
+      'zh-TW': ['A. 他也去 (Tā yě qù)', 'B. 他不去 (Tā bú qù)', 'C. 他去过了 (Tā qùguo le)'],
       en: ['A. 他也去 (Tā yě qù)', 'B. 他不去 (Tā bú qù)', 'C. 他去过了 (Tā qùguo le)'],
       ko: ['A. 他也去 (Tā yě qù)', 'B. 他不去 (Tā bú qù)', 'C. 他去过了 (Tā qùguo le)'],
       ja: ['A. 他也去 (Tā yě qù)', 'B. 他不去 (Tā bú qù)', 'C. 他去过了 (Tā qùguo le)'],
     },
     correctAnswer: {
       zh: 'A. 他也去 (Tā yě qù)',
+      'zh-TW': 'A. 他也去 (Tā yě qù)',
       en: 'A. 他也去 (Tā yě qù)',
       ko: 'A. 他也去 (Tā yě qù)',
       ja: 'A. 他也去 (Tā yě qù)',

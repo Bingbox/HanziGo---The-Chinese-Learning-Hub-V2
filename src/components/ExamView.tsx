@@ -14,6 +14,91 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[] | boolean>>({});
 
+  const translations: Record<string, any> = {
+    zh: {
+      back: '返回级别选择',
+      exam: '模拟考试',
+      question: '题目',
+      prev: '上一题',
+      next: '下一题',
+      submit: '提交答案',
+      loading: '正在加载题目...',
+      notFound: '未找到题目。',
+      true: '正确',
+      false: '错误',
+      fillPlaceholder: '填写第 {n} 个空 ({hint})',
+      shortAnswerPlaceholder: '请输入您的答案...',
+      analysisPlaceholder: '请输入您的分析...',
+      unknownType: '未知题型',
+    },
+    'zh-TW': {
+      back: '返回級別選擇',
+      exam: '模擬考試',
+      question: '題目',
+      prev: '上一題',
+      next: '下一題',
+      submit: '提交答案',
+      loading: '正在加載題目...',
+      notFound: '未找到題目。',
+      true: '正確',
+      false: '錯誤',
+      fillPlaceholder: '填寫第 {n} 個空 ({hint})',
+      shortAnswerPlaceholder: '請輸入您的答案...',
+      analysisPlaceholder: '請輸入您的分析...',
+      unknownType: '未知題型',
+    },
+    en: {
+      back: 'Back to Level Selection',
+      exam: 'Mock Exam',
+      question: 'Question',
+      prev: 'Previous',
+      next: 'Next',
+      submit: 'Submit',
+      loading: 'Loading questions...',
+      notFound: 'Question not found.',
+      true: 'True',
+      false: 'False',
+      fillPlaceholder: 'Fill blank {n} ({hint})',
+      shortAnswerPlaceholder: 'Please enter your answer...',
+      analysisPlaceholder: 'Please enter your analysis...',
+      unknownType: 'Unknown question type',
+    },
+    ko: {
+      back: '레벨 선택으로 돌아가기',
+      exam: '모의고사',
+      question: '문제',
+      prev: '이전',
+      next: '다음',
+      submit: '제출',
+      loading: '문제를 불러오는 중...',
+      notFound: '문제를 찾을 수 없습니다.',
+      true: '맞음',
+      false: '틀림',
+      fillPlaceholder: '{n}번째 빈칸 채우기 ({hint})',
+      shortAnswerPlaceholder: '답변을 입력하세요...',
+      analysisPlaceholder: '분석을 입력하세요...',
+      unknownType: '알 수 없는 문제 유형',
+    },
+    ja: {
+      back: 'レベル選択に戻る',
+      exam: '模擬試験',
+      question: '問題',
+      prev: '前へ',
+      next: '次へ',
+      submit: '提出',
+      loading: '問題を読み込み中...',
+      notFound: '問題が見つかりません。',
+      true: '正しい',
+      false: '間違い',
+      fillPlaceholder: '{n}番目の空欄を埋める ({hint})',
+      shortAnswerPlaceholder: '回答を入力してください...',
+      analysisPlaceholder: '分析を入力してください...',
+      unknownType: '不明な問題形式',
+    }
+  };
+
+  const t = translations[language] || translations['zh'];
+
   useEffect(() => {
     if (!Array.isArray(questions)) return;
     
@@ -125,12 +210,12 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
   };
 
   if (!Array.isArray(questions) || questions.length === 0) {
-    return <div className="text-center p-8 text-white/70">Loading questions...</div>;
+    return <div className="text-center p-8 text-white/70">{t.loading}</div>;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
   if (!currentQuestion) {
-    return <div className="text-center p-8 text-white/70">Question not found.</div>;
+    return <div className="text-center p-8 text-white/70">{t.notFound}</div>;
   }
 
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
@@ -183,12 +268,12 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
             <button 
               onClick={() => handleAnswer(tfQuestion.id, true)}
               className={`w-full text-center p-4 rounded-lg border-2 transition-colors text-lg font-semibold ${currentAnswer === true ? 'bg-blue-500 border-blue-400 text-white' : 'bg-white/5 border-white/20 hover:bg-white/10 text-white/80'}`}>
-              正确
+              {t.true}
             </button>
             <button 
               onClick={() => handleAnswer(tfQuestion.id, false)}
               className={`w-full text-center p-4 rounded-lg border-2 transition-colors text-lg font-semibold ${currentAnswer === false ? 'bg-blue-500 border-blue-400 text-white' : 'bg-white/5 border-white/20 hover:bg-white/10 text-white/80'}`}>
-              错误
+              {t.false}
             </button>
           </div>
         );
@@ -208,7 +293,7 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
                   newFillAnswers[index] = e.target.value;
                   handleAnswer(fbQuestion.id, newFillAnswers);
                 }}
-                placeholder={`填写第 ${index + 1} 个空 (${blank})`}
+                placeholder={t.fillPlaceholder.replace('{n}', index + 1).replace('{hint}', blank)}
                 className="w-full p-4 rounded-lg bg-white/5 border border-white/20 text-white/80 focus:outline-none focus:border-blue-500"
               />
             ))}
@@ -221,7 +306,7 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
             <textarea
               value={currentAnswer as string || ''}
               onChange={(e) => handleAnswer(saQuestion.id, e.target.value)}
-              placeholder="请输入您的答案..."
+              placeholder={t.shortAnswerPlaceholder}
               rows={5}
               className="w-full p-4 rounded-lg bg-white/5 border border-white/20 text-white/80 focus:outline-none focus:border-blue-500"
             ></textarea>
@@ -234,14 +319,14 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
             <textarea
               value={currentAnswer as string || ''}
               onChange={(e) => handleAnswer(anQuestion.id, e.target.value)}
-              placeholder="请输入您的分析..."
+              placeholder={t.analysisPlaceholder}
               rows={8}
               className="w-full p-4 rounded-lg bg-white/5 border border-white/20 text-white/80 focus:outline-none focus:border-blue-500"
             ></textarea>
           </div>
         );
       default:
-        return <p className="text-red-500">未知题型</p>;
+        return <p className="text-red-500">{t.unknownType}</p>;
     }
   };
 
@@ -250,7 +335,7 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
       <div className="mb-4">
         <button onClick={onBack} className="flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors">
           <ArrowLeft size={16} />
-          返回级别选择
+          {t.back}
         </button>
       </div>
 
@@ -259,8 +344,8 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
       </div>
 
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">HSK {level} 模拟考试</h2>
-        <p className="text-white/60 font-medium">题目 {currentQuestionIndex + 1} / {questions.length}</p>
+        <h2 className="text-2xl font-bold text-white">HSK {level} {t.exam}</h2>
+        <p className="text-white/60 font-medium">{t.question} {currentQuestionIndex + 1} / {questions.length}</p>
       </div>
       
       <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex-grow flex flex-col justify-center">
@@ -273,19 +358,19 @@ export const ExamView: React.FC<ExamViewProps> = ({ level, questions = [], langu
           onClick={() => setCurrentQuestionIndex(i => Math.max(0, i - 1))}
           disabled={currentQuestionIndex === 0}
           className="px-8 py-3 rounded-lg bg-white/10 disabled:opacity-50 transition-colors font-semibold">
-          上一题
+          {t.prev}
         </button>
         {currentQuestionIndex < questions.length - 1 ? (
           <button 
             onClick={() => setCurrentQuestionIndex(i => Math.min(questions.length - 1, i + 1))}
             className="px-8 py-3 rounded-lg bg-white/20 hover:bg-white/30 transition-colors font-semibold">
-            下一题
+            {t.next}
           </button>
         ) : (
           <button 
             onClick={handleSubmit}
             className="px-8 py-3 rounded-lg bg-green-600 hover:bg-green-500 transition-colors font-semibold">
-            提交答案
+            {t.submit}
           </button>
         )}
       </div>

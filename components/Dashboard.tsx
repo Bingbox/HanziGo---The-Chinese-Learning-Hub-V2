@@ -23,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(new Date().getDay() - 1);
 
   const featuredModules = useMemo(() => {
-    const available = allUnits.filter(u => !u.locked);
+    const available = (allUnits || []).filter(u => !u.locked);
     return [...available].sort(() => 0.5 - Math.random()).slice(0, 3);
   }, [allUnits]);
 

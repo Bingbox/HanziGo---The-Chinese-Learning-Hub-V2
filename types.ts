@@ -7,6 +7,7 @@ export enum View {
   CULTURE = 'CULTURE',
   AI_TUTOR = 'AI_TUTOR',
   SETTINGS = 'SETTINGS',
+  ADMIN = 'ADMIN',
 }
 
 export type Language = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'ko' | 'ru' | 'ar' | 'zh_hk' | 'zh';

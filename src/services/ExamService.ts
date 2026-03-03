@@ -21,55 +21,46 @@ export class ExamService {
    * 根据级别生成模拟考试试卷
    * @param level HSK级别 (1-9)
    */
-  static generateMockExam(level: number): Exam {
-    const allQuestions = hskQuestionBank[level] || [];
-    
-    if (allQuestions.length === 0) {
-      throw new Error(`No questions found for HSK Level ${level}`);
+  static async generateMockExam(level: number): Promise<Exam> {
+    try {
+      const res = await fetch(`/api/questions/${level}`);
+      const allQuestions: Question[] = await res.json();
+      
+      if (!allQuestions || allQuestions.length === 0) {
+        throw new Error(`No questions found for HSK Level ${level}`);
+      }
+
+      const structure = this.examStructure[level] || { listening: 20, reading: 20, writing: 0 };
+      const totalQuestionsNeeded = structure.listening + structure.reading + structure.writing + (structure.translation || 0) + (structure.speaking || 0);
+
+      let selectedQuestions: Question[] = [];
+      let pool = [...allQuestions];
+      
+      // Shuffle the pool
+      for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      const actualNeeded = Math.min(totalQuestionsNeeded, pool.length);
+      
+      for (let i = 0; i < actualNeeded; i++) {
+          const q = pool[i];
+          const uniqueQ = { ...q, id: `${q.id}_exam_${i}` };
+          selectedQuestions.push(uniqueQ);
+      }
+      
+      const totalScore = selectedQuestions.reduce((sum, q) => sum + q.score, 0);
+
+      return {
+        level,
+        questions: selectedQuestions,
+        totalScore,
+      };
+    } catch (error) {
+      console.error('Failed to generate mock exam:', error);
+      throw error;
     }
-
-    const structure = this.examStructure[level] || { listening: 20, reading: 20, writing: 0 };
-    const totalQuestionsNeeded = structure.listening + structure.reading + structure.writing + (structure.translation || 0) + (structure.speaking || 0);
-
-    // Filter questions by type (heuristic based on ID or content if explicit type is missing, 
-    // but currently we rely on the bank having mixed types. 
-    // Ideally, we should filter by type, but for now we will shuffle and fill to meet the count.)
-    
-    // Since we might not have enough unique questions, we will fill the exam to meet the required count
-    // by repeating questions if necessary, to simulate the exam length.
-    
-    let selectedQuestions: Question[] = [];
-    
-    // Separate questions by section if possible (Listening, Reading, Writing)
-    // For now, we just shuffle the entire pool and pick unique ones.
-    let pool = [...allQuestions];
-    
-    // Shuffle the pool
-    for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-    }
-
-    const actualNeeded = Math.min(totalQuestionsNeeded, pool.length);
-    
-    for (let i = 0; i < actualNeeded; i++) {
-        const q = pool[i];
-        // Clone the question and ensure unique ID for React keys
-        const uniqueQ = { ...q, id: `${q.id}_exam_${i}` };
-        selectedQuestions.push(uniqueQ);
-    }
-    
-    // If we don't have enough questions, we just return what we have.
-    // In a real scenario, we'd want to warn the user or the developer.
-    
-    // 计算总分
-    const totalScore = selectedQuestions.reduce((sum, q) => sum + q.score, 0);
-
-    return {
-      level,
-      questions: selectedQuestions,
-      totalScore,
-    };
   }
 
   /**

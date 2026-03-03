@@ -29,7 +29,7 @@ const ExamCenter: React.FC = () => {
     setLoading(true);
     setSelectedLevel(level);
     try {
-      const exam = ExamService.generateMockExam(level.level);
+      const exam = await ExamService.generateMockExam(level.level);
       if (exam.questions && exam.questions.length > 0) {
         setQuestions(exam.questions as any);
         setTestStarted(true);
@@ -480,7 +480,7 @@ const ExamCenter: React.FC = () => {
           <div className="pt-8 border-t border-gray-100">
             <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight border-l-4 border-red-500 pl-4">{t('examHistory')}</h3>
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-2">
-              {examHistory.slice(0, 5).map(record => (
+              {(examHistory || []).slice(0, 5).map(record => (
                 <div key={record.id} className="flex justify-between items-center py-3 px-5 rounded-xl bg-gray-50 border border-gray-100">
                   <div>
                     <p className="font-black text-gray-900">{t('mockExamTitle').replace('{level}', record.level.toString())}</p>

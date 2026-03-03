@@ -69,15 +69,36 @@ const Learn: React.FC = () => {
     }
   };
 
-  const startLesson = (unit: any) => {
-    const completionPercent = (unit.completed / unit.lessons) * 100;
-    const exercises = questionBankService.getSessionExercises(unit.id, 10, completionPercent);
-    setUnitExercises(exercises);
-    setSessionResults([]);
-    setShowSummary(false);
-    setActiveUnit(unit);
-    setCurrentExerciseIdx(0);
-    resetState();
+  const startLesson = async (unit: any) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/exercises/${unit.id}`);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        setUnitExercises(data);
+      } else {
+        const completionPercent = (unit.completed / unit.lessons) * 100;
+        const exercises = questionBankService.getSessionExercises(unit.id, 10, completionPercent);
+        setUnitExercises(exercises);
+      }
+      setSessionResults([]);
+      setShowSummary(false);
+      setActiveUnit(unit);
+      setCurrentExerciseIdx(0);
+      resetState();
+    } catch (e) {
+      console.error("Failed to fetch exercises", e);
+      const completionPercent = (unit.completed / unit.lessons) * 100;
+      const exercises = questionBankService.getSessionExercises(unit.id, 10, completionPercent);
+      setUnitExercises(exercises);
+      setSessionResults([]);
+      setShowSummary(false);
+      setActiveUnit(unit);
+      setCurrentExerciseIdx(0);
+      resetState();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetState = () => {

@@ -4,7 +4,7 @@ import { Language } from './types';
 export const translations: Record<Language, any> = {
   en: {
     // Navigation
-    home: 'Home', learn: 'Learn', dict: 'Dictionary', tutor: 'Tutor', explore: 'Explore', tests: 'Exam', 
+    home: 'Home', learn: 'Learn', dict: 'Dictionary', tutor: 'Tutor', explore: 'Explore', tests: 'Exam', admin: 'Admin CMS',
     welcome: 'Nǐ hǎo, {name}!', streak: 'Streak', xp: 'XP Points', hskProgress: 'HSK Progress',
     premium: 'Premium', pathProgress: 'HSK {level} • Day {day}', back: 'Back', masteryHub: 'Mastery Hub',
     
@@ -2018,7 +2018,7 @@ export const translations: Record<Language, any> = {
     reflection_eight_cuisines: 'Eine Reise durch den Geschmack ist eine Reise durch die Geschichte.'
   },
   ja: {
-    home: 'ホーム', learn: '学習', dict: '辞書', tutor: 'チューター', explore: '探索', tests: '試験',
+    home: 'ホーム', learn: '学習', dict: '辞書', tutor: 'チューター', explore: '探索', tests: '試験', admin: '管理パネル',
     welcome: 'Nǐ hǎo, {name}!', streak: '連続', xp: 'XPポイント', hskProgress: 'HSK進捗',
     premium: 'プレミアム', pathProgress: 'HSK {level} • {day}日目', back: '戻る', masteryHub: 'マスタリーハブ',
 
@@ -2560,7 +2560,7 @@ export const translations: Record<Language, any> = {
     reflection_tai_chi: '水のように流れ、山のように立ちなさい。',
   },
   ko: {
-    home: '홈', learn: '학습', dict: '사전', tutor: '튜터', explore: '탐색', tests: '시험',
+    home: '홈', learn: '학습', dict: '사전', tutor: '튜터', explore: '탐색', tests: '시험', admin: '관리 패널',
     welcome: 'Nǐ hǎo, {name}!', streak: '연속', xp: 'XP 포인트', hskProgress: 'HSK 진행',
     premium: '프리미엄', pathProgress: 'HSK {level} • {day}일차', back: '뒤로', masteryHub: '마스터리 허브',
 
@@ -3927,7 +3927,7 @@ export const translations: Record<Language, any> = {
     reflection_eight_cuisines: 'رحلة عبر الذوق هي رحلة عبر التاريخ.'
   },
   zh_hk: {
-    home: '主頁', learn: '學習', dict: '詞典', tutor: '導師', explore: '探索', tests: '考試',
+    home: '主頁', learn: '學習', dict: '詞典', tutor: '導師', explore: '探索', tests: '考試', admin: '后台管理',
     welcome: '你好, {name}!', streak: '連勝', xp: '經驗值', hskProgress: 'HSK 進度',
     premium: '高級會員', pathProgress: 'HSK {level} • 第 {day} 日', back: '返回', masteryHub: '學習中心',
 
